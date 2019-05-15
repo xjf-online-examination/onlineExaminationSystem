@@ -26,4 +26,8 @@ public class ExamPaperParamsDTO implements Serializable{
      * 出卷人
      */
     private String teacherName;
+
+    private Integer currentPage;
+
+    private Integer pageSize;
 }

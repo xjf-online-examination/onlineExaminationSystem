@@ -419,52 +419,62 @@ public class ExamPaperExample {
             return (Criteria) this;
         }
 
-        public Criteria andCourseCodeEqualTo(Integer value) {
+        public Criteria andCourseCodeEqualTo(String value) {
             addCriterion("course_code =", value, "courseCode");
             return (Criteria) this;
         }
 
-        public Criteria andCourseCodeNotEqualTo(Integer value) {
+        public Criteria andCourseCodeNotEqualTo(String value) {
             addCriterion("course_code <>", value, "courseCode");
             return (Criteria) this;
         }
 
-        public Criteria andCourseCodeGreaterThan(Integer value) {
+        public Criteria andCourseCodeGreaterThan(String value) {
             addCriterion("course_code >", value, "courseCode");
             return (Criteria) this;
         }
 
-        public Criteria andCourseCodeGreaterThanOrEqualTo(Integer value) {
+        public Criteria andCourseCodeGreaterThanOrEqualTo(String value) {
             addCriterion("course_code >=", value, "courseCode");
             return (Criteria) this;
         }
 
-        public Criteria andCourseCodeLessThan(Integer value) {
+        public Criteria andCourseCodeLessThan(String value) {
             addCriterion("course_code <", value, "courseCode");
             return (Criteria) this;
         }
 
-        public Criteria andCourseCodeLessThanOrEqualTo(Integer value) {
+        public Criteria andCourseCodeLessThanOrEqualTo(String value) {
             addCriterion("course_code <=", value, "courseCode");
             return (Criteria) this;
         }
 
-        public Criteria andCourseCodeIn(List<Integer> values) {
+        public Criteria andCourseCodeLike(String value) {
+            addCriterion("course_code like", value, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeNotLike(String value) {
+            addCriterion("course_code not like", value, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeIn(List<String> values) {
             addCriterion("course_code in", values, "courseCode");
             return (Criteria) this;
         }
 
-        public Criteria andCourseCodeNotIn(List<Integer> values) {
+        public Criteria andCourseCodeNotIn(List<String> values) {
             addCriterion("course_code not in", values, "courseCode");
             return (Criteria) this;
         }
 
-        public Criteria andCourseCodeBetween(Integer value1, Integer value2) {
+        public Criteria andCourseCodeBetween(String value1, String value2) {
             addCriterion("course_code between", value1, value2, "courseCode");
             return (Criteria) this;
         }
 
-        public Criteria andCourseCodeNotBetween(Integer value1, Integer value2) {
+        public Criteria andCourseCodeNotBetween(String value1, String value2) {
             addCriterion("course_code not between", value1, value2, "courseCode");
             return (Criteria) this;
         }

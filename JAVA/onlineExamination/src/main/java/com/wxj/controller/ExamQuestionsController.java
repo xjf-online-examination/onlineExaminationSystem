@@ -8,6 +8,7 @@ import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
+import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
 import com.wxj.service.ExamQuestionsServiceI;
 import com.wxj.utils.ResponseUtils;
@@ -28,11 +29,16 @@ import java.util.List;
  * @date 2019-05-14 23:21
  */
 @RestController
-@RequestMapping("/achievement")
+@RequestMapping("/examQuestions")
 public class ExamQuestionsController {
     @Autowired
     ExamQuestionsServiceI examQuestionsService;
 
+    /**
+     * 条件查询分页列表
+     * @param jsonObject
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
     public Object listExamQuestionsByParams(@RequestBody JSONObject jsonObject) {
         try {
@@ -52,12 +58,22 @@ public class ExamQuestionsController {
         }
     }
 
+    /**
+     * 获取详情根据ID
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
     public Object getExamQuestionsDetailsById(@PathVariable("id") Integer id) {
-        ExamQuestionsVO examQuestionsVO = examQuestionsService.getExamQuestionsDetailsById(id);
-        return ResponseUtils.success("200", examQuestionsVO);
+        ExamQuestionsDetailsVO examQuestionsDetailsVO = examQuestionsService.getExamQuestionsDetailsById(id);
+        return ResponseUtils.success("200", examQuestionsDetailsVO);
     }
 
+    /**
+     * 新增
+     * @param jsonObject
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object save(@RequestBody JSONObject jsonObject) {
         try {
@@ -71,5 +87,48 @@ public class ExamQuestionsController {
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }
+    }
+
+    /**
+     * 修改
+     * @param id
+     * @param jsonObject
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/json;charset=utf-8")
+    public Object modify(@PathVariable("id")Integer id, @RequestBody JSONObject jsonObject) {
+        try {
+            RequestBean<ExamQuestionsSaveDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ExamQuestionsSaveDTO>>(){});
+            ExamQuestionsSaveDTO examQuestionsSaveDTO = requestBean.getData();
+            examQuestionsService.modify(id, examQuestionsSaveDTO);
+            return ResponseUtils.success("201");
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 删除试题相关的信息
+     * @param jsonObject
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.DELETE, consumes = "application/json;charset=utf-8")
+    public Object delete(@RequestBody JSONObject jsonObject) {
+        try {
+            RequestBean<Integer> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<Integer>>(){});
+            examQuestionsService.delete(requestBean.getData());
+            return ResponseUtils.success("204");
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+
+    public Object examQuestionsImport() {
+        return null;
+    }
+
+    public Object examQuestionsExport() {
+        return null;
     }
 }

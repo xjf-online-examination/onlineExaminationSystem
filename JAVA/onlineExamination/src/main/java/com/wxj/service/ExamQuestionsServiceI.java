@@ -2,6 +2,7 @@ package com.wxj.service;
 
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
+import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
 
 import java.util.List;
@@ -22,7 +23,11 @@ public interface ExamQuestionsServiceI {
 
     Long countExamQuestionsByParams(ExamQuestionsParamsDTO examQuestionsParamsDTO);
 
-    ExamQuestionsVO getExamQuestionsDetailsById(Integer id);
+    ExamQuestionsDetailsVO getExamQuestionsDetailsById(Integer id);
 
     int save(ExamQuestionsSaveDTO examQuestionsSaveDTO);
+
+    int modify(Integer id, ExamQuestionsSaveDTO examQuestionsSaveDTO);
+
+    int delete(Integer id);
 }

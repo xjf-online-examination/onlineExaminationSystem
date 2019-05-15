@@ -9,7 +9,7 @@ import java.util.Date;
  * <p>Copyright: Copyright (c) 2019</p>
  * <p>Company: www.hanshow.com</p>
  * @author wangxiaojun
- * @date 2019-05-08 11:51:15
+ * @date 2019-05-15 23:19:36
  * @version 1.0
  */
 public class ExamPaper implements Serializable {
@@ -39,9 +39,9 @@ public class ExamPaper implements Serializable {
     private Byte questionsAmount;
 
     /**
-     * 班级课程ID
+     * 班级课程code
      */
-    private Integer courseCode;
+    private String courseCode;
 
     /**
      * 操作者ID
@@ -97,12 +97,12 @@ public class ExamPaper implements Serializable {
         this.questionsAmount = questionsAmount;
     }
 
-    public Integer getCourseCode() {
+    public String getCourseCode() {
         return courseCode;
     }
 
-    public void setCourseCode(Integer courseCode) {
-        this.courseCode = courseCode;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode == null ? null : courseCode.trim();
     }
 
     public Integer getOpeator() {

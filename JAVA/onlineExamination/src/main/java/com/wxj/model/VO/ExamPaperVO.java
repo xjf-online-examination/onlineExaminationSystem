@@ -11,6 +11,10 @@ import java.io.Serializable;
 @ToString
 public class ExamPaperVO implements Serializable {
     /**
+     * id
+     */
+    private Integer id;
+    /**
      * 试卷编号
      */
     private String code;
