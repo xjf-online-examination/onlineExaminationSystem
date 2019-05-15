@@ -17,4 +17,8 @@ public class SystemConstant {
     public static final int ZERO = 0;
 
     public static final Float SCORE_ZERO = 0f;
+
+    public static final Integer ONE = 1;
+
+    public static final Integer TWO = 2;
 }

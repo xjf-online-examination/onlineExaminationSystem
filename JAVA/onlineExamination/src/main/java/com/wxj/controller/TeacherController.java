@@ -130,6 +130,11 @@ public class TeacherController {
         }
     }
 
+    /**
+     * 所授课程
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "taught/{id}", method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
     public Object listTaughtByTeacherId(@PathVariable("id") Integer id) {
         try {

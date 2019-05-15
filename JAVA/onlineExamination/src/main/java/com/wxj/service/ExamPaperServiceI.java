@@ -1,6 +1,8 @@
 package com.wxj.service;
 
 import com.wxj.model.DTO.ExamPaperParamsDTO;
+import com.wxj.model.DTO.ExamPaperSaveModifyDTO;
+import com.wxj.model.VO.ExamPaperDetailsVO;
 import com.wxj.model.VO.ExamPaperVO;
 
 import java.util.List;
@@ -19,6 +21,12 @@ public interface ExamPaperServiceI {
 
     List<ExamPaperVO> listExamPaperByParams(ExamPaperParamsDTO examPaperParamsDTO);
 
-    Long countExamPaperByParams(ExamPaperParamsDTO examPaperParamsDTO);
+    int countExamPaperByParams(ExamPaperParamsDTO examPaperParamsDTO);
+
+    ExamPaperDetailsVO getExamPaperDetailsById(Integer id);
+
+    int save(ExamPaperSaveModifyDTO examPaperSaveModifyDTO);
+
+    int modify(Integer id, ExamPaperSaveModifyDTO examPaperSaveModifyDTO);
 
 }

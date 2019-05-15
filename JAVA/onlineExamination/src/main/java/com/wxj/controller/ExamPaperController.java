@@ -7,16 +7,16 @@ import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.ExamPaperParamsDTO;
+import com.wxj.model.DTO.ExamPaperSaveModifyDTO;
+import com.wxj.model.DTO.TeacherParamsDTO;
+import com.wxj.model.VO.ExamPaperDetailsVO;
 import com.wxj.model.VO.ExamPaperVO;
 import com.wxj.model.VO.ExamQuestionsVO;
 import com.wxj.service.ExamPaperServiceI;
 import com.wxj.utils.ResponseUtils;
 import com.wxj.utils.ValidateParamsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,12 +44,60 @@ public class ExamPaperController {
             new ValidateParamsUtil().vaildParams(examPaperParamsDTO,"currentPage", "pageSize");
             List<ExamPaperVO> examPaperVOList = examPaperService.listExamPaperByParams(examPaperParamsDTO);
 
-            Long count = examPaperService.countExamPaperByParams(examPaperParamsDTO);
+            int count = examPaperService.countExamPaperByParams(examPaperParamsDTO);
 
             PageBean<ExamQuestionsVO> pageBean = new PageBean(count, examPaperParamsDTO.getCurrentPage(), examPaperParamsDTO.getPageSize(), examPaperVOList);
             return ResponseUtils.success("200",pageBean);
         } catch (BusinessException e) {
             return ResponseUtils.error(e);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 获取详情根据ID
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
+    public Object getExamQuestionsDetailsById(@PathVariable("id") Integer id) {
+        ExamPaperDetailsVO examQuestionsDetailsVO = examPaperService.getExamPaperDetailsById(id);
+        return ResponseUtils.success("200", examQuestionsDetailsVO);
+    }
+
+    /**
+     * 新增
+     * @param jsonObject
+     * @return
+     */
+    @RequestMapping(value = "/automatic", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object save(@RequestBody JSONObject jsonObject) {
+        try {
+            RequestBean<ExamPaperSaveModifyDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ExamPaperSaveModifyDTO>>(){});
+            ExamPaperSaveModifyDTO examPaperSaveModifyDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(examPaperSaveModifyDTO, "jobNo", "name");
+            examPaperService.save(examPaperSaveModifyDTO);
+            return ResponseUtils.success("201");
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 修改
+     * @param jsonObject
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object modify(@PathVariable("id")Integer id, @RequestBody JSONObject jsonObject) {
+        try {
+            RequestBean<ExamPaperSaveModifyDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ExamPaperSaveModifyDTO>>(){});
+            ExamPaperSaveModifyDTO examPaperSaveModifyDTO = requestBean.getData();
+            examPaperService.modify(id, examPaperSaveModifyDTO);
+            return ResponseUtils.success("201");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }
