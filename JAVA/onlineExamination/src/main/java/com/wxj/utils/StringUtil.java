@@ -248,4 +248,17 @@ public class StringUtil {
         return imageUrlPath;
     }
 
+    public static String getRandom() {
+        int intFlag = (int)(Math.random() * 100000);
+
+        String flag = String.valueOf(intFlag);
+        if (flag.length() == 5 && flag.substring(0, 1).equals("9"))
+        {
+            return System.currentTimeMillis() + "" + intFlag;
+        } else {
+            intFlag = intFlag + 10000;
+            return System.currentTimeMillis() + "" + intFlag;
+        }
+    }
+
 }
