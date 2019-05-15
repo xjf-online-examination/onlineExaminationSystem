@@ -273,7 +273,7 @@
   </update>
 
   <select id="selectExamPaperByParams" parameterType="com.wxj.model.DTO.ExamPaperParamsDTO" resultType="com.wxj.model.VO.ExamPaperVO">
-    select ep.id id, ep.code code, ep.name name, ep.questions_amount number, t.name teacherName
+    select ep.id id, ep.code code, ep.name name, ep.questions_amount number,c.name courseName, t.name teacherName
     from exam_paper ep
     LEFT JOIN course c on ep.course_code = c.code
     LEFT JOIN teacher t on ep.opeator = t.id
@@ -311,4 +311,21 @@
       and t.name = #{record.teacherName,jdbcType=CHAR}
     </if>
   </select>
+
+  <resultMap id="ExamPaperDetailsMap" type="com.wxj.model.VO.ExamPaperDetailsVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="CHAR" property="code" />
+    <result column="name" jdbcType="CHAR" property="name" />
+    <result column="questions_amount" jdbcType="TINYINT" property="questionsAmount" />
+    <result column="course_name" jdbcType="CHAR" property="courseName" />
+    <result column="teacher_name" jdbcType="CHAR" property="teacherName" />
+
+  </resultMap>
+
+  <select id="selectExamPaperDetailsById" parameterType="java.lang.Integer" resultMap="ExamPaperDetailsMap">
+    select ep.id id, ep.code, ep.name, ep.questions_amount,c.name course_name, t.name teacher_name
+    from exam_paper ep
+    LEFT JOIN course c on ep.course_code = c.code
+    LEFT JOIN teacher t on ep.opeator = t.id
+    where ep.id = #{id,jdbcType=INTEGER}
 </mapper>

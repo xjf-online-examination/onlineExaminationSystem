@@ -240,4 +240,8 @@
       del_flag = #{delFlag,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+
+  </insert>
 </mapper>
