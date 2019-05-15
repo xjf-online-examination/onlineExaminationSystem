@@ -3,14 +3,21 @@
 </style>
 
 <template>
-  <div class="login">
+  <!-- <div class="login">
     <div class="login-con">
       <Card icon="log-in" title="欢迎登录" :bordered="false">
         <div class="form-con">
           <login-form @on-success-valid="handleSubmit"></login-form>
-          <p class="login-tip">输入任意用户名和密码即可</p>
         </div>
       </Card>
+    </div>
+  </div>-->
+  <div class="login">
+    <div class="app-title">赤峰学院经济与管理学院</div>
+    <div class="login-block">
+      <div class="login-box">
+        <login-form @on-success-valid="handleSubmit"></login-form>
+      </div>
     </div>
   </div>
 </template>

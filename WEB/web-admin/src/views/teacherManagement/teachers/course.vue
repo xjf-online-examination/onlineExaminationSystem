@@ -30,6 +30,16 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
+    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="ok">
+      <Form ref="classSearch" :model="teacher">
+        <FormItem prop="teacherCode" label="工号">
+          <Input type="text" v-model="teacher.teacherCode" placeholder="请输入工号"/>
+        </FormItem>
+        <FormItem prop="className" label="姓名">
+          <Input type="text" v-model="teacher.teacherName" placeholder="请输入姓名"/>
+        </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 
@@ -37,7 +47,7 @@
 import Tables from '@/components/tables';
 
 export default {
-  name: 'teachers',
+  name: 'teacherCourse',
   components: {
     Tables,
   },
@@ -94,7 +104,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.onDelete(params.index);
+                    this.onViewCourse(params.index);
                   },
                 },
               }, '课程'),
@@ -108,10 +118,10 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.onDelete(params.index);
+                    this.onResetPwd(params.index);
                   },
                 },
-              }, '修改密码'),
+              }, '重置密码'),
             ]),
           ],
         }],
@@ -124,6 +134,13 @@ export default {
         className: '',
         classCode: '',
       },
+      teacher: {
+        teacherCode: '',
+        teacherName: '',
+      },
+      modalVisible: false,
+      modalTitle: '',
+      showDeleteModal: false,
     };
   },
   methods: {
@@ -144,22 +161,33 @@ export default {
     },
     onEdit(index) {
       console.log(index);
-      /* todo */
+      // TODO:
     },
     onDelete(index) {
       console.log(index);
-      /* TODO */
+      // TODO:
+      this.showDeleteModal = true;
+    },
+    onResetPwd(index) {
+      console.log(index);
+      // TODO:
     },
     onPageChange(params) {
       console.log(params);
-      /* todo */
+      // TODO:
     },
     onPageSizeChange(params) {
       console.log(params);
-      /* todo */
+      // TODO:
     },
     onAdd() {
-      /* todo */
+      // TODO:
+      this.modalVisible = true;
+      this.modalTitle = '添加教师';
+    },
+    ok() {
+      // TODO:
+      console.log(this.teacher);
     },
   },
 };

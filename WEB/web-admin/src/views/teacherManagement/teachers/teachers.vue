@@ -30,15 +30,27 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
+    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="ok">
+      <Form ref="classSearch" :model="teacher">
+        <FormItem prop="teacherCode" label="工号">
+          <Input type="text" v-model="teacher.teacherCode" placeholder="请输入工号"/>
+        </FormItem>
+        <FormItem prop="className" label="姓名">
+          <Input type="text" v-model="teacher.teacherName" placeholder="请输入姓名"/>
+        </FormItem>
+      </Form>
+    </Modal>
+    <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteTeacher">
+      <p>是否删除该教师，删除后无法恢复？</p>
+    </Modal>
   </div>
 </template>
-
 
 <script>
 import Tables from '@/components/tables';
 
 export default {
-  name: 'classes',
+  name: 'teachers',
   components: {
     Tables,
   },
@@ -49,13 +61,10 @@ export default {
           title: '序号', type: 'index', align: 'center',
         },
         {
-          title: '班级编号', key: 'classCode', align: 'center',
+          title: '工号', key: 'teacherNo', align: 'center',
         },
         {
-          title: '班级名称', key: 'className', align: 'center',
-        },
-        {
-          title: '人数', key: 'count', align: 'center',
+          title: '教师姓名', key: 'name', align: 'center',
         },
         {
           title: '操作',
@@ -88,6 +97,34 @@ export default {
                   },
                 },
               }, '删除'),
+              h('a', {
+                props: {
+                  type: 'text',
+                  size: 'small',
+                },
+                style: {
+                  'margin-left': '10px',
+                },
+                on: {
+                  click: () => {
+                    this.onViewCourse(params.index);
+                  },
+                },
+              }, '课程'),
+              h('a', {
+                props: {
+                  type: 'text',
+                  size: 'small',
+                },
+                style: {
+                  'margin-left': '10px',
+                },
+                on: {
+                  click: () => {
+                    this.onResetPwd(params.index);
+                  },
+                },
+              }, '重置密码'),
             ]),
           ],
         }],
@@ -100,6 +137,14 @@ export default {
         className: '',
         classCode: '',
       },
+      teacher: {
+        teacherCode: '',
+        teacherName: '',
+      },
+      modalVisible: false,
+      modalTitle: '',
+      showDeleteModal: false,
+      selectIndex: 0,
     };
   },
   methods: {
@@ -120,27 +165,42 @@ export default {
     },
     onEdit(index) {
       console.log(index);
-      /* todo */
+      // TODO:
     },
     onDelete(index) {
       console.log(index);
-      /* TODO */
+      // TODO:
+      this.showDeleteModal = true;
+      this.selectIndex = index;
+    },
+    onResetPwd(index) {
+      console.log(index);
+      // TODO:
     },
     onPageChange(params) {
       console.log(params);
-      /* todo */
+      // TODO:
     },
     onPageSizeChange(params) {
       console.log(params);
-      /* todo */
+      // TODO:
     },
     onAdd() {
-      /* todo */
+      // TODO:
+      this.modalVisible = true;
+      this.modalTitle = '添加教师';
+    },
+    ok() {
+      // TODO:
+      console.log(this.teacher);
+    },
+    deleteTeacher() {
+      // TODO:
+      this.tableData.splice(this.selectIndex, 1);
     },
   },
 };
 </script>
-
 <style lang="less" scoped>
 .search-flex {
   display: inline-flex;

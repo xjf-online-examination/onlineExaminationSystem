@@ -46,7 +46,7 @@ export default [{
   path: '/teacher',
   name: 'teacherManagement',
   meta: {
-    hideInBread: false,
+    hideInBread: true,
   },
   component: Main,
   children: [{
@@ -56,13 +56,14 @@ export default [{
       icon: 'ios-people',
       title: '教师管理',
     },
-    component: () => import('@/views/teachers/teachers'),
+    component: () => import('@/views/teacherManagement/teachers/teachers'),
   }],
-}, {
+},
+{
   path: '/student',
   name: 'studentManagement',
   meta: {
-    hideInBread: false,
+    hideInBread: true,
   },
   component: Main,
   children: [{
@@ -72,14 +73,14 @@ export default [{
       icon: 'ios-school',
       title: '学生管理',
     },
-    component: () => import('@/views/students/students'),
+    component: () => import('@/views/teacherManagement/students/students'),
   }],
 },
 {
   path: '/class',
   name: 'classManagement',
   meta: {
-    hideInBread: false,
+    hideInBread: true,
   },
   component: Main,
   children: [{
@@ -89,14 +90,14 @@ export default [{
       icon: 'ios-bug',
       title: '班级管理',
     },
-    component: () => import('@/views/classes/classes'),
+    component: () => import('@/views/teacherManagement/classes/classes'),
   }],
 },
 {
   path: '/course',
   name: 'courseManagement',
   meta: {
-    hideInBread: false,
+    hideInBread: true,
   },
   component: Main,
   children: [{
@@ -106,14 +107,15 @@ export default [{
       icon: 'ios-book',
       title: '课程管理',
     },
-    component: () => import('@/views/courses/courses'),
+    component: () => import('@/views/teacherManagement/courses/courses'),
   }],
 },
 {
   path: '/paper',
   name: 'paperManagement',
   meta: {
-    hideInBread: false,
+    hideInBread: true,
+    hideInMenu: true,
   },
   component: Main,
   children: [{
@@ -123,7 +125,7 @@ export default [{
       icon: 'ios-paper',
       title: '试卷管理',
     },
-    component: () => import('@/views/paper/paper'),
+    component: () => import('@/views/teacherManagement/paper/paper'),
   }],
 },
 {
@@ -140,7 +142,92 @@ export default [{
       icon: 'ios-list-box',
       title: '试题管理',
     },
-    component: () => import('@/views/question/question'),
+    component: () => import('@/views/teacherManagement/question/question'),
+  }],
+},
+{
+  path: '/scheduler',
+  name: 'schedulerManagement',
+  meta: {
+    hideInBread: false,
+  },
+  component: Main,
+  children: [{
+    path: 'scheduler',
+    name: 'scheduler',
+    meta: {
+      icon: 'ios-list-box',
+      title: '考试安排',
+    },
+    component: () => import('@/views/teacherManagement/scheduler/scheduler'),
+  }],
+},
+{
+  path: '/mark',
+  name: 'markManagement',
+  meta: {
+    hideInBread: false,
+  },
+  component: Main,
+  children: [{
+    path: 'mark',
+    name: 'mark',
+    meta: {
+      icon: 'md-checkbox-outline',
+      title: '阅卷',
+    },
+    component: () => import('@/views/teacherManagement/mark/mark'),
+  }],
+},
+{
+  path: '/report',
+  name: 'reportManagement',
+  meta: {
+    hideInBread: false,
+  },
+  component: Main,
+  children: [{
+    path: 'report',
+    name: 'report',
+    meta: {
+      icon: 'ios-stats-outline',
+      title: '报表',
+    },
+    component: () => import('@/views/teacherManagement/report/report'),
+  }],
+},
+{
+  path: '/achievement',
+  name: 'achievementManagement',
+  meta: {
+    hideInBread: false,
+  },
+  component: Main,
+  children: [{
+    path: 'achievement',
+    name: 'achievement',
+    meta: {
+      icon: 'md-checkbox-outline',
+      title: '查看成绩',
+    },
+    component: () => import('@/views/studentManagement/achievement/achievement'),
+  }],
+},
+{
+  path: '/testScheduler',
+  name: 'testScheduler',
+  meta: {
+    hideInBread: false,
+  },
+  component: Main,
+  children: [{
+    path: 'test',
+    name: 'test',
+    meta: {
+      icon: 'ios-stats-outline',
+      title: '考试安排',
+    },
+    component: () => import('@/views/studentManagement/test/test'),
   }],
 },
 ];
