@@ -4,6 +4,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.wxj.model.DTO.ExamPaperParamsDTO;
 import com.wxj.model.PO.ExamPaper;
 import com.wxj.model.PO.ExamPaperExample;
+import com.wxj.model.VO.ExamPaperDetailsVO;
 import com.wxj.model.VO.ExamPaperVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -78,5 +79,7 @@ public interface ExamPaperMapper {
 
     List<ExamPaperVO> selectExamPaperByParams(@Param("record")ExamPaperParamsDTO examPaperParamsDTO, PageBounds pageBounds);
 
-    Long countExamPaperByParams(@Param("record")ExamPaperParamsDTO examPaperParamsDTO);
+    int countExamPaperByParams(@Param("record")ExamPaperParamsDTO examPaperParamsDTO);
+
+    ExamPaperDetailsVO selectExamPaperDetailsById(Integer id);
 }

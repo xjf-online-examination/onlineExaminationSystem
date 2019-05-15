@@ -72,4 +72,6 @@ public interface ExamPaperQuestionsMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(ExamPaperQuestions record);
+
+    int batchInsert(@Param("list") List<ExamPaperQuestions> list);
 }
