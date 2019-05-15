@@ -1,0 +1,84 @@
+package com.wxj.mapper;
+
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.wxj.model.DTO.ExamQuestionsParamsDTO;
+import com.wxj.model.PO.ExamQuestions;
+import com.wxj.model.PO.ExamQuestionsExample;
+import com.wxj.model.VO.ExamQuestionsVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface ExamQuestionsMapper {
+    /**
+     *
+     * @mbg.generated
+     */
+    long countByExample(ExamQuestionsExample example);
+
+    /**
+     *
+     * @mbg.generated
+     */
+    int deleteByExample(ExamQuestionsExample example);
+
+    /**
+     *
+     * @mbg.generated
+     */
+    int deleteByPrimaryKey(Integer id);
+
+    /**
+     *
+     * @mbg.generated
+     */
+    int insert(ExamQuestions record);
+
+    /**
+     *
+     * @mbg.generated
+     */
+    int insertSelective(ExamQuestions record);
+
+    /**
+     *
+     * @mbg.generated
+     */
+    List<ExamQuestions> selectByExample(ExamQuestionsExample example);
+
+    /**
+     *
+     * @mbg.generated
+     */
+    ExamQuestions selectByPrimaryKey(Integer id);
+
+    /**
+     *
+     * @mbg.generated
+     */
+    int updateByExampleSelective(@Param("record") ExamQuestions record, @Param("example") ExamQuestionsExample example);
+
+    /**
+     *
+     * @mbg.generated
+     */
+    int updateByExample(@Param("record") ExamQuestions record, @Param("example") ExamQuestionsExample example);
+
+    /**
+     *
+     * @mbg.generated
+     */
+    int updateByPrimaryKeySelective(ExamQuestions record);
+
+    /**
+     *
+     * @mbg.generated
+     */
+    int updateByPrimaryKey(ExamQuestions record);
+
+    List<ExamQuestionsVO> selectExamQuestionsByParams(@Param("record")ExamQuestionsParamsDTO record, PageBounds pageBounds);
+
+    Long countExamQuestionsByParams(@Param("record")ExamQuestionsParamsDTO record);
+
+    ExamQuestionsVO getExamQuestionsDetailsById(Integer id);
+}
