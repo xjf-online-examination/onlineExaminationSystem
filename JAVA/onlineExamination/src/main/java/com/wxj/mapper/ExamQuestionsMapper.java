@@ -4,6 +4,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.PO.ExamQuestionsExample;
+import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -80,5 +81,5 @@ public interface ExamQuestionsMapper {
 
     Long countExamQuestionsByParams(@Param("record")ExamQuestionsParamsDTO record);
 
-    ExamQuestionsVO getExamQuestionsDetailsById(Integer id);
+    ExamQuestionsDetailsVO getExamQuestionsDetailsById(Integer id);
 }

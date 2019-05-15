@@ -425,7 +425,7 @@
     </if>
   </select>
 
-  <select id="getExamQuestionsDetailsById" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.ExamQuestionsVO">
+  <select id="getExamQuestionsDetailsById" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.ExamQuestionsDetailsVO">
     select id, code, courseCode, type, title, optiona optionA, optionb optionB, optionc optionC, optiond optionD, optione optionE, singleAnswer, multipleAnswer, yesNoAnswer
     from exam_questions
     where id = #{id,jdbcType=INTEGER}
