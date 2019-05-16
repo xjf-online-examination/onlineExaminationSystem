@@ -288,4 +288,55 @@
       del_flag = #{delFlag,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="listExamScheduleByParams" parameterType="com.wxj.model.DTO.ExamScheduleParamsDTO" resultType="com.wxj.model.VO.ExamScheduleVO">
+    select es.id, es.start_time startTime, es.duration, es.exam_paper_code examPaperCode, es.exam_paper_name examPaperName, cla.`name` className
+    from exam_schedule es
+    LEFT JOIN exam_paper ep on es.exam_paper_id = ep.id
+    LEFT JOIN course cou on ep.course_code = cou.code
+    LEFT JOIN class_course cc on cou.id = cc.course_id
+    LEFT JOIN class cla on cc.class_id = cla.id
+    where 1=1
+    <if test='record.examPaperCode != null and record.examPaperCode != ""'>
+      and ep.exam_paper_code = #{record.examPaperCode,jdbcType=CHAR}
+    </if>
+    <if test='record.status != null'>
+      <if test="record.status == 1">
+        and es.start_time &gt; now()
+      </if>
+      <if test="record.status == 2">
+        and es.start_time &lt;= now()
+        and date_add(es.start_time, interval es.duration minute) &gt;= now()
+      </if>
+      <if test="record.status == 3">
+        and date_add(es.start_time, interval es.duration minute) &lt; now()
+      </if>
+    </if>
+  </select>
+
+  <select id="countExamScheduleByParams" parameterType="com.wxj.model.DTO.ExamScheduleParamsDTO" resultType="java.lang.Long">
+    select count(1)
+    from exam_schedule es
+    LEFT JOIN exam_paper ep on es.exam_paper_id = ep.id
+    LEFT JOIN course cou on ep.course_code = cou.code
+    LEFT JOIN class_course cc on cou.id = cc.course_id
+    LEFT JOIN class cla on cc.class_id = cla.id
+    where 1=1
+    <if test='record.examPaperCode != null and record.examPaperCode != ""'>
+      and ep.exam_paper_code = #{record.examPaperCode,jdbcType=CHAR}
+    </if>
+    <if test='record.status != null'>
+      <if test="record.status == 1">
+        and es.start_time &gt; now()
+      </if>
+      <if test="record.status == 2">
+        and es.start_time &lt;= now()
+        and date_add(es.start_time, interval es.duration minute) &gt;= now()
+      </if>
+      <if test="record.status == 3">
+        and date_add(es.start_time, interval es.duration minute) &lt; now()
+      </if>
+    </if>
+  </select>
 </mapper>
+

@@ -10,7 +10,7 @@ package com.wxj.exception;
  * @author zhengzhibo
  * @date 2019年1月9日 上午10:54:56
  */
-public class InnerDataErrorException extends BusinessException{
+public class InnerDataErrorException extends BusinessRuntimeException{
 
 	private static final long serialVersionUID = 1L;
 

@@ -18,4 +18,8 @@ public class ExamScheduleParamsDTO implements Serializable {
      * 状态 1：未开始 2：进行中 3：已结束
      */
     private Integer status;
+
+    private Integer currentPage;
+
+    private Integer pageSize;
 }
