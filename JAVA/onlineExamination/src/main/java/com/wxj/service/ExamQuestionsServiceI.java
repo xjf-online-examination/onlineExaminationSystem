@@ -27,7 +27,7 @@ public interface ExamQuestionsServiceI {
 
     int save(ExamQuestionsSaveDTO examQuestionsSaveDTO);
 
-    int modify(Integer id, ExamQuestionsSaveDTO examQuestionsSaveDTO);
+    int modify(ExamQuestionsSaveDTO examQuestionsSaveDTO);
 
     int delete(Integer id);
 }

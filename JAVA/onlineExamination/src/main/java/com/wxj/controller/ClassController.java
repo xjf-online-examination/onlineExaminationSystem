@@ -1,7 +1,5 @@
 package com.wxj.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.model.Bean.PageBean;
@@ -34,13 +32,12 @@ public class ClassController {
 
     /**
      * 条件查询分页列表
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object listClassByParams(@RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listClassByParams(@RequestBody RequestBean<ClassParamsDTO> requestBean) {
         try {
-            RequestBean<ClassParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ClassParamsDTO>>(){});
             ClassParamsDTO classParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(classParamsDTO,"currentPage", "pageSize");
             List<ClassVO> classVOList = classService.listClassByParams(classParamsDTO);
@@ -58,13 +55,13 @@ public class ClassController {
 
     /**
      * 根据id查询
-     * @param id
+     * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object getClassById(@PathVariable("id") Integer id) {
+    @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object getClassById(@RequestBody RequestBean<Integer> requestBean) {
         ClassParamsDTO classParamsDTO = new ClassParamsDTO();
-        classParamsDTO.setId(id);
+        classParamsDTO.setId(requestBean.getData());
         classParamsDTO.setCurrentPage(1);
         classParamsDTO.setPageSize(1);
         List<ClassVO> classVOList = classService.listClassByParams(classParamsDTO);
@@ -75,13 +72,12 @@ public class ClassController {
 
     /**
      * 新增
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object save(@RequestBody RequestBean<ClassParamsDTO> requestBean) {
         try {
-            RequestBean<ClassParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ClassParamsDTO>>(){});
             ClassParamsDTO classParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(classParamsDTO,"code", "name");
             classService.save(classParamsDTO);
@@ -95,31 +91,32 @@ public class ClassController {
 
     /**
      * 修改
-     * @param id
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/json;charset=utf-8")
-    public Object modify(@PathVariable("id") Integer id, @RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object modify(@RequestBody RequestBean<ClassParamsDTO> requestBean) {
         try {
-            RequestBean<ClassParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ClassParamsDTO>>(){});
             ClassParamsDTO classParamsDTO = requestBean.getData();
-            classService.modify(id, classParamsDTO);
+            new ValidateParamsUtil().vaildParams(classParamsDTO,"id");
+            classService.modify(classParamsDTO);
             return ResponseUtils.success("201");
-        } catch (BusinessRuntimeException e) {
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        }  catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }
     }
 
     /**
      *  删除这个班级相关学生的所有信息
-     * @param id
+     * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, consumes = "application/json;charset=utf-8")
-    public Object delete(@PathVariable("id") Integer id) {
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE, consumes = "application/json;charset=utf-8")
+    public Object delete(@RequestBody RequestBean<Integer> requestBean) {
         try {
-            classService.delete(id);
+            classService.delete(requestBean.getData());
             return ResponseUtils.success("204");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);

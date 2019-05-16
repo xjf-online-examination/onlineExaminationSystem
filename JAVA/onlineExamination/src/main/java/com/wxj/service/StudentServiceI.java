@@ -37,11 +37,10 @@ public interface StudentServiceI {
     int save(StudentParamsDTO studentParamsDTO);
     /**
      * 修改学生信息
-     * @param id
      * @param studentParamsDTO
      * @return
      */
-    int modify(Integer id, StudentParamsDTO studentParamsDTO);
+    int modify(StudentParamsDTO studentParamsDTO);
     /**
      *  删除学生信息
      * @param id

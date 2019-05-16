@@ -98,25 +98,21 @@ public class ClassServiceImpl implements ClassServiceI {
     }
 
     @Override
-    public int modify(Integer id, ClassParamsDTO classParamsDTO) {
+    public int modify(ClassParamsDTO classParamsDTO) {
+        ClassExample classExample = new ClassExample();
+        classExample.createCriteria().andIdNotEqualTo(classParamsDTO.getId()).andCodeEqualTo(classParamsDTO.getCode());
+        Long size = classMapper.countByExample(classExample);
+        if (size > 0) {
+            throw new ParamInvalidException("code重复");
+        }
         Class c = new Class();
         BeanUtils.copyProperties(classParamsDTO, c);
-        c.setId(id);
         c.setModifyTime(new Date());
-        int i = 0;
-        try {
-            i = classMapper.updateByPrimaryKeySelective(c);
-            if (SystemConstant.ZERO == i) {
-                throw new OperationException(" 修改失败");
-            }
-        } catch (DuplicateKeyException e) {
-            ClassExample classExample = new ClassExample();
-            classExample.createCriteria().andCodeEqualTo(classParamsDTO.getCode());
-            Long size = classMapper.countByExample(classExample);
-            if (size > 0) {
-                throw new ParamInvalidException("code重复");
-            }
+        int i = classMapper.updateByPrimaryKeySelective(c);
+        if (SystemConstant.ZERO == i) {
+            throw new OperationException(" 修改失败");
         }
+
         return i;
     }
 

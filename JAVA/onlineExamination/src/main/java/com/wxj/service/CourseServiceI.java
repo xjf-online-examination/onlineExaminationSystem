@@ -23,7 +23,7 @@ public interface CourseServiceI {
 
     int save(CourseParamsDTO courseParamsDTO);
 
-    int modify(Integer id, CourseParamsDTO courseParamsDTO);
+    int modify(CourseParamsDTO courseParamsDTO);
 
     int delete(Integer id);
 }

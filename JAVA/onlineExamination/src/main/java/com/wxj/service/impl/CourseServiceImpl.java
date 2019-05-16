@@ -88,36 +88,32 @@ public class CourseServiceImpl implements CourseServiceI {
     }
 
     @Override
-    public int modify(Integer id, CourseParamsDTO courseParamsDTO) {
+    public int modify(CourseParamsDTO courseParamsDTO) {
+        CourseExample classExample = new CourseExample();
+        classExample.createCriteria().andIdNotEqualTo(courseParamsDTO.getId()).andCodeEqualTo(courseParamsDTO.getCode());
+        Long size = courseMapper.countByExample(classExample);
+        if (size > 0) {
+            throw new ParamInvalidException("code重复");
+        }
         Course course = new Course();
 
         BeanUtils.copyProperties(courseParamsDTO, course);
-        course.setId(id);
         course.setModifyTime(new Date());
-        int i = 0;
-        try {
-            i = courseMapper.updateByPrimaryKeySelective(course);
-            if (SystemConstant.ZERO == i) {
-                throw new OperationException("修改失败");
-            }
-            ClassCourse classCourse = new ClassCourse();
-            classCourse.setClassId(courseParamsDTO.getClassId());
-            classCourse.setCourseId(course.getId());
-            classCourse.setModifyTime(new Date());
-            ClassCourseExample classCourseExample = new ClassCourseExample();
-            classCourseExample.createCriteria().andClassIdEqualTo(courseParamsDTO.getClassId()).andCourseIdEqualTo(courseParamsDTO.getId()).andModifyTimeEqualTo(new Date());
-            i = classCourseMapper.updateByExampleSelective(classCourse, classCourseExample);
-            if (SystemConstant.ZERO == i) {
-                throw new ParamInvalidException("修改重复");
-            }
-        } catch (DuplicateKeyException e) {
-            CourseExample classExample = new CourseExample();
-            classExample.createCriteria().andCodeEqualTo(courseParamsDTO.getCode());
-            Long size = courseMapper.countByExample(classExample);
-            if (size > 0) {
-                throw new ParamInvalidException("code重复");
-            }
+        int i = courseMapper.updateByPrimaryKeySelective(course);
+        if (SystemConstant.ZERO == i) {
+            throw new OperationException("修改失败");
         }
+        ClassCourse classCourse = new ClassCourse();
+        classCourse.setClassId(courseParamsDTO.getClassId());
+        classCourse.setCourseId(course.getId());
+        classCourse.setModifyTime(new Date());
+        ClassCourseExample classCourseExample = new ClassCourseExample();
+        classCourseExample.createCriteria().andClassIdEqualTo(courseParamsDTO.getClassId()).andCourseIdEqualTo(courseParamsDTO.getId()).andModifyTimeEqualTo(new Date());
+        i = classCourseMapper.updateByExampleSelective(classCourse, classCourseExample);
+        if (SystemConstant.ZERO == i) {
+            throw new ParamInvalidException("修改重复");
+        }
+
         return i;
     }
 

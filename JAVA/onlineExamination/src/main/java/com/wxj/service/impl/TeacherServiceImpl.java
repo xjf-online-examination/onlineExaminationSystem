@@ -73,31 +73,29 @@ public class TeacherServiceImpl implements TeacherServiceI {
     }
 
     @Override
-    public int modify(Integer id, TeacherParamsDTO teacherParamsDTO) {
+    public int modify(TeacherParamsDTO teacherParamsDTO) {
+        TeacherExample teacherExample = new TeacherExample();
+        teacherExample.createCriteria().andIdNotEqualTo(teacherParamsDTO.getId()).andJobNoEqualTo(teacherParamsDTO.getJobNo());
+        Long size = teacherMapper.countByExample(teacherExample);
+        if (size > 0) {
+            throw new ParamInvalidException("jobNo重复");
+        }
+
         Teacher teacher = new Teacher();
         BeanUtils.copyProperties(teacherParamsDTO, teacher);
-        teacher.setId(id);
         teacher.setModifyTime(new Date());
-        int i = 0;
-        try {
-            i = teacherMapper.updateByPrimaryKeySelective(teacher);
-            if (SystemConstant.ZERO == i) {
-                throw new OperationException(" 修改失败");
-            }
-        } catch (DuplicateKeyException e) {
-            TeacherExample teacherExample = new TeacherExample();
-            teacherExample.createCriteria().andJobNoEqualTo(teacher.getJobNo());
-            Long size = teacherMapper.countByExample(teacherExample);
-            if (size > 0) {
-                throw new ParamInvalidException("jobNo重复");
-            }
+        int i = teacherMapper.updateByPrimaryKeySelective(teacher);
+        if (SystemConstant.ZERO == i) {
+            throw new OperationException(" 修改失败");
         }
+
         return i;
     }
 
     @Override
     public int delete(Integer id) {
-        //TODO:
+        //TODO:删除教师
+        //TODO:删除教师课程对应表
         return 0;
     }
 

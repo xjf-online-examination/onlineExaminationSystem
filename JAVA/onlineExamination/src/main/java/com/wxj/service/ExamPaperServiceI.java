@@ -27,6 +27,6 @@ public interface ExamPaperServiceI {
 
     int save(ExamPaperSaveModifyDTO examPaperSaveModifyDTO);
 
-    int modify(Integer id, ExamPaperSaveModifyDTO examPaperSaveModifyDTO);
+    int modify(ExamPaperSaveModifyDTO examPaperSaveModifyDTO);
 
 }

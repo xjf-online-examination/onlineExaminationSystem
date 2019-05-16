@@ -39,11 +39,10 @@ public interface ClassServiceI {
 
     /**
      * 新增
-     * @param id
      * @param classParamsDTO
      * @return
      */
-    int modify(Integer id, ClassParamsDTO classParamsDTO);
+    int modify(ClassParamsDTO classParamsDTO);
 
     int delete(Integer id);
 }

@@ -35,10 +35,9 @@ public class ExamPaperController {
     @Autowired
     ExamPaperServiceI examPaperService;
 
-    @RequestMapping(method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object listExamPaperByParams(@RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listExamPaperByParams(@RequestBody RequestBean<ExamPaperParamsDTO> requestBean) {
         try {
-            RequestBean<ExamPaperParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ExamPaperParamsDTO>>(){});
             ExamPaperParamsDTO examPaperParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(examPaperParamsDTO,"currentPage", "pageSize");
             List<ExamPaperVO> examPaperVOList = examPaperService.listExamPaperByParams(examPaperParamsDTO);
@@ -56,24 +55,23 @@ public class ExamPaperController {
 
     /**
      * 获取详情根据ID
-     * @param id
+     * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object getExamQuestionsDetailsById(@PathVariable("id") Integer id) {
-        ExamPaperDetailsVO examQuestionsDetailsVO = examPaperService.getExamPaperDetailsById(id);
+    @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object getExamQuestionsDetailsById(@RequestBody RequestBean<Integer> requestBean) {
+        ExamPaperDetailsVO examQuestionsDetailsVO = examPaperService.getExamPaperDetailsById(requestBean.getData());
         return ResponseUtils.success("200", examQuestionsDetailsVO);
     }
 
     /**
      * 新增
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
     @RequestMapping(value = "/automatic", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody JSONObject jsonObject) {
+    public Object save(@RequestBody RequestBean<ExamPaperSaveModifyDTO> requestBean) {
         try {
-            RequestBean<ExamPaperSaveModifyDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ExamPaperSaveModifyDTO>>(){});
             ExamPaperSaveModifyDTO examPaperSaveModifyDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(examPaperSaveModifyDTO, "jobNo", "name");
             examPaperService.save(examPaperSaveModifyDTO);
@@ -87,15 +85,14 @@ public class ExamPaperController {
 
     /**
      * 修改
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object modify(@PathVariable("id")Integer id, @RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object modify(@RequestBody RequestBean<ExamPaperSaveModifyDTO> requestBean) {
         try {
-            RequestBean<ExamPaperSaveModifyDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ExamPaperSaveModifyDTO>>(){});
             ExamPaperSaveModifyDTO examPaperSaveModifyDTO = requestBean.getData();
-            examPaperService.modify(id, examPaperSaveModifyDTO);
+            examPaperService.modify(examPaperSaveModifyDTO);
             return ResponseUtils.success("201");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);

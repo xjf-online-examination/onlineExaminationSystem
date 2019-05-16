@@ -34,14 +34,12 @@ public class CourseController {
 
     /**
      * 条件查询分页列表
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object listCourseByParams(@RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/list",method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listCourseByParams(@RequestBody RequestBean<CourseParamsDTO> requestBean) {
         try {
-            RequestBean<CourseParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<CourseParamsDTO>>() {
-            });
             CourseParamsDTO teacherParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(teacherParamsDTO, "currentPage", "pageSize");
             List<CourseVO> studentVOList = courseService.listCourseByParams(teacherParamsDTO);
@@ -59,14 +57,14 @@ public class CourseController {
 
     /**
      * 根据id查询
-     * @param id
+     * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object getTeacherById(@PathVariable("id") Integer id) {
+    @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object getTeacherById(@RequestBody RequestBean<Integer> requestBean) {
         try {
             CourseParamsDTO courseParamsDTO = new CourseParamsDTO();
-            courseParamsDTO.setId(id);
+            courseParamsDTO.setId(requestBean.getData());
             courseParamsDTO.setCurrentPage(1);
             courseParamsDTO.setPageSize(1);
             List<CourseVO> studentVOList = courseService.listCourseByParams(courseParamsDTO);
@@ -79,13 +77,12 @@ public class CourseController {
 
     /**
      * 新增
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object save(@RequestBody RequestBean<CourseParamsDTO> requestBean) {
         try {
-            RequestBean<CourseParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<CourseParamsDTO>>(){});
             CourseParamsDTO courseParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(courseParamsDTO, "code", "name", "classId");
             courseService.save(courseParamsDTO);
@@ -99,16 +96,14 @@ public class CourseController {
 
     /**
      * 修改
-     * @param id
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/json;charset=utf-8")
-    public Object modify(@PathVariable("id") Integer id, @RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object modify(@RequestBody RequestBean<CourseParamsDTO> requestBean) {
         try {
-            RequestBean<CourseParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<CourseParamsDTO>>(){});
             CourseParamsDTO courseParamsDTO = requestBean.getData();
-            courseService.modify(id, courseParamsDTO);
+            courseService.modify(courseParamsDTO);
             return ResponseUtils.success("201");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
@@ -117,13 +112,13 @@ public class CourseController {
 
     /**
      * 删除课程相关的信息
-     * @param id
+     * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, consumes = "application/json;charset=utf-8")
-    public Object delete(@PathVariable("id") Integer id) {
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object delete(@RequestBody RequestBean<Integer> requestBean) {
         try {
-            courseService.delete(id);
+            courseService.delete(requestBean.getData());
             return ResponseUtils.success("204");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);

@@ -1,7 +1,5 @@
 package com.wxj.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.model.Bean.PageBean;
@@ -36,13 +34,12 @@ public class ExamQuestionsController {
 
     /**
      * 条件查询分页列表
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object listExamQuestionsByParams(@RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listExamQuestionsByParams(@RequestBody RequestBean<ExamQuestionsParamsDTO> requestBean) {
         try {
-            RequestBean<ExamQuestionsParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ExamQuestionsParamsDTO>>(){});
             ExamQuestionsParamsDTO examQuestionsParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(examQuestionsParamsDTO,"currentPage", "pageSize");
             List<ExamQuestionsVO> examQuestionsVOList = examQuestionsService.listExamQuestionsByParams(examQuestionsParamsDTO);
@@ -60,24 +57,23 @@ public class ExamQuestionsController {
 
     /**
      * 获取详情根据ID
-     * @param id
+     * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object getExamQuestionsDetailsById(@PathVariable("id") Integer id) {
-        ExamQuestionsDetailsVO examQuestionsDetailsVO = examQuestionsService.getExamQuestionsDetailsById(id);
+    @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object getExamQuestionsDetailsById(@RequestBody RequestBean<Integer> requestBean) {
+        ExamQuestionsDetailsVO examQuestionsDetailsVO = examQuestionsService.getExamQuestionsDetailsById(requestBean.getData());
         return ResponseUtils.success("200", examQuestionsDetailsVO);
     }
 
     /**
      * 新增
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object save(@RequestBody RequestBean<ExamQuestionsSaveDTO> requestBean) {
         try {
-            RequestBean<ExamQuestionsSaveDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ExamQuestionsSaveDTO>>(){});
             ExamQuestionsSaveDTO examQuestionsSaveDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(examQuestionsSaveDTO,"courseCode", "type", "title");
             examQuestionsService.save(examQuestionsSaveDTO);
@@ -91,16 +87,14 @@ public class ExamQuestionsController {
 
     /**
      * 修改
-     * @param id
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/json;charset=utf-8")
-    public Object modify(@PathVariable("id")Integer id, @RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object modify(RequestBean<ExamQuestionsSaveDTO> requestBean) {
         try {
-            RequestBean<ExamQuestionsSaveDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ExamQuestionsSaveDTO>>(){});
             ExamQuestionsSaveDTO examQuestionsSaveDTO = requestBean.getData();
-            examQuestionsService.modify(id, examQuestionsSaveDTO);
+            examQuestionsService.modify(examQuestionsSaveDTO);
             return ResponseUtils.success("201");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
@@ -109,13 +103,12 @@ public class ExamQuestionsController {
 
     /**
      * 删除试题相关的信息
-     * @param jsonObject
+     * @param requestBean
      * @return
      */
-    @RequestMapping(method = RequestMethod.DELETE, consumes = "application/json;charset=utf-8")
-    public Object delete(@RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object delete(@RequestBody RequestBean<Integer> requestBean) {
         try {
-            RequestBean<Integer> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<Integer>>(){});
             examQuestionsService.delete(requestBean.getData());
             return ResponseUtils.success("204");
         } catch (BusinessRuntimeException e) {

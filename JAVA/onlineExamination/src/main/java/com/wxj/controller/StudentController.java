@@ -1,7 +1,5 @@
 package com.wxj.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.model.Bean.PageBean;
@@ -35,13 +33,12 @@ public class StudentController {
 
     /**
      * 条件查询列表分页
-     * @param jsonObject 条件
+     * @param requestBean 条件
      * @return PageBean<StudentVO>
      */
-    @RequestMapping(method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object listStudentByParams(@RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listStudentByParams(@RequestBody RequestBean<StudentParamsDTO> requestBean) {
         try {
-            RequestBean<StudentParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<StudentParamsDTO>>(){});
             StudentParamsDTO studentParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(studentParamsDTO,"currentPage", "pageSize");
             List<StudentVO> studentVOList = studentService.listStudentVOByParams(studentParamsDTO);
@@ -59,14 +56,14 @@ public class StudentController {
 
     /**
      * 根据id查询
-     * @param id studentID
+     * @param requestBean studentID
      * @return StudentVO
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object getStudentById(@PathVariable("id") Integer id) {
+    @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object getStudentById(@RequestBody RequestBean<Integer> requestBean) {
         try {
             StudentParamsDTO studentParamsDTO = new StudentParamsDTO();
-            studentParamsDTO.setId(id);
+            studentParamsDTO.setId(requestBean.getData());
             studentParamsDTO.setCurrentPage(1);
             studentParamsDTO.setPageSize(1);
             List<StudentVO> studentVOList = studentService.listStudentVOByParams(studentParamsDTO);
@@ -79,13 +76,12 @@ public class StudentController {
 
     /**
      * 新增
-     * @param jsonObject 学生信息
+     * @param requestBean 学生信息
      * @return 201
      */
-    @RequestMapping(method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object save(@RequestBody RequestBean<StudentParamsDTO> requestBean) {
         try {
-            RequestBean<StudentParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<StudentParamsDTO>>(){});
             StudentParamsDTO studentParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(studentParamsDTO, "sno", "name", "classId");
             studentService.save(studentParamsDTO);
@@ -99,31 +95,32 @@ public class StudentController {
 
     /**
      * 修改
-     * @param id studentId
-     * @param jsonObject 要修改的学生信息
+     * @param requestBean 要修改的学生信息
      * @return 201
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/json;charset=utf-8")
-    public Object modify(@PathVariable("id") Integer id, @RequestBody JSONObject jsonObject) {
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object modify(@RequestBody RequestBean<StudentParamsDTO> requestBean) {
         try {
-            RequestBean<StudentParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<StudentParamsDTO>>(){});
             StudentParamsDTO studentParamsDTO = requestBean.getData();
-            studentService.modify(id, studentParamsDTO);
+            new ValidateParamsUtil().vaildParams(studentParamsDTO, "id");
+            studentService.modify(studentParamsDTO);
             return ResponseUtils.success("201");
-        } catch (BusinessRuntimeException e) {
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        }  catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }
     }
 
     /**
      * 删除
-     * @param id studentId
+     * @param requestBean studentId
      * @return 204
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, consumes = "application/json;charset=utf-8")
-    public Object delete(@PathVariable("id") Integer id) {
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object delete(@RequestBody RequestBean<Integer> requestBean) {
         try {
-            studentService.delete(id);
+            studentService.delete(requestBean.getData());
             return ResponseUtils.success("204");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
@@ -132,24 +129,24 @@ public class StudentController {
 
     /**
      * 成绩
-     * @param id studentId
+     * @param requestBean studentId
      * @return 200
      */
-    @RequestMapping(value = "/achievement/{id}", method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
-    public Object achievement(@PathVariable("id") Integer id) {
-        List<AchievementVO> achievementVOList = studentService.achievement(id);
+    @RequestMapping(value = "/achievement", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object achievement(@RequestBody RequestBean<Integer> requestBean) {
+        List<AchievementVO> achievementVOList = studentService.achievement(requestBean.getData());
         return ResponseUtils.success("200", achievementVOList);
     }
 
     /**
      * 重置密码
-     * @param id studentId
+     * @param requestBean studentId
      * @return 201
      */
-    @RequestMapping("/resetPassword/{id}")
-    public Object resetPassword(@PathVariable("id") Integer id) {
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object resetPassword(@RequestBody RequestBean<Integer> requestBean) {
         try {
-            studentService.resetPassword(id);
+            studentService.resetPassword(requestBean.getData());
             return ResponseUtils.success("201");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);

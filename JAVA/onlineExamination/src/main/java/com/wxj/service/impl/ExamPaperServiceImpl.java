@@ -67,7 +67,7 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
     }
 
     @Override
-    public int modify(Integer id, ExamPaperSaveModifyDTO examPaperSaveModifyDTO) {
+    public int modify(ExamPaperSaveModifyDTO examPaperSaveModifyDTO) {
         //TODO:修改试卷
 
         //TODO:删除试卷试题对应关系

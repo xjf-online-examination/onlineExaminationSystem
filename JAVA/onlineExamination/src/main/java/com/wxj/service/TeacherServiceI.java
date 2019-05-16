@@ -41,11 +41,10 @@ public interface TeacherServiceI {
 
     /**
      * 修改
-     * @param id
      * @param teacherParamsDTO
      * @return
      */
-    int modify(Integer id, TeacherParamsDTO teacherParamsDTO);
+    int modify(TeacherParamsDTO teacherParamsDTO);
 
     /**
      * 删除教师相关信息

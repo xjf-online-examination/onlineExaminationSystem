@@ -75,7 +75,7 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     }
 
     @Override
-    public int modify(Integer id, ExamQuestionsSaveDTO examQuestionsSaveDTO) {
+    public int modify(ExamQuestionsSaveDTO examQuestionsSaveDTO) {
         ExamQuestions examQuestions = new ExamQuestions();
         BeanUtils.copyProperties(examQuestionsSaveDTO, examQuestions);
 

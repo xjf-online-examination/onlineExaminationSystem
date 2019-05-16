@@ -41,5 +41,9 @@ public class LoginController {
 
     }
 
-    //TODO:修改密码
+    @RequestMapping(value = "/modifyPassword", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object modifyPassword(HttpServletRequest request, @RequestBody RequestBean<String> requestBean) {
+
+        return null;
+    }
 }

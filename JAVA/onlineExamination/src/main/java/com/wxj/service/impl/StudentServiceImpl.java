@@ -57,6 +57,13 @@ public class StudentServiceImpl implements StudentServiceI {
 
     @Override
     public int save(StudentParamsDTO studentParamsDTO) {
+        Map<String, Object> paramsMap = new HashMap<>(1);
+        paramsMap.put("sno", studentParamsDTO.getSno());
+        List<Student> studentList = studentMapper.selectStudentByParams(paramsMap);
+        if (studentList.size() > 0) {
+            throw new ParamInvalidException("sno重复");
+        }
+
         Date date = new Date();
 
         Student student = new Student();
@@ -64,51 +71,42 @@ public class StudentServiceImpl implements StudentServiceI {
         BeanUtils.copyProperties(studentParamsDTO, student);
         student.setCreateTime(date);
         student.setModifyTime(date);
+        student.setLoginPassword("123456");
         student.setDelFlag(SystemConstant.NOUGHT);
 
-        int i = 0;
-        try {
-            i = studentMapper.insertSelective(student);
-            if (SystemConstant.ZERO == i) {
-                throw new OperationException(" 插入失败");
-            }
-        } catch (DuplicateKeyException e) {
-            Map<String, Object> paramsMap = new HashMap<>(1);
-            paramsMap.put("sno", studentParamsDTO.getSno());
-            List<Student> studentList = studentMapper.selectStudentByParams(paramsMap);
-            if (studentList.size() > 0) {
-                throw new ParamInvalidException("sno重复");
-            }
+        int i = studentMapper.insertSelective(student);
+        if (SystemConstant.ZERO == i) {
+            throw new OperationException(" 插入失败");
         }
+
         return i;
     }
 
     @Override
-    public int modify(Integer id, StudentParamsDTO studentParamsDTO) {
+    public int modify(StudentParamsDTO studentParamsDTO) {
+        Map<String, Object> paramsMap = new HashMap<>(2);
+        paramsMap.put("id", studentParamsDTO.getId());
+        paramsMap.put("sno", studentParamsDTO.getSno());
+        List<Student> studentList = studentMapper.selectStudentByParams(paramsMap);
+        if (studentList.size() > 0) {
+            throw new ParamInvalidException("sno重复");
+        }
+
         Student student = new Student();
 
         BeanUtils.copyProperties(studentParamsDTO, student);
-        student.setId(id);
         student.setModifyTime(new Date());
-        int i = 0;
-        try {
-            i = studentMapper.updateByPrimaryKeySelective(student);
-            if (SystemConstant.ZERO == i) {
-                throw new OperationException("修改失败");
-            }
-        } catch (DuplicateKeyException e) {
-            Map<String, Object> paramsMap = new HashMap<>(1);
-            paramsMap.put("sno", studentParamsDTO.getSno());
-            List<Student> studentList = studentMapper.selectStudentByParams(paramsMap);
-            if (studentList.size() > 0) {
-                throw new ParamInvalidException("sno重复");
-            }
+
+        int i = studentMapper.updateByPrimaryKeySelective(student);
+        if (SystemConstant.ZERO == i) {
+            throw new OperationException("修改失败");
         }
         return i;
     }
 
     @Override
     public int delete(Integer id) {
+        //TODO:删除学生相关的
         int i = studentMapper.deleteByPrimaryKey(id);
         if (SystemConstant.ZERO == i) {
             throw new OperationException("删除失败");
