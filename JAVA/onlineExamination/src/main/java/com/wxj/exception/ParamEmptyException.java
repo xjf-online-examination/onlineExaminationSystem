@@ -9,7 +9,7 @@ package com.wxj.exception;
  * @author zhengzhibo
  * @date 2019年1月8日 下午4:31:02
  */
-public class ParamEmptyException extends BusinessException{
+public class ParamEmptyException extends BusinessRuntimeException{
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ public class ParamEmptyException extends BusinessException{
 
 	@Override
 	public String getCode(){
-		return "E11_ARG_IS_EMPTY";
+		return "400";
 	}
 
 	@Override

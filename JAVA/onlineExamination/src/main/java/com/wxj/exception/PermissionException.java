@@ -9,7 +9,7 @@ package com.wxj.exception;
  * @author zhengzhibo
  * @date 2019年1月8日 下午4:31:02
  */
-public class PermissionException extends BusinessException{
+public class PermissionException extends BusinessRuntimeException{
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ public class PermissionException extends BusinessException{
 
 	@Override
 	public String getCode(){
-		return "E10_PERMISSION_DENIED";
+		return "401";
 	}
 
 	@Override

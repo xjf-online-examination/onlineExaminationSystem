@@ -25,7 +25,6 @@ import java.util.List;
  * @date 2019-05-12 22:55
  */
 @RestController
-@RequestMapping("/class")
 public class ClassController {
     @Autowired
     ClassServiceI classService;
