@@ -11,7 +11,7 @@ public class TeacherParamsDTO implements Serializable {
     /**
      * ID
      */
-    private int id;
+    private Integer id;
     /**
      *  工号
      */

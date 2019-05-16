@@ -8,7 +8,6 @@ import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.ExamPaperParamsDTO;
 import com.wxj.model.DTO.ExamPaperSaveModifyDTO;
-import com.wxj.model.DTO.TeacherParamsDTO;
 import com.wxj.model.VO.ExamPaperDetailsVO;
 import com.wxj.model.VO.ExamPaperVO;
 import com.wxj.model.VO.ExamQuestionsVO;
@@ -36,7 +35,7 @@ public class ExamPaperController {
     @Autowired
     ExamPaperServiceI examPaperService;
 
-    @RequestMapping(method = RequestMethod.GET,consumes = "applocation/json;charset=utf-8")
+    @RequestMapping(method = RequestMethod.GET, consumes = "application/json;charset=utf-8")
     public Object listExamPaperByParams(@RequestBody JSONObject jsonObject) {
         try {
             RequestBean<ExamPaperParamsDTO> requestBean = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<RequestBean<ExamPaperParamsDTO>>(){});

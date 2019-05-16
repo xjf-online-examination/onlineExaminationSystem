@@ -242,6 +242,13 @@
   </update>
 
   <insert id="batchInsert" parameterType="java.util.List">
-
+    insert into exam_paper_questions
+    (id, exam_paper_id, exam_questions_id, questions_no, create_time, modify_time, del_flag)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id,jdbcType=INTEGER}, #{item.examPaperId,jdbcType=INTEGER}, #{item.examQuestionsId,jdbcType=INTEGER},
+      #{item.questionsNo,jdbcType=TINYINT}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP},
+      #{item.delFlag,jdbcType=CHAR})
+    </foreach>
   </insert>
 </mapper>

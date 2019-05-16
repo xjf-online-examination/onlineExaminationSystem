@@ -13,7 +13,7 @@ public class ExamQuestionsModifyDTO implements Serializable {
     /**
      * ID
      */
-    private int id;
+    private Integer id;
     /**
      * 课程编号
      */
