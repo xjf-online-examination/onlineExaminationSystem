@@ -1,0 +1,159 @@
+package com.wxj.controller;
+
+import com.wxj.exception.BusinessException;
+import com.wxj.exception.BusinessRuntimeException;
+import com.wxj.model.Bean.PageBean;
+import com.wxj.model.Bean.RequestBean;
+import com.wxj.model.DTO.TeacherParamsDTO;
+import com.wxj.model.VO.TeacherTaughtVO;
+import com.wxj.model.VO.TeacherVO;
+import com.wxj.service.TeacherServiceI;
+import com.wxj.utils.ResponseUtils;
+import com.wxj.utils.ValidateParamsUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * <p>Title: TeacherController</p >
+ * <p>Description: </p >
+ * <p>Copyright: Copyright (c) 2018</p >
+ * <p>Company: www.hanshow.com</p >
+ *
+ * @author wangxiaojun
+ * @version 1.0
+ * @date 2019-05-13 21:46
+ */
+@RestController
+@RequestMapping("/teacher")
+public class TeacherController {
+    @Autowired
+    TeacherServiceI teacherService;
+
+    /**
+     * 条件查询分页列表
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listTeacherByParams(@RequestBody RequestBean<TeacherParamsDTO> requestBean) {
+        try {
+            TeacherParamsDTO teacherParamsDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(teacherParamsDTO,"currentPage", "pageSize");
+            List<TeacherVO> studentVOList = teacherService.listTeacherByParams(teacherParamsDTO);
+
+            Long count = teacherService.countTeacherByParams(teacherParamsDTO);
+
+            PageBean<TeacherVO> pageBean = new PageBean(count, teacherParamsDTO.getCurrentPage(), teacherParamsDTO.getPageSize(), studentVOList);
+            return ResponseUtils.success("200",pageBean);
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 根据id查询
+     * @param requestBean studentID
+     * @return StudentVO
+     */
+    @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object getTeacherById(@RequestBody RequestBean<Integer> requestBean) {
+        try {
+            TeacherParamsDTO teacherParamsDTO = new TeacherParamsDTO();
+            teacherParamsDTO.setId(requestBean.getData());
+            teacherParamsDTO.setCurrentPage(1);
+            teacherParamsDTO.setPageSize(1);
+            List<TeacherVO> studentVOList = teacherService.listTeacherByParams(teacherParamsDTO);
+
+            return ResponseUtils.success("200", studentVOList.get(0));
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 新增
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object save(@RequestBody RequestBean<TeacherParamsDTO> requestBean) {
+        try {
+            TeacherParamsDTO teacherParamsDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(teacherParamsDTO, "jobNo", "name");
+            teacherService.save(teacherParamsDTO);
+            return ResponseUtils.success("201");
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 修改
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object modify(@RequestBody RequestBean<TeacherParamsDTO> requestBean) {
+        try {
+            TeacherParamsDTO teacherParamsDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(teacherParamsDTO, "id");
+            teacherService.modify(teacherParamsDTO);
+            return ResponseUtils.success("201");
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        }  catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 删除教师相关的信息
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object delete(@RequestBody RequestBean<Integer> requestBean) {
+        try {
+            teacherService.delete(requestBean.getData());
+            return ResponseUtils.success("204");
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 所授课程
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "taught", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listTaughtByTeacherId(@RequestBody RequestBean<Integer> requestBean) {
+        try {
+            List<TeacherTaughtVO> teacherTaughtVOList = teacherService.listTaughtByTeacherId(requestBean.getData());
+            return ResponseUtils.success("200", teacherTaughtVOList);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 重置密码
+     * @param requestBean studentId
+     * @return 201
+     */
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object resetPassword(@RequestBody RequestBean<Integer> requestBean) {
+        try {
+            teacherService.resetPassword(requestBean.getData());
+            return ResponseUtils.success("201");
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+}

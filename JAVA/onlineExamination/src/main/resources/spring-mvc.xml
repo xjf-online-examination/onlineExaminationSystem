@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task-4.2.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	    http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+	<!-- 配置使Spring采用CGLIB代理 ，使controller的aop生效。 必须写在spring-mvc.xml里-->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<!-- 引入dbconfig.properties属性文件 -->
+	<context:property-placeholder location="classpath:config.properties"/> 
+
+
+	<!-- 自动扫描该包，使SpringMVC认为包下用注解的类是控制器 -->
+	<context:component-scan base-package="com.wxj.controller,com.wxj.aspect" />
+
+
+	<!-- 扩充了注解驱动，可以将请求参数绑定到控制参数 -->
+	<!-- 扩充了注解驱动，用于统一处理返回的json，比如把null字符串改成"" -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+
+	<!-- 静态资源处理 css js images -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+
+	<!-- Configure to plugin JSON as request and response in method handler -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="jsonMessageConverter" />
+			</list>
+		</property>
+	</bean>
+	<!-- Configure bean to convert JSON to POJO and vice versa -->
+	<bean id="jsonMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+	</bean>
+
+	<!-- 上传文件拦截，设置最大上传文件大小   10M=10*1024*1024(B)=10485760 bytes -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+    	<property name="maxUploadSize" value="10485760" />  
+	</bean>
+
+    <!-- 启动加载 初始化日期转换类型 -->
+<!--    <bean class="com.hanshow.wise.portal.center.init.DateMorpherInit"></bean>-->
+
+
+</beans>  
