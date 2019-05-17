@@ -1,15 +1,41 @@
 import axios from '@/libs/api.request';
 
-export const getTeacherList = params => axios.request({
-  url: 'get_table_data',
-  method: 'POST',
-  data: params,
-});
-export const addTeacher = params => axios.request({
-  url: 'get_table_data',
-  method: 'POST',
-  data: params,
-});
+export const getTeacherList = ({
+  name,
+  jobNo,
+  currentPage,
+  pageSize,
+}) => {
+  const data = {
+    name,
+    jobNo,
+    currentPage,
+    pageSize,
+  };
+  return axios.request({
+    url: 'teacher/list',
+    data: {
+      data,
+    },
+    method: 'POST',
+  });
+};
+export const addTeacher = ({
+  name,
+  jobNo,
+}) => {
+  const data = {
+    name,
+    jobNo,
+  };
+  return axios.request({
+    url: 'teacher',
+    data: {
+      data,
+    },
+    method: 'post',
+  });
+};
 
 export const getDragList = () => axios.request({
   url: 'get_drag_list',
