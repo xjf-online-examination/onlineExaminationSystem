@@ -12,6 +12,7 @@ import com.wxj.utils.ValidateParamsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class ClassController {
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object listClassByParams(@RequestBody RequestBean<ClassParamsDTO> requestBean) {
+    public Object listClassByParams(HttpServletRequest request, @RequestBody RequestBean<ClassParamsDTO> requestBean) {
         try {
             ClassParamsDTO classParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(classParamsDTO,"currentPage", "pageSize");
@@ -59,7 +60,7 @@ public class ClassController {
      * @return
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object getClassById(@RequestBody RequestBean<Integer> requestBean) {
+    public Object getClassById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         ClassParamsDTO classParamsDTO = new ClassParamsDTO();
         classParamsDTO.setId(requestBean.getData());
         classParamsDTO.setCurrentPage(1);
@@ -76,7 +77,7 @@ public class ClassController {
      * @return
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody RequestBean<ClassParamsDTO> requestBean) {
+    public Object save(HttpServletRequest request, @RequestBody RequestBean<ClassParamsDTO> requestBean) {
         try {
             ClassParamsDTO classParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(classParamsDTO,"code", "name");
@@ -95,7 +96,7 @@ public class ClassController {
      * @return
      */
     @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object modify(@RequestBody RequestBean<ClassParamsDTO> requestBean) {
+    public Object modify(HttpServletRequest request, @RequestBody RequestBean<ClassParamsDTO> requestBean) {
         try {
             ClassParamsDTO classParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(classParamsDTO,"id");
@@ -114,7 +115,7 @@ public class ClassController {
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE, consumes = "application/json;charset=utf-8")
-    public Object delete(@RequestBody RequestBean<Integer> requestBean) {
+    public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             classService.delete(requestBean.getData());
             return ResponseUtils.success("204");

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public class ExamScheduleController {
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object listExamScheduleByParams(@RequestBody RequestBean<ExamScheduleParamsDTO> requestBean) {
+    public Object listExamScheduleByParams(HttpServletRequest request, @RequestBody RequestBean<ExamScheduleParamsDTO> requestBean) {
         try {
             ExamScheduleParamsDTO examScheduleParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(examScheduleParamsDTO,"currentPage", "pageSize");

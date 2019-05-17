@@ -14,6 +14,7 @@ import com.wxj.utils.ValidateParamsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -38,7 +39,7 @@ public class ExamQuestionsController {
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object listExamQuestionsByParams(@RequestBody RequestBean<ExamQuestionsParamsDTO> requestBean) {
+    public Object listExamQuestionsByParams(HttpServletRequest request, @RequestBody RequestBean<ExamQuestionsParamsDTO> requestBean) {
         try {
             ExamQuestionsParamsDTO examQuestionsParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(examQuestionsParamsDTO,"currentPage", "pageSize");
@@ -61,7 +62,7 @@ public class ExamQuestionsController {
      * @return
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object getExamQuestionsDetailsById(@RequestBody RequestBean<Integer> requestBean) {
+    public Object getExamQuestionsDetailsById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         ExamQuestionsDetailsVO examQuestionsDetailsVO = examQuestionsService.getExamQuestionsDetailsById(requestBean.getData());
         return ResponseUtils.success("200", examQuestionsDetailsVO);
     }
@@ -72,7 +73,7 @@ public class ExamQuestionsController {
      * @return
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody RequestBean<ExamQuestionsSaveDTO> requestBean) {
+    public Object save(HttpServletRequest request, @RequestBody RequestBean<ExamQuestionsSaveDTO> requestBean) {
         try {
             ExamQuestionsSaveDTO examQuestionsSaveDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(examQuestionsSaveDTO,"courseCode", "type", "title");
@@ -91,7 +92,7 @@ public class ExamQuestionsController {
      * @return
      */
     @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object modify(RequestBean<ExamQuestionsSaveDTO> requestBean) {
+    public Object modify(HttpServletRequest request, RequestBean<ExamQuestionsSaveDTO> requestBean) {
         try {
             ExamQuestionsSaveDTO examQuestionsSaveDTO = requestBean.getData();
             examQuestionsService.modify(examQuestionsSaveDTO);
@@ -107,7 +108,7 @@ public class ExamQuestionsController {
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object delete(@RequestBody RequestBean<Integer> requestBean) {
+    public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             examQuestionsService.delete(requestBean.getData());
             return ResponseUtils.success("204");

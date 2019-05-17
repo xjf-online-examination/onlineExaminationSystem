@@ -10,9 +10,12 @@ import com.wxj.model.VO.TeacherVO;
 import com.wxj.service.TeacherServiceI;
 import com.wxj.utils.ResponseUtils;
 import com.wxj.utils.ValidateParamsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -28,6 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/teacher")
 public class TeacherController {
+    Logger logger = LoggerFactory.getLogger(TeacherController.class);
     @Autowired
     TeacherServiceI teacherService;
 
@@ -37,7 +41,7 @@ public class TeacherController {
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object listTeacherByParams(@RequestBody RequestBean<TeacherParamsDTO> requestBean) {
+    public Object listTeacherByParams(HttpServletRequest request, @RequestBody RequestBean<TeacherParamsDTO> requestBean) {
         try {
             TeacherParamsDTO teacherParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(teacherParamsDTO,"currentPage", "pageSize");
@@ -60,7 +64,7 @@ public class TeacherController {
      * @return StudentVO
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object getTeacherById(@RequestBody RequestBean<Integer> requestBean) {
+    public Object getTeacherById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             TeacherParamsDTO teacherParamsDTO = new TeacherParamsDTO();
             teacherParamsDTO.setId(requestBean.getData());
@@ -80,7 +84,7 @@ public class TeacherController {
      * @return
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody RequestBean<TeacherParamsDTO> requestBean) {
+    public Object save(HttpServletRequest request, @RequestBody RequestBean<TeacherParamsDTO> requestBean) {
         try {
             TeacherParamsDTO teacherParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(teacherParamsDTO, "jobNo", "name");
@@ -99,7 +103,7 @@ public class TeacherController {
      * @return
      */
     @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object modify(@RequestBody RequestBean<TeacherParamsDTO> requestBean) {
+    public Object modify(HttpServletRequest request, @RequestBody RequestBean<TeacherParamsDTO> requestBean) {
         try {
             TeacherParamsDTO teacherParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(teacherParamsDTO, "id");
@@ -118,7 +122,7 @@ public class TeacherController {
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object delete(@RequestBody RequestBean<Integer> requestBean) {
+    public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             teacherService.delete(requestBean.getData());
             return ResponseUtils.success("204");
@@ -133,7 +137,7 @@ public class TeacherController {
      * @return
      */
     @RequestMapping(value = "taught", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object listTaughtByTeacherId(@RequestBody RequestBean<Integer> requestBean) {
+    public Object listTaughtByTeacherId(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             List<TeacherTaughtVO> teacherTaughtVOList = teacherService.listTaughtByTeacherId(requestBean.getData());
             return ResponseUtils.success("200", teacherTaughtVOList);
@@ -148,7 +152,7 @@ public class TeacherController {
      * @return 201
      */
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object resetPassword(@RequestBody RequestBean<Integer> requestBean) {
+    public Object resetPassword(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             teacherService.resetPassword(requestBean.getData());
             return ResponseUtils.success("201");

@@ -36,37 +36,23 @@ public class LoginValidateAspect {
     /**
      *
      * @param request
-     * @param obj
+     * @param requestBean
      */
-    public void before(Object obj) throws BusinessRuntimeException {
+    public void before(HttpServletRequest request, RequestBean<?> requestBean) throws BusinessRuntimeException {
 //        logger.info("[#requestUrl#]:{}\t[#requestJson#]:{}", request.getRequestURI(), StringUtil.formatJson(JSONObject.fromObject(obj).toString()));
-//        String requestUri = request.getRequestURI();
-//        String contextPath = request.getContextPath();
-//        String url = requestUri.substring(contextPath.length());
-//        if (url.startsWith("/open/user/loginByLoginName") || url.startsWith("/open")) { //如果是不拦截的地址直接放行
-//            return;
-//        }
+        String requestUri = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        String url = requestUri.substring(contextPath.length());
+        if (url.startsWith("/open")) { //如果是不拦截的地址直接放行
+            return;
+        }
         RequestBean<?> baseDTO = null;
         //是HttpServletRequest request, @RequestBody JSONObject jsonObject
-        if (obj instanceof JSONObject) {
-            //            JSONObject jsonObject = (JSONObject) obj;
-            RequestBean<JSONObject> baseQUERY = null;
-//            JsonConfig jsonConfig = new JsonConfig();
-            Map<String, Object> classMap = new HashMap<>();
-//            classMap.put("data",JSONObject.class);
-//            jsonConfig.setClassMap(classMap);
-//            baseQUERY = (BaseQUERY) JSONObject.toBean(jsonObject, new BaseQUERY(), jsonConfig);
-            baseQUERY= JSON.parseObject(JSON.toJSONString(obj), RequestBean.class);
-            // 校验参数
-            validateParamter(baseQUERY);
-            //校验securityKey
-//            validateSecurityKey(request, baseQUERY);
-        } else if (obj instanceof RequestBean) {
-            RequestBean requestBean = (RequestBean) obj;
+        if (requestBean instanceof RequestBean) {
             // 校验参数
             validateParamter(requestBean);
             //校验securityKey
-//            validateSecurityKey(request, requestBean);
+            validateSecurityKey(request, requestBean);
         }
 
     }
@@ -104,9 +90,9 @@ public class LoginValidateAspect {
         }
     }
 
-    public void after(JSONObject jsonObject) {
-        System.out.println(jsonObject);
-//        logger.info("[#RequestUrl##]:{},[#RequestJson#]:{}", request.getRequestURI(), jsonObject);
+    public void after(HttpServletRequest request, RequestBean<?> requestBean) {
+        System.out.println(requestBean);
+        logger.info("[#RequestUrl##]:{},[#RequestJson#]:{}", request.getRequestURI(), requestBean);
     }
 
     public void afterReturning(HttpServletRequest request, Object response, JSONObject jsonObject)throws JsonProcessingException {

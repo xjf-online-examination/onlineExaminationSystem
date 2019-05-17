@@ -13,6 +13,7 @@ import com.wxj.utils.ValidateParamsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public class StudentController {
      * @return PageBean<StudentVO>
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object listStudentByParams(@RequestBody RequestBean<StudentParamsDTO> requestBean) {
+    public Object listStudentByParams(HttpServletRequest request, @RequestBody RequestBean<StudentParamsDTO> requestBean) {
         try {
             StudentParamsDTO studentParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(studentParamsDTO,"currentPage", "pageSize");
@@ -60,7 +61,7 @@ public class StudentController {
      * @return StudentVO
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object getStudentById(@RequestBody RequestBean<Integer> requestBean) {
+    public Object getStudentById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             StudentParamsDTO studentParamsDTO = new StudentParamsDTO();
             studentParamsDTO.setId(requestBean.getData());
@@ -80,7 +81,7 @@ public class StudentController {
      * @return 201
      */
     @RequestMapping(value = "save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody RequestBean<StudentParamsDTO> requestBean) {
+    public Object save(HttpServletRequest request, @RequestBody RequestBean<StudentParamsDTO> requestBean) {
         try {
             StudentParamsDTO studentParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(studentParamsDTO, "sno", "name", "classId");
@@ -99,7 +100,7 @@ public class StudentController {
      * @return 201
      */
     @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object modify(@RequestBody RequestBean<StudentParamsDTO> requestBean) {
+    public Object modify(HttpServletRequest request, @RequestBody RequestBean<StudentParamsDTO> requestBean) {
         try {
             StudentParamsDTO studentParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(studentParamsDTO, "id");
@@ -118,7 +119,7 @@ public class StudentController {
      * @return 204
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object delete(@RequestBody RequestBean<Integer> requestBean) {
+    public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             studentService.delete(requestBean.getData());
             return ResponseUtils.success("204");
@@ -133,7 +134,7 @@ public class StudentController {
      * @return 200
      */
     @RequestMapping(value = "/achievement", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object achievement(@RequestBody RequestBean<Integer> requestBean) {
+    public Object achievement(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         List<AchievementVO> achievementVOList = studentService.achievement(requestBean.getData());
         return ResponseUtils.success("200", achievementVOList);
     }
@@ -144,7 +145,7 @@ public class StudentController {
      * @return 201
      */
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object resetPassword(@RequestBody RequestBean<Integer> requestBean) {
+    public Object resetPassword(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             studentService.resetPassword(requestBean.getData());
             return ResponseUtils.success("201");

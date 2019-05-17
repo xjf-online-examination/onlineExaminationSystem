@@ -28,23 +28,23 @@
 	<bean id="controllerLogAspect" class="com.hanshow.wise.common.aspect.ControllerLogAspect" />
 -->
 
-<!--    <bean id="loginValidateAspect" class="com.wxj.aspect.LoginValidateAspect" />-->
-<!--	&lt;!&ndash;统一验证小程序调用接口时是否带有合法的securityKey,合法则继续走,不合法则直接拦截&ndash;&gt;-->
-<!--    <aop:config>-->
-<!--        <aop:aspect id="loginValidate" ref="loginValidateAspect">-->
-<!--            &lt;!&ndash; 配置一个切点 &ndash;&gt;-->
-<!--            <aop:pointcut id="loginValidatePoint" expression="execution(* com.wxj.controller.*(..)) and args(obj)"  />-->
-<!--            &lt;!&ndash; 配置前置通知 &ndash;&gt;-->
-<!--            <aop:before pointcut-ref="loginValidatePoint" method="before" arg-names="obj"/>-->
-<!--            &lt;!&ndash; 配置前置通知 &ndash;&gt;-->
-<!--&lt;!&ndash;            <aop:after pointcut-ref="loginValidatePoint" method="after" arg-names="obj"/>&ndash;&gt;-->
-<!--            &lt;!&ndash; 配置后置返回通知 &ndash;&gt;-->
-<!--&lt;!&ndash;            <aop:after-returning pointcut-ref="loginValidatePoint" method="afterReturning" arg-names="request,response,jsonObject" returning="response" />&ndash;&gt;-->
-<!--            &lt;!&ndash; 配置异常捕捉 &ndash;&gt;-->
-<!--&lt;!&ndash;-->
-<!--            <aop:after-throwing throwing="exception" method="afterThrowingRequest" pointcut-ref="loginValidatePoint" arg-names="request,jsonObject, exception" />-->
-<!--&ndash;&gt;-->
-<!--        </aop:aspect>-->
-<!--    </aop:config>-->
-<!--	<bean id="exceptionResolver" class="com.hanshow.wise.portal.center.resolver.CustomExceptionResolver"></bean>-->
+    <bean id="loginValidateAspect" class="com.wxj.aspect.LoginValidateAspect" />
+	<!--统一验证小程序调用接口时是否带有合法的securityKey,合法则继续走,不合法则直接拦截-->
+    <aop:config>
+        <aop:aspect id="loginValidate" ref="loginValidateAspect">
+            <!-- 配置一个切点 -->
+            <aop:pointcut id="loginValidatePoint" expression="execution(* com.wxj.controller.*.*(..)) and args(request,requestBean)"  />
+            <!-- 配置前置通知 -->
+            <aop:before pointcut-ref="loginValidatePoint" method="before" arg-names="request, requestBean"/>
+            <!-- 配置后置通知 -->
+            <aop:after pointcut-ref="loginValidatePoint" method="after" arg-names="request, requestBean"/>
+            <!-- 配置后置返回通知 -->
+<!--            <aop:after-returning pointcut-ref="loginValidatePoint" method="afterReturning" arg-names="request,response,jsonObject" returning="response" />-->
+            <!-- 配置异常捕捉 -->
+<!--
+            <aop:after-throwing throwing="exception" method="afterThrowingRequest" pointcut-ref="loginValidatePoint" arg-names="request,jsonObject, exception" />
+-->
+        </aop:aspect>
+    </aop:config>
+	<bean id="exceptionResolver" class="com.wxj.resolver.CustomExceptionResolver"></bean>
 </beans>

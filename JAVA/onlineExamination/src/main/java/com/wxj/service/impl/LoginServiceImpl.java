@@ -58,7 +58,7 @@ public class LoginServiceImpl implements LoginServiceI {
             userInfoVO.setUserType(LoginConstant.USER_TYPE_ONE);
             userInfoVO.setSecurityKey(uuid);
 
-            request.getSession().setAttribute(LoginConstant.SECURITY_KEY+userInfoList.get(0).getName(), uuid);
+            request.getSession().setAttribute(LoginConstant.SECURITY_KEY + userInfoList.get(0).getName(), uuid);
         } else {
             throw new InnerDataErrorException("用户不存在");
         }

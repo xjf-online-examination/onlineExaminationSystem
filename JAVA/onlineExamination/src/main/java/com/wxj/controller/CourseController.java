@@ -14,6 +14,7 @@ import com.wxj.utils.ValidateParamsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -38,7 +39,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/list",method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object listCourseByParams(@RequestBody RequestBean<CourseParamsDTO> requestBean) {
+    public Object listCourseByParams(HttpServletRequest request, @RequestBody RequestBean<CourseParamsDTO> requestBean) {
         try {
             CourseParamsDTO teacherParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(teacherParamsDTO, "currentPage", "pageSize");
@@ -61,7 +62,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object getTeacherById(@RequestBody RequestBean<Integer> requestBean) {
+    public Object getTeacherById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             CourseParamsDTO courseParamsDTO = new CourseParamsDTO();
             courseParamsDTO.setId(requestBean.getData());
@@ -81,7 +82,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody RequestBean<CourseParamsDTO> requestBean) {
+    public Object save(HttpServletRequest request, @RequestBody RequestBean<CourseParamsDTO> requestBean) {
         try {
             CourseParamsDTO courseParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(courseParamsDTO, "code", "name", "classId");
@@ -100,7 +101,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object modify(@RequestBody RequestBean<CourseParamsDTO> requestBean) {
+    public Object modify(HttpServletRequest request, @RequestBody RequestBean<CourseParamsDTO> requestBean) {
         try {
             CourseParamsDTO courseParamsDTO = requestBean.getData();
             courseService.modify(courseParamsDTO);
@@ -116,7 +117,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object delete(@RequestBody RequestBean<Integer> requestBean) {
+    public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             courseService.delete(requestBean.getData());
             return ResponseUtils.success("204");

@@ -17,6 +17,7 @@ import com.wxj.utils.ValidateParamsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class ExamPaperController {
     ExamPaperServiceI examPaperService;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object listExamPaperByParams(@RequestBody RequestBean<ExamPaperParamsDTO> requestBean) {
+    public Object listExamPaperByParams(HttpServletRequest request, @RequestBody RequestBean<ExamPaperParamsDTO> requestBean) {
         try {
             ExamPaperParamsDTO examPaperParamsDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(examPaperParamsDTO,"currentPage", "pageSize");
@@ -59,7 +60,7 @@ public class ExamPaperController {
      * @return
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object getExamQuestionsDetailsById(@RequestBody RequestBean<Integer> requestBean) {
+    public Object getExamQuestionsDetailsById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         ExamPaperDetailsVO examQuestionsDetailsVO = examPaperService.getExamPaperDetailsById(requestBean.getData());
         return ResponseUtils.success("200", examQuestionsDetailsVO);
     }
@@ -70,7 +71,7 @@ public class ExamPaperController {
      * @return
      */
     @RequestMapping(value = "/automatic", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(@RequestBody RequestBean<ExamPaperSaveModifyDTO> requestBean) {
+    public Object save(HttpServletRequest request, @RequestBody RequestBean<ExamPaperSaveModifyDTO> requestBean) {
         try {
             ExamPaperSaveModifyDTO examPaperSaveModifyDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(examPaperSaveModifyDTO, "jobNo", "name");
@@ -89,7 +90,7 @@ public class ExamPaperController {
      * @return
      */
     @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object modify(@RequestBody RequestBean<ExamPaperSaveModifyDTO> requestBean) {
+    public Object modify(HttpServletRequest request, @RequestBody RequestBean<ExamPaperSaveModifyDTO> requestBean) {
         try {
             ExamPaperSaveModifyDTO examPaperSaveModifyDTO = requestBean.getData();
             examPaperService.modify(examPaperSaveModifyDTO);
