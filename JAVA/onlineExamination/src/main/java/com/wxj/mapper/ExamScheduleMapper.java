@@ -4,6 +4,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.wxj.model.DTO.ExamScheduleParamsDTO;
 import com.wxj.model.PO.ExamSchedule;
 import com.wxj.model.PO.ExamScheduleExample;
+import com.wxj.model.VO.ExamScheduleDetailsVO;
 import com.wxj.model.VO.ExamScheduleVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -79,4 +80,6 @@ public interface ExamScheduleMapper {
     List<ExamScheduleVO> listExamScheduleByParams(@Param("record") ExamScheduleParamsDTO examScheduleParamsDTO, PageBounds pageBounds);
 
     Long countExamScheduleByParams(@Param("record") ExamScheduleParamsDTO examScheduleParamsDTO);
+
+    ExamScheduleDetailsVO selectExamScheduleDetailsById(Integer id);
 }
