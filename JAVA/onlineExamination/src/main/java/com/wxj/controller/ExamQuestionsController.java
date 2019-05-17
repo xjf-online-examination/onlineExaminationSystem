@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * <p>Title: ExamQuestionsController</p >
- * <p>Description: </p >
+ * <p>Description: 试题管理</p >
  * <p>Copyright: Copyright (c) 2018</p >
  * <p>Company: wxj</p >
  *

@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * <p>Title: TeacherController</p >
- * <p>Description: </p >
+ * <p>Description: 教师管理</p >
  * <p>Copyright: Copyright (c) 2018</p >
  * <p>Company: www.hanshow.com</p >
  *

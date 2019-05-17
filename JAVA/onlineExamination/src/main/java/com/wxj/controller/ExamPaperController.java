@@ -1,7 +1,5 @@
 package com.wxj.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.model.Bean.PageBean;
@@ -22,7 +20,7 @@ import java.util.List;
 
 /**
  * <p>Title: ExamPaperController</p >
- * <p>Description: </p >
+ * <p>Description: 试卷管理</p >
  * <p>Copyright: Copyright (c) 2018</p >
  * <p>Company: wxj</p >
  *

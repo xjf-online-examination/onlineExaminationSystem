@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * <p>Title: ClassController</p >
- * <p>Description: </p >
+ * <p>Description: 班级管理</p >
  * <p>Copyright: Copyright (c) 2018</p >
  * <p>Company: www.hanshow.com</p >
  *

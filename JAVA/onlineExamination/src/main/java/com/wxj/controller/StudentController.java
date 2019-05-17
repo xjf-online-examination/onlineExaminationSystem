@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * <p>Title: StudentController</p >
- * <p>Description: </p >
+ * <p>Description: 学生管理</p >
  * <p>Copyright: Copyright (c) 2018</p >
  * <p>Company: wxj</p >
  *

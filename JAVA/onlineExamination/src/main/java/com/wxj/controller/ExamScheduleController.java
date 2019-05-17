@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * <p>Title: ExamScheduleController</p >
- * <p>Description: </p >
+ * <p>Description: 考试安排</p >
  * <p>Copyright: Copyright (c) 2018</p >
  * <p>Company: wxj</p >
  *

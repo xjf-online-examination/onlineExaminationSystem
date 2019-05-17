@@ -1,7 +1,5 @@
 package com.wxj.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.model.Bean.PageBean;
@@ -19,7 +17,7 @@ import java.util.List;
 
 /**
  * <p>Title: CourseController</p >
- * <p>Description: </p >
+ * <p>Description: 课程管理</p >
  * <p>Copyright: Copyright (c) 2018</p >
  * <p>Company: wxj</p >
  *
