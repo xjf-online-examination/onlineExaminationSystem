@@ -2,6 +2,7 @@ package com.wxj.controller;
 
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
+import com.wxj.exception.ParamEmptyException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
@@ -63,8 +64,15 @@ public class ExamQuestionsController {
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object getExamQuestionsDetailsById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
-        ExamQuestionsDetailsVO examQuestionsDetailsVO = examQuestionsService.getExamQuestionsDetailsById(requestBean.getData());
-        return ResponseUtils.success("200", examQuestionsDetailsVO);
+        try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
+            ExamQuestionsDetailsVO examQuestionsDetailsVO = examQuestionsService.getExamQuestionsDetailsById(requestBean.getData());
+            return ResponseUtils.success("200", examQuestionsDetailsVO);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
     }
 
     /**
@@ -76,7 +84,7 @@ public class ExamQuestionsController {
     public Object save(HttpServletRequest request, @RequestBody RequestBean<ExamQuestionsSaveDTO> requestBean) {
         try {
             ExamQuestionsSaveDTO examQuestionsSaveDTO = requestBean.getData();
-            new ValidateParamsUtil().vaildParams(examQuestionsSaveDTO,"courseCode", "type", "title");
+            new ValidateParamsUtil().vaildParams(examQuestionsSaveDTO,"courseCode", "type", "title", "score");
             examQuestionsService.save(examQuestionsSaveDTO);
             return ResponseUtils.success("201");
         } catch (BusinessException e) {
@@ -110,6 +118,9 @@ public class ExamQuestionsController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
             examQuestionsService.delete(requestBean.getData());
             return ResponseUtils.success("204");
         } catch (BusinessRuntimeException e) {

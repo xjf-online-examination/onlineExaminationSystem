@@ -15,6 +15,7 @@
     <result column="single_answer" jdbcType="CHAR" property="singleAnswer" />
     <result column="multiple_answer" jdbcType="CHAR" property="multipleAnswer" />
     <result column="yes_no_answer" jdbcType="CHAR" property="yesNoAnswer" />
+    <result column="score" jdbcType="INTEGER" property="score" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
     <result column="del_flag" jdbcType="CHAR" property="delFlag" />
@@ -78,8 +79,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, course_code, code, type, title, optionA, optionB, optionC, optionD, optionE, 
-    single_answer, multiple_answer, yes_no_answer, create_time, modify_time, del_flag
+    id, course_code, code, type, title, optionA, optionB, optionC, optionD, optionE,
+    single_answer, multiple_answer, yes_no_answer, score, create_time, modify_time, del_flag
   </sql>
   <select id="selectByExample" parameterType="com.wxj.model.PO.ExamQuestionsExample" resultMap="BaseResultMap">
     select
@@ -96,7 +97,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from exam_questions
     where id = #{id,jdbcType=INTEGER}
@@ -112,16 +113,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wxj.model.PO.ExamQuestions">
-    insert into exam_questions (id, course_code, code, 
-      type, title, optionA, optionB, 
-      optionC, optionD, optionE, single_answer, 
-      multiple_answer, yes_no_answer, create_time, 
-      modify_time, del_flag)
-    values (#{id,jdbcType=INTEGER}, #{courseCode,jdbcType=CHAR}, #{code,jdbcType=CHAR}, 
-      #{type,jdbcType=CHAR}, #{title,jdbcType=VARCHAR}, #{optiona,jdbcType=CHAR}, #{optionb,jdbcType=CHAR}, 
-      #{optionc,jdbcType=CHAR}, #{optiond,jdbcType=CHAR}, #{optione,jdbcType=CHAR}, #{singleAnswer,jdbcType=CHAR}, 
-      #{multipleAnswer,jdbcType=CHAR}, #{yesNoAnswer,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR})
+    insert into exam_questions (id, course_code, code,
+      type, title, optionA, optionB,
+      optionC, optionD, optionE, single_answer,
+      multiple_answer, yes_no_answer, score,
+      create_time, modify_time, del_flag
+      )
+    values (#{id,jdbcType=INTEGER}, #{courseCode,jdbcType=CHAR}, #{code,jdbcType=CHAR},
+      #{type,jdbcType=CHAR}, #{title,jdbcType=VARCHAR}, #{optiona,jdbcType=CHAR}, #{optionb,jdbcType=CHAR},
+      #{optionc,jdbcType=CHAR}, #{optiond,jdbcType=CHAR}, #{optione,jdbcType=CHAR}, #{singleAnswer,jdbcType=CHAR},
+      #{multipleAnswer,jdbcType=CHAR}, #{yesNoAnswer,jdbcType=CHAR}, #{score,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wxj.model.PO.ExamQuestions">
     insert into exam_questions
@@ -164,6 +167,9 @@
       </if>
       <if test="yesNoAnswer != null">
         yes_no_answer,
+      </if>
+      <if test="score != null">
+        score,
       </if>
       <if test="createTime != null">
         create_time,
@@ -214,6 +220,9 @@
       </if>
       <if test="yesNoAnswer != null">
         #{yesNoAnswer,jdbcType=CHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -274,6 +283,9 @@
       <if test="record.yesNoAnswer != null">
         yes_no_answer = #{record.yesNoAnswer,jdbcType=CHAR},
       </if>
+      <if test="record.score != null">
+        score = #{record.score,jdbcType=INTEGER},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -291,21 +303,22 @@
   <update id="updateByExample" parameterType="map">
     update exam_questions
     set id = #{record.id,jdbcType=INTEGER},
-      course_code = #{record.courseCode,jdbcType=CHAR},
-      code = #{record.code,jdbcType=CHAR},
-      type = #{record.type,jdbcType=CHAR},
-      title = #{record.title,jdbcType=VARCHAR},
-      optionA = #{record.optiona,jdbcType=CHAR},
-      optionB = #{record.optionb,jdbcType=CHAR},
-      optionC = #{record.optionc,jdbcType=CHAR},
-      optionD = #{record.optiond,jdbcType=CHAR},
-      optionE = #{record.optione,jdbcType=CHAR},
-      single_answer = #{record.singleAnswer,jdbcType=CHAR},
-      multiple_answer = #{record.multipleAnswer,jdbcType=CHAR},
-      yes_no_answer = #{record.yesNoAnswer,jdbcType=CHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
-      del_flag = #{record.delFlag,jdbcType=CHAR}
+    course_code = #{record.courseCode,jdbcType=CHAR},
+    code = #{record.code,jdbcType=CHAR},
+    type = #{record.type,jdbcType=CHAR},
+    title = #{record.title,jdbcType=VARCHAR},
+    optionA = #{record.optiona,jdbcType=CHAR},
+    optionB = #{record.optionb,jdbcType=CHAR},
+    optionC = #{record.optionc,jdbcType=CHAR},
+    optionD = #{record.optiond,jdbcType=CHAR},
+    optionE = #{record.optione,jdbcType=CHAR},
+    single_answer = #{record.singleAnswer,jdbcType=CHAR},
+    multiple_answer = #{record.multipleAnswer,jdbcType=CHAR},
+    yes_no_answer = #{record.yesNoAnswer,jdbcType=CHAR},
+    score = #{record.score,jdbcType=INTEGER},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+    del_flag = #{record.delFlag,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -349,6 +362,9 @@
       <if test="yesNoAnswer != null">
         yes_no_answer = #{yesNoAnswer,jdbcType=CHAR},
       </if>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -375,6 +391,7 @@
       single_answer = #{singleAnswer,jdbcType=CHAR},
       multiple_answer = #{multipleAnswer,jdbcType=CHAR},
       yes_no_answer = #{yesNoAnswer,jdbcType=CHAR},
+      score = #{score,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       del_flag = #{delFlag,jdbcType=CHAR}
@@ -426,7 +443,7 @@
   </select>
 
   <select id="getExamQuestionsDetailsById" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.ExamQuestionsDetailsVO">
-    select id, code, course_code courseCode, type, title, optionA, optionB, optionC, optionD, optionE, single_answer singleAnswer, multiple_answer multipleAnswer, yes_no_answer yesNoAnswer
+    select id, code, course_code courseCode, type, title, optionA, optionB, optionC, optionD, optionE, single_answer singleAnswer, multiple_answer multipleAnswer, yes_no_answer yesNoAnswer, score
     from exam_questions
     where id = #{id,jdbcType=INTEGER}
   </select>

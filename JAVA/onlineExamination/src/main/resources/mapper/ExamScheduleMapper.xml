@@ -338,5 +338,11 @@
       </if>
     </if>
   </select>
+
+  <select id="selectExamScheduleDetailsById" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.ExamScheduleDetailsVO">
+    select exam_paper_code examPaperCode, start_time startTime, duration, title
+    from exam_schedule
+    where id = #{id,jdbcType=INTEGER}
+  </select>
 </mapper>
 

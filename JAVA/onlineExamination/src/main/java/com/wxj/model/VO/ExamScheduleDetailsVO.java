@@ -1,4 +1,4 @@
-package com.wxj.model.DTO;
+package com.wxj.model.VO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +9,9 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class ExamScheduleSaveDTO implements Serializable {
+public class ExamScheduleDetailsVO implements Serializable {
     /**
-     * title
+     * 考试安排title
      */
     private String title;
     /**

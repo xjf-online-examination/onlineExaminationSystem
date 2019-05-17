@@ -2,6 +2,7 @@ package com.wxj.controller;
 
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
+import com.wxj.exception.ParamEmptyException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.ClassParamsDTO;
@@ -61,13 +62,20 @@ public class ClassController {
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object getClassById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
-        ClassParamsDTO classParamsDTO = new ClassParamsDTO();
-        classParamsDTO.setId(requestBean.getData());
-        classParamsDTO.setCurrentPage(1);
-        classParamsDTO.setPageSize(1);
-        List<ClassVO> classVOList = classService.listClassByParams(classParamsDTO);
+        try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
+            ClassParamsDTO classParamsDTO = new ClassParamsDTO();
+            classParamsDTO.setId(requestBean.getData());
+            classParamsDTO.setCurrentPage(1);
+            classParamsDTO.setPageSize(1);
+            List<ClassVO> classVOList = classService.listClassByParams(classParamsDTO);
 
-        return ResponseUtils.success("200", classVOList.get(0));
+            return ResponseUtils.success("200", classVOList.get(0));
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
 
     }
 
@@ -117,6 +125,9 @@ public class ClassController {
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE, consumes = "application/json;charset=utf-8")
     public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
             classService.delete(requestBean.getData());
             return ResponseUtils.success("204");
         } catch (BusinessRuntimeException e) {

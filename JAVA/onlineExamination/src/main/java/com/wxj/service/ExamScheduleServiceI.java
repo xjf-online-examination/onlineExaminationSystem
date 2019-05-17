@@ -1,6 +1,8 @@
 package com.wxj.service;
 
 import com.wxj.model.DTO.ExamScheduleParamsDTO;
+import com.wxj.model.DTO.ExamScheduleSaveDTO;
+import com.wxj.model.VO.ExamScheduleDetailsVO;
 import com.wxj.model.VO.ExamScheduleVO;
 
 import java.util.List;
@@ -20,4 +22,12 @@ public interface ExamScheduleServiceI {
     List<ExamScheduleVO> listExamScheduleByParams(ExamScheduleParamsDTO examScheduleParamsDTO);
 
     Long countExamScheduleByParams(ExamScheduleParamsDTO examScheduleParamsDTO);
+
+    ExamScheduleDetailsVO getExamScheduleDetailsById(Integer id);
+
+    int save(ExamScheduleSaveDTO examScheduleSaveDTO);
+
+    int modify(ExamScheduleSaveDTO examScheduleSaveDTO);
+
+    int delete(Integer id);
 }

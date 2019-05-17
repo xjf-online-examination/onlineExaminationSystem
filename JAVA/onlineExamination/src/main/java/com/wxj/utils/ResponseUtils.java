@@ -47,6 +47,19 @@ public class ResponseUtils {
 	/**
 	 * <p>Title: error</p>
 	 * <p>Description: 返回失败实体</p>
+	 * @param message
+	 * @return
+	 */
+	public static SimpleResponseBean error(String message){
+		SimpleResponseBean resBody = new SimpleResponseBean();
+		resBody.setResponseMsg(message);
+		resBody.setTimestamp(System.currentTimeMillis()+"");
+		return resBody;
+	}
+
+	/**
+	 * <p>Title: error</p>
+	 * <p>Description: 返回失败实体</p>
 	 * @param e
 	 * @return
 	 */

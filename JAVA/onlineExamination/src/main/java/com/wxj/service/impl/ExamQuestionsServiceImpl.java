@@ -1,7 +1,6 @@
 package com.wxj.service.impl;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.wxj.constant.ExamConstant;
 import com.wxj.constant.SystemConstant;
 import com.wxj.exception.OperationException;
 import com.wxj.mapper.ExamQuestionsMapper;

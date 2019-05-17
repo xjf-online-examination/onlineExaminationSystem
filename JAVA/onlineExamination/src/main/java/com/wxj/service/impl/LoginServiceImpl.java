@@ -38,24 +38,24 @@ public class LoginServiceImpl implements LoginServiceI {
     @Override
     public UserInfoVO login(HttpServletRequest request, LoginDTO loginDTO) throws BusinessException {
         List<UserInfo> userInfoList;
+        UserInfoVO userInfoVO = new UserInfoVO();
         switch (loginDTO.getUserType()) {
             case 1:
                 userInfoList = studentMapper.selectUserByUserNameAndPassword(loginDTO);
+                userInfoVO.setUserType(LoginConstant.USER_TYPE_ONE);
                 break;
             case 2:
                 userInfoList = teacherMapper.selectUserByUserNameAndPassword(loginDTO);
+                userInfoVO.setUserType(LoginConstant.USER_TYPE_TWO);
                 break;
             default:{
                 userInfoList = null;
             }
         }
 
-        UserInfoVO userInfoVO;
         if (userInfoList.size() > 0 && userInfoList != null) {
-            userInfoVO = new UserInfoVO();
             String uuid = UUID.randomUUID().toString().replaceAll("-", "");
             userInfoVO.setUsername(userInfoList.get(0).getName());
-            userInfoVO.setUserType(LoginConstant.USER_TYPE_ONE);
             userInfoVO.setSecurityKey(uuid);
 
             request.getSession().setAttribute(LoginConstant.SECURITY_KEY + userInfoList.get(0).getName(), uuid);

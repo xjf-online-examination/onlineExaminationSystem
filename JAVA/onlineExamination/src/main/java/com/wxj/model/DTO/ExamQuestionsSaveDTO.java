@@ -54,4 +54,8 @@ public class ExamQuestionsSaveDTO implements Serializable {
      * 判断答案
      */
     private String yesNoAnswer;
+    /**
+     * 分数
+     */
+    private Integer score;
 }

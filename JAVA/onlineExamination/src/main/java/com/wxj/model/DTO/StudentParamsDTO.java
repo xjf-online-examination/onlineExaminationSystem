@@ -26,6 +26,10 @@ public class StudentParamsDTO implements Serializable {
      *班级ID
      */
     private Integer classId;
+    /**
+     * 班级编号
+     */
+    private String classCode;
 
     private Integer currentPage;
 

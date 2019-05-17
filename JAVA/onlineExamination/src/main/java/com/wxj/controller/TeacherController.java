@@ -2,6 +2,7 @@ package com.wxj.controller;
 
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
+import com.wxj.exception.ParamEmptyException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.TeacherParamsDTO;
@@ -66,6 +67,9 @@ public class TeacherController {
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object getTeacherById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
             TeacherParamsDTO teacherParamsDTO = new TeacherParamsDTO();
             teacherParamsDTO.setId(requestBean.getData());
             teacherParamsDTO.setCurrentPage(1);
@@ -124,6 +128,9 @@ public class TeacherController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
             teacherService.delete(requestBean.getData());
             return ResponseUtils.success("204");
         } catch (BusinessRuntimeException e) {
@@ -154,6 +161,9 @@ public class TeacherController {
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object resetPassword(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
             teacherService.resetPassword(requestBean.getData());
             return ResponseUtils.success("201");
         } catch (BusinessRuntimeException e) {

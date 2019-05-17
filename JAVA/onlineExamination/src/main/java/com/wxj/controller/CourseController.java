@@ -2,6 +2,7 @@ package com.wxj.controller;
 
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
+import com.wxj.exception.ParamEmptyException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.CourseParamsDTO;
@@ -62,6 +63,9 @@ public class CourseController {
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object getTeacherById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
             CourseParamsDTO courseParamsDTO = new CourseParamsDTO();
             courseParamsDTO.setId(requestBean.getData());
             courseParamsDTO.setCurrentPage(1);
@@ -117,6 +121,9 @@ public class CourseController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
             courseService.delete(requestBean.getData());
             return ResponseUtils.success("204");
         } catch (BusinessRuntimeException e) {

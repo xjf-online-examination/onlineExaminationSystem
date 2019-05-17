@@ -1,6 +1,8 @@
 package com.wxj.controller;
 
 import com.wxj.exception.BusinessException;
+import com.wxj.exception.BusinessRuntimeException;
+import com.wxj.exception.ParamEmptyException;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.LoginDTO;
 import com.wxj.model.VO.UserInfoVO;
@@ -43,8 +45,15 @@ public class LoginController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object logout(HttpServletRequest request, @RequestBody RequestBean<String> requestBean) {
-        request.getSession().setAttribute(requestBean.getSecurityKey(), "");
-        return ResponseUtils.success("200");
+        try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
+            request.getSession().setAttribute(requestBean.getSecurityKey(), "");
+            return ResponseUtils.success("200");
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
 
     }
 

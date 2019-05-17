@@ -2,6 +2,7 @@ package com.wxj.controller;
 
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
+import com.wxj.exception.ParamEmptyException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.ExamPaperParamsDTO;
@@ -59,8 +60,15 @@ public class ExamPaperController {
      */
     @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object getExamQuestionsDetailsById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
-        ExamPaperDetailsVO examQuestionsDetailsVO = examPaperService.getExamPaperDetailsById(requestBean.getData());
-        return ResponseUtils.success("200", examQuestionsDetailsVO);
+        try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
+            ExamPaperDetailsVO examQuestionsDetailsVO = examPaperService.getExamPaperDetailsById(requestBean.getData());
+            return ResponseUtils.success("200", examQuestionsDetailsVO);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
     }
 
     /**

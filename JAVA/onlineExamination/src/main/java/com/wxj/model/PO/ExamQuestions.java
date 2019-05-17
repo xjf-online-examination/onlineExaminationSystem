@@ -5,11 +5,11 @@ import java.util.Date;
 
 /**
  * <p>Title: ExamQuestions</p>
- * <p>Description: </p>
+ * <p>Description:试题 </p>
  * <p>Copyright: Copyright (c) 2019</p>
  * <p>Company: www.hanshow.com</p>
  * @author wangxiaojun
- * @date 2019-05-08 11:51:15
+ * @date 2019-05-17 23:30:52
  * @version 1.0
  */
 public class ExamQuestions implements Serializable {
@@ -82,6 +82,11 @@ public class ExamQuestions implements Serializable {
      * 判断题答案
      */
     private String yesNoAnswer;
+
+    /**
+     * 分数
+     */
+    private Integer score;
 
     /**
      * 创建时间
@@ -204,6 +209,14 @@ public class ExamQuestions implements Serializable {
         this.yesNoAnswer = yesNoAnswer == null ? null : yesNoAnswer.trim();
     }
 
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -251,6 +264,7 @@ public class ExamQuestions implements Serializable {
         sb.append(", singleAnswer=").append(singleAnswer);
         sb.append(", multipleAnswer=").append(multipleAnswer);
         sb.append(", yesNoAnswer=").append(yesNoAnswer);
+        sb.append(", score=").append(score);
         sb.append(", createTime=").append(createTime);
         sb.append(", modifyTime=").append(modifyTime);
         sb.append(", delFlag=").append(delFlag);

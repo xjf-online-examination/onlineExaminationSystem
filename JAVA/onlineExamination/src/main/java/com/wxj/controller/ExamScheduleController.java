@@ -2,10 +2,13 @@ package com.wxj.controller;
 
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
+import com.wxj.exception.ParamEmptyException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
-import com.wxj.model.DTO.ExamQuestionsParamsDTO;
+import com.wxj.model.DTO.ExamQuestionsSaveDTO;
 import com.wxj.model.DTO.ExamScheduleParamsDTO;
+import com.wxj.model.DTO.ExamScheduleSaveDTO;
+import com.wxj.model.VO.ExamScheduleDetailsVO;
 import com.wxj.model.VO.ExamScheduleVO;
 import com.wxj.service.ExamScheduleServiceI;
 import com.wxj.utils.ResponseUtils;
@@ -54,6 +57,80 @@ public class ExamScheduleController {
             return ResponseUtils.success("200",pageBean);
         } catch (BusinessException e) {
             return ResponseUtils.error(e);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 获取详情根据ID
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object getExamQuestionsDetailsById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
+        try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
+            ExamScheduleDetailsVO examQuestionsDetailsVO = examScheduleService.getExamScheduleDetailsById(requestBean.getData());
+            return ResponseUtils.success("200", examQuestionsDetailsVO);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 新增
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object save(HttpServletRequest request, @RequestBody RequestBean<ExamScheduleSaveDTO> requestBean) {
+        try {
+            ExamScheduleSaveDTO examScheduleSaveDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(examScheduleSaveDTO,"examPaperCode", "startTime", "duration");
+            examScheduleService.save(examScheduleSaveDTO);
+            return ResponseUtils.success("201");
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 新增
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object modify(HttpServletRequest request, @RequestBody RequestBean<ExamScheduleSaveDTO> requestBean) {
+        try {
+            ExamScheduleSaveDTO examScheduleSaveDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(examScheduleSaveDTO,"id");
+            examScheduleService.modify(examScheduleSaveDTO);
+            return ResponseUtils.success("201");
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 新增
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
+        try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
+            examScheduleService.delete(requestBean.getData());
+            return ResponseUtils.success("201");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }
