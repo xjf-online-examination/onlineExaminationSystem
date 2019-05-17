@@ -1,11 +1,11 @@
 <template>
   <div>
     <Form ref="classSearch" :model="searchData" inline>
-      <FormItem prop="classCode" label="班级编号" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.classCode" placeholder="班级编号"/>
+      <FormItem prop="jobNo" label="工号" label-position="left" class="search-flex">
+        <Input type="text" v-model="searchData.jobNo" placeholder="工号"/>
       </FormItem>
-      <FormItem prop="className" label="班级名称" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.className" placeholder="班级名称"/>
+      <FormItem prop="name" label="教师姓名" label-position="left" class="search-flex">
+        <Input type="text" v-model="searchData.name" placeholder="教师姓名"/>
       </FormItem>
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
@@ -48,6 +48,7 @@
 
 <script>
 import Tables from '@/components/tables';
+import { getTeacherList, addTeacher } from '@/api/user';
 
 export default {
   name: 'teachers',
@@ -134,8 +135,10 @@ export default {
         },
       ],
       searchData: {
-        className: '',
-        classCode: '',
+        jobNo: '123321',
+        name: 'xujiafei',
+        pageSize: 10,
+        currentPage: 1,
       },
       teacher: {
         teacherCode: '',
@@ -198,6 +201,16 @@ export default {
       // TODO:
       this.tableData.splice(this.selectIndex, 1);
     },
+  },
+  mounted() {
+    // addTeacher(this.searchData).then((res) => {
+    //   // this.tableData = res.data;
+    //   console.log(res);
+    // });
+    getTeacherList(this.searchData).then((res) => {
+      // this.tableData = res.data;
+      console.log(res);
+    });
   },
 };
 </script>

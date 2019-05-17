@@ -12,7 +12,10 @@ import {
 import {
   setToken,
   getToken,
+  getUserType,
+  setUserType,
 } from '@/libs/util';
+
 
 export default {
   state: {
@@ -20,6 +23,7 @@ export default {
     userId: '',
     avatarImgPath: '',
     token: getToken(),
+    userType: getUserType,
     access: '',
     hasGetInfo: false,
     unreadCount: 0,
@@ -44,6 +48,10 @@ export default {
     setToken(state, token) {
       state.token = token;
       setToken(token);
+    },
+    setUserType(state, userType) {
+      state.userType = userType;
+      setUserType(userType);
     },
     setHasGetInfo(state, status) {
       state.hasGetInfo = status;
@@ -89,16 +97,21 @@ export default {
     }, {
       userName,
       password,
+      userType,
     }) {
       userName = userName.trim();
       return new Promise((resolve, reject) => {
         login({
           userName,
           password,
+          userType,
         }).then((res) => {
-          const {data} = res;
-          commit('setToken', data.token);
-          resolve();
+          const {
+            data,
+          } = res;
+          commit('setToken', data.data.securityKey);
+          commit('setUserType', data.data.userType);
+          resolve(data);
         }).catch((err) => {
           reject(err);
         });
@@ -130,14 +143,13 @@ export default {
     }) {
       return new Promise((resolve, reject) => {
         try {
-          getUserInfo(state.token).then((res) => {
-            const {data} = res;
-            commit('setAvatar', data.avatar);
-            commit('setUserName', data.name);
-            commit('setUserId', data.user_id);
-            commit('setAccess', data.access);
+          getUserInfo(state.userType).then((res) => {
+            commit('setAvatar', res.avatar);
+            commit('setUserName', res.name);
+            commit('setUserId', res.user_id);
+            commit('setAccess', res.access);
             commit('setHasGetInfo', true);
-            resolve(data);
+            resolve(res);
           }).catch((err) => {
             reject(err);
           });

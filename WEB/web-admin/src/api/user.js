@@ -1,84 +1,62 @@
-import axios from '@/libs/api.request'
-
-export const login = ({ userName, password }) => {
+/*
+ * @Author: xujiafei
+ * @Date: 2019-05-16 14:40:30
+ * @Last Modified by: xujiafei
+ * @Last Modified time: 2019-05-17 12:58:13
+ */
+import axios from '@/libs/api.request';
+// 登录
+const USER_MAP = {
+  teacher: {
+    name: '',
+    access: ['teacher'],
+    token: '',
+    user_type: 2,
+    avatar: './assets/images/teacher.png',
+  },
+  student: {
+    name: '',
+    access: ['student'],
+    token: '',
+    user_type: 1,
+    avatar: './assets/images/student.png',
+  },
+};
+export const login = ({
+  userName,
+  password,
+  userType,
+}) => {
   const data = {
-    userName,
-    password
-  }
+    username: userName,
+    password,
+    userType: userType === '教师' ? 2 : 1,
+  };
   return axios.request({
-    url: 'login',
-    data,
-    method: 'post'
-  })
-}
-
-export const getUserInfo = (token) => {
-  return axios.request({
-    url: 'get_info',
-    params: {
-      token
+    url: 'user/login',
+    data: {
+      data,
     },
-    method: 'get'
-  })
-}
-
-export const logout = (token) => {
-  return axios.request({
-    url: 'logout',
-    method: 'post'
-  })
-}
-
-export const getUnreadCount = () => {
-  return axios.request({
-    url: 'message/count',
-    method: 'get'
-  })
-}
-
-export const getMessage = () => {
-  return axios.request({
-    url: 'message/init',
-    method: 'get'
-  })
-}
-
-export const getContentByMsgId = msg_id => {
-  return axios.request({
-    url: 'message/content',
-    method: 'get',
-    params: {
-      msg_id
-    }
-  })
-}
-
-export const hasRead = msg_id => {
-  return axios.request({
-    url: 'message/has_read',
     method: 'post',
-    data: {
-      msg_id
-    }
-  })
-}
-
-export const removeReaded = msg_id => {
-  return axios.request({
-    url: 'message/remove_readed',
-    method: 'post',
-    data: {
-      msg_id
-    }
-  })
-}
-
-export const restoreTrash = msg_id => {
-  return axios.request({
-    url: 'message/restore',
-    method: 'post',
-    data: {
-      msg_id
-    }
-  })
-}
+  });
+};
+export const logout = token => axios.request({
+  url: 'user/logout',
+  data: {
+    securityKey: token,
+  },
+  method: 'post',
+});
+export const getUserInfo = (userType) => {
+  const role = userType === 1 ? 'teacher' : 'student';
+  return new Promise((resolve, reject) => {
+    resolve(USER_MAP[role]);
+  });
+};
+// export const getUserInfo = userType => axios.request({
+//   url: 'get_info',
+//   params: {
+//     userType,
+//   },
+//   method: 'get',
+// });

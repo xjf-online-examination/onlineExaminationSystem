@@ -3,20 +3,11 @@
 </style>
 
 <template>
-  <!-- <div class="login">
-    <div class="login-con">
-      <Card icon="log-in" title="欢迎登录" :bordered="false">
-        <div class="form-con">
-          <login-form @on-success-valid="handleSubmit"></login-form>
-        </div>
-      </Card>
-    </div>
-  </div>-->
   <div class="login">
     <div class="app-title">赤峰学院经济与管理学院</div>
     <div class="login-block">
       <div class="login-box">
-        <login-form @on-success-valid="handleSubmit"></login-form>
+        <login-form @on-success-valid="handleSubmit" :err-msg="errMsg"></login-form>
       </div>
     </div>
   </div>
@@ -30,18 +21,28 @@ export default {
   components: {
     LoginForm,
   },
+  data() {
+    return {
+      errMsg: '',
+    };
+  },
   methods: {
     ...mapActions([
       'handleLogin',
       'getUserInfo',
     ]),
-    handleSubmit({ userName, password }) {
-      this.handleLogin({ userName, password }).then((res) => {
-        this.getUserInfo().then((res) => {
-          this.$router.push({
-            name: this.$config.homeName,
+    handleSubmit({ userName, password, userType }) {
+      this.handleLogin({ userName, password, userType }).then((res) => {
+        console.log(res);
+        if (res.responseCode === '404') {
+          this.errMsg = '用户名或密码错误';
+        } else {
+          this.getUserInfo().then((res) => {
+            this.$router.push({
+              name: this.$config.homeName,
+            });
           });
-        });
+        }
       });
     },
   },

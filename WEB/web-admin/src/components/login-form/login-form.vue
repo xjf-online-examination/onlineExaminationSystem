@@ -1,5 +1,11 @@
 <template>
-  <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
+  <Form
+    ref="loginForm"
+    :model="form"
+    :rules="rules"
+    @keydown.enter.native="handleSubmit"
+    message="用户名或密码错误"
+  >
     <div class="login-form-title">
       <label>用户登录</label>
       <div class="split-border"></div>
@@ -18,8 +24,8 @@
         </span>
       </Input>
     </FormItem>
-    <FormItem prop="role" class="login-form-role">
-      <RadioGroup v-model="form.role" size="large">
+    <FormItem prop="userType" class="login-form-role">
+      <RadioGroup v-model="form.userType" size="large">
         <Radio label="教师"></Radio>
         <Radio label="学生"></Radio>
       </RadioGroup>
@@ -27,12 +33,19 @@
     <FormItem>
       <Button @click="handleSubmit" type="primary" class="login-form-btn">登录</Button>
     </FormItem>
+    <label class="err-info">{{errMsg}}</label>
   </Form>
 </template>
 <script>
 export default {
   name: 'LoginForm',
   props: {
+    errMsg: {
+      type: String,
+      default: () => {
+        '用户名或密码错误';
+      },
+    },
     userNameRules: {
       type: Array,
       default: () => [
@@ -49,9 +62,9 @@ export default {
   data() {
     return {
       form: {
-        userName: 'super_admin',
-        password: '',
-        role: '教师',
+        userName: '14114100234',
+        password: '123456',
+        userType: '教师',
       },
     };
   },
@@ -70,6 +83,7 @@ export default {
           this.$emit('on-success-valid', {
             userName: this.form.userName,
             password: this.form.password,
+            userType: this.form.userType,
           });
         }
       });

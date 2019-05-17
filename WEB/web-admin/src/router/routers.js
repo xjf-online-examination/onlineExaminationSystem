@@ -47,6 +47,7 @@ export default [{
   name: 'teacherManagement',
   meta: {
     hideInBread: true,
+    access: ['teacher'],
   },
   component: Main,
   children: [{
@@ -64,6 +65,7 @@ export default [{
   name: 'studentManagement',
   meta: {
     hideInBread: true,
+    access: ['teacher'],
   },
   component: Main,
   children: [{
@@ -81,6 +83,7 @@ export default [{
   name: 'classManagement',
   meta: {
     hideInBread: true,
+    access: ['teacher'],
   },
   component: Main,
   children: [{
@@ -98,6 +101,7 @@ export default [{
   name: 'courseManagement',
   meta: {
     hideInBread: true,
+    access: ['teacher'],
   },
   component: Main,
   children: [{
@@ -116,6 +120,7 @@ export default [{
   meta: {
     hideInBread: true,
     hideInMenu: true,
+    access: ['teacher'],
   },
   component: Main,
   children: [{
@@ -133,6 +138,7 @@ export default [{
   name: 'questionManagement',
   meta: {
     hideInBread: false,
+    access: ['teacher'],
   },
   component: Main,
   children: [{
@@ -150,6 +156,7 @@ export default [{
   name: 'schedulerManagement',
   meta: {
     hideInBread: false,
+    access: ['teacher'],
   },
   component: Main,
   children: [{
@@ -167,6 +174,7 @@ export default [{
   name: 'markManagement',
   meta: {
     hideInBread: false,
+    access: ['teacher'],
   },
   component: Main,
   children: [{
@@ -184,6 +192,7 @@ export default [{
   name: 'reportManagement',
   meta: {
     hideInBread: false,
+    access: ['teacher'],
   },
   component: Main,
   children: [{
@@ -201,6 +210,7 @@ export default [{
   name: 'achievementManagement',
   meta: {
     hideInBread: false,
+    access: ['student'],
   },
   component: Main,
   children: [{
@@ -218,6 +228,7 @@ export default [{
   name: 'testScheduler',
   meta: {
     hideInBread: false,
+    access: ['student'],
   },
   component: Main,
   children: [{
