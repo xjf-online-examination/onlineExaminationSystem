@@ -37,9 +37,9 @@
 <!--            &lt;!&ndash; 配置前置通知 &ndash;&gt;-->
 <!--            <aop:before pointcut-ref="loginValidatePoint" method="before" arg-names="obj"/>-->
 <!--            &lt;!&ndash; 配置前置通知 &ndash;&gt;-->
-<!--            <aop:after pointcut-ref="loginValidatePoint" method="after" arg-names="obj"/>-->
+<!--&lt;!&ndash;            <aop:after pointcut-ref="loginValidatePoint" method="after" arg-names="obj"/>&ndash;&gt;-->
 <!--            &lt;!&ndash; 配置后置返回通知 &ndash;&gt;-->
-<!--            <aop:after-returning pointcut-ref="loginValidatePoint" method="afterReturning" arg-names="request,response,jsonObject" returning="response" />-->
+<!--&lt;!&ndash;            <aop:after-returning pointcut-ref="loginValidatePoint" method="afterReturning" arg-names="request,response,jsonObject" returning="response" />&ndash;&gt;-->
 <!--            &lt;!&ndash; 配置异常捕捉 &ndash;&gt;-->
 <!--&lt;!&ndash;-->
 <!--            <aop:after-throwing throwing="exception" method="afterThrowingRequest" pointcut-ref="loginValidatePoint" arg-names="request,jsonObject, exception" />-->
