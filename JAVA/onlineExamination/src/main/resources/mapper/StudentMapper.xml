@@ -257,7 +257,7 @@
   </update>
 
   <select id="selectUserByUserNameAndPassword" parameterType="com.wxj.model.DTO.LoginDTO" resultType="com.wxj.model.PO.UserInfo">
-    select id, name
+    select id, name, sno code
     from student
     where sno = #{record.username,jdbcType=CHAR}
     and login_password = #{record.password,jdbcType=CHAR}

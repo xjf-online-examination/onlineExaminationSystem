@@ -242,7 +242,7 @@
   </update>
 
   <select id="selectUserByUserNameAndPassword" parameterType="com.wxj.model.DTO.LoginDTO" resultType="com.wxj.model.PO.UserInfo">
-    select id, name
+    select id, name, job_no code
     from teacher
     where job_no = #{record.username,jdbcType=CHAR}
     and login_password = #{record.password,jdbcType=CHAR}

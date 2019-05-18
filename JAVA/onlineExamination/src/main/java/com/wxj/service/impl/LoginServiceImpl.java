@@ -55,10 +55,11 @@ public class LoginServiceImpl implements LoginServiceI {
 
         if (userInfoList.size() > 0 && userInfoList != null) {
             String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            userInfoVO.setUserCode(userInfoList.get(0).getCode());
             userInfoVO.setUsername(userInfoList.get(0).getName());
             userInfoVO.setSecurityKey(uuid);
 
-            request.getSession().setAttribute(LoginConstant.SECURITY_KEY + userInfoList.get(0).getName(), uuid);
+            request.getSession().setAttribute(LoginConstant.SECURITY_KEY + userInfoList.get(0).getCode(), uuid);
         } else {
             throw new InnerDataErrorException("用户不存在");
         }

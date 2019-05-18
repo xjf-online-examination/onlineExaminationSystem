@@ -59,10 +59,10 @@ public class LoginValidateAspect {
      * @param baseQUERY
      */
     private void validateSecurityKey(HttpServletRequest request, RequestBean<?> baseQUERY) {
-        String loginKey = LoginConstant.SECURITY_KEY+baseQUERY.getUsername();
+        String loginKey = LoginConstant.SECURITY_KEY+baseQUERY.getUserCode();
         String securityKey = (String)request.getSession().getAttribute(loginKey);
         if (null == securityKey || !securityKey.equals(baseQUERY.getSecurityKey())) {
-            logger.info("securityKey校验失败,userId={}", baseQUERY.getUsername());
+            logger.info("securityKey校验失败,userId={}", baseQUERY.getUserCode());
             request.getSession().setAttribute(loginKey,"");
             throw new PermissionException("登陆过期");
         }
@@ -81,9 +81,9 @@ public class LoginValidateAspect {
             logger.warn("统一aop拦截,请求参数securityKey不能为空");
             throw new ParamEmptyException("请求参数securityKey不能为空");
         }
-        if (StringUtils.isEmpty(baseQUERY.getUsername())) {
-            logger.warn("统一aop拦截,请求参数username不能为空");
-            throw new ParamEmptyException("请求参数username不能为空");
+        if (StringUtils.isEmpty(baseQUERY.getUserCode())) {
+            logger.warn("统一aop拦截,请求参数userCode不能为空");
+            throw new ParamEmptyException("请求参数userCode不能为空");
         }
     }
 

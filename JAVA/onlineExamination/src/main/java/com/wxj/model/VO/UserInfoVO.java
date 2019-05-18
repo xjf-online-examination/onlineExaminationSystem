@@ -23,6 +23,8 @@ import java.io.Serializable;
 public class UserInfoVO implements Serializable {
     private String securityKey;
 
+    private String userCode;
+
     private String username;
 
     private Integer userType;
