@@ -8,9 +8,12 @@ import com.wxj.constant.SystemConstant;
 import com.wxj.exception.OperationException;
 import com.wxj.exception.ParamInvalidException;
 import com.wxj.logic.StudentLogic;
+import com.wxj.mapper.ClassMapper;
 import com.wxj.mapper.StudentMapper;
 import com.wxj.model.DTO.StudentParamsDTO;
 import com.wxj.model.PO.Achievement;
+import com.wxj.model.PO.Class;
+import com.wxj.model.PO.ClassExample;
 import com.wxj.model.PO.Student;
 import com.wxj.model.VO.AchievementVO;
 import com.wxj.model.VO.StudentVO;
@@ -19,10 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * <p>Title: StudentServiceImpl</p >
@@ -42,6 +46,8 @@ public class StudentServiceImpl implements StudentServiceI {
     StudentMapper studentMapper;
     @Autowired
     StudentLogic studentLogic;
+    @Autowired
+    ClassMapper classMapper;
 
     @Override
     public List<StudentVO> listStudentVOByParams(StudentParamsDTO studentParamsDTO) {
@@ -155,5 +161,29 @@ public class StudentServiceImpl implements StudentServiceI {
             throw new OperationException("重置密码失败");
         }
         return i;
+    }
+
+    @Override
+    public int studentImport(List<StudentParamsDTO> studentParamsDTOList) {
+        Date date = new Date();
+        ClassExample classExample = new ClassExample();
+        List<Class> classList = classMapper.selectByExample(classExample);
+        Map<String, Integer> classMap = classList.stream().collect(Collectors.toMap(Class::getCode, item -> item.getId()));
+
+        List<Student> studentList = Lists.newArrayList();
+        Student student;
+        for (int i=0,size=studentParamsDTOList.size(); i<size; i++) {
+            StudentParamsDTO studentParamsDTO = studentParamsDTOList.get(i);
+            student = new Student();
+            student.setSno(studentParamsDTO.getSno());
+            student.setName(studentParamsDTO.getName());
+            student.setLoginPassword(SystemConstant.LOGIN_PASSWORD);
+            student.setClassId(classMap.get(studentParamsDTO.getClassCode()));
+            student.setCreateTime(date);
+            student.setModifyTime(date);
+            student.setDelFlag(SystemConstant.NOUGHT);
+            studentList.add(student);
+        }
+        return studentMapper.bathInsert(studentList);
     }
 }

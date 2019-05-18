@@ -61,4 +61,11 @@ public interface StudentServiceI {
      * @return
      */
     int resetPassword(Integer id);
+
+    /**
+     * 导入excel批量插入学生信息
+     * @param studentParamsDTOList
+     * @return
+     */
+    int studentImport(List<StudentParamsDTO> studentParamsDTOList);
 }

@@ -21,15 +21,18 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -205,7 +208,6 @@ public class StudentController {
             if (rs != null) {
                 // 创建集合list
                 List<StudentParamsDTO> studentParamsDTOList = new ArrayList<>();
-                String categoryCode = "";
                 Row rowZero = rs.getRow(0);
                 Map<String,Integer> map = new HashMap<String,Integer>();
                 for (int i = 0; i < rowZero.getLastCellNum() ; i++) {
@@ -257,10 +259,9 @@ public class StudentController {
                         }
                         studentParamsDTO.setClassCode(classCode);
                     }
-
                     studentParamsDTOList.add(studentParamsDTO);
                 }
-
+                studentService.studentImport(studentParamsDTOList);
             }
             return ResponseUtils.success("200");
         } catch (FileNotFoundException e) {
@@ -274,7 +275,31 @@ public class StudentController {
         }
     }
 
-    public Object download() {
-        return null;
+    @RequestMapping(value = "/download", method = RequestMethod.GET)
+    public void download(HttpServletResponse response) {
+        OutputStream sos = null;
+        // 模板名称
+        String filename = "studentTemplate";
+        response.setContentType("application/msexcel;charset=UTF-8");
+        try {
+            sos = response.getOutputStream();
+            // 设置编码
+            response.addHeader("Content-Disposition", "attachment;filename=\"" + new String((filename + ".xlsx").getBytes("GBK"), "ISO8859_1") + "\"");
+            // 查找模板
+            XSSFWorkbook templatewb = new XSSFWorkbook(StudentController.class.getClassLoader().getResource("template/studentTemplate.xlsx").openStream());
+            templatewb.setSheetName(0, "学生信息");
+            templatewb.write(sos);
+            templatewb.close();
+        } catch (Exception e) {
+             logger.error("下载学生模版模板失败", e);
+        } finally {
+            if (null != sos) {
+                try {
+                    sos.flush();
+                    sos.close();
+                } catch (Exception e2) {
+                }
+            }
+        }
     }
 }

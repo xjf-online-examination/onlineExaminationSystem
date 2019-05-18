@@ -1,5 +1,6 @@
 package com.wxj.controller;
 
+import com.wxj.constant.LoginConstant;
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.exception.ParamEmptyException;
@@ -49,7 +50,7 @@ public class LoginController {
             if (null == requestBean.getData()) {
                 throw new ParamEmptyException("data不能为空");
             }
-            request.getSession().setAttribute(requestBean.getSecurityKey(), "");
+            request.getSession().setAttribute(LoginConstant.SECURITY_KEY + requestBean.getData(), "");
             return ResponseUtils.success("200");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
@@ -58,8 +59,15 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/modifyPassword", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object modifyPassword(HttpServletRequest request, @RequestBody RequestBean<String> requestBean) {
+    public Object modifyPassword(HttpServletRequest request, @RequestBody RequestBean<LoginDTO> requestBean) {
+        try {
+            LoginDTO loginDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(loginDTO, "userType", "username", "password");
 
-        return null;
+            loginService.modifyPassword(loginDTO);
+            return ResponseUtils.success("201");
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        }
     }
 }

@@ -1,17 +1,20 @@
 package com.wxj.service.impl;
 
 import com.wxj.constant.LoginConstant;
+import com.wxj.constant.SystemConstant;
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.InnerDataErrorException;
+import com.wxj.exception.OperationException;
 import com.wxj.mapper.StudentMapper;
 import com.wxj.mapper.TeacherMapper;
 import com.wxj.model.DTO.LoginDTO;
-import com.wxj.model.PO.UserInfo;
+import com.wxj.model.PO.*;
 import com.wxj.model.VO.UserInfoVO;
 import com.wxj.service.LoginServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.management.openmbean.OpenDataException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
@@ -49,7 +52,7 @@ public class LoginServiceImpl implements LoginServiceI {
                 userInfoVO.setUserType(LoginConstant.USER_TYPE_TWO);
                 break;
             default:{
-                userInfoList = null;
+                throw new InnerDataErrorException("请选择正确的用户类型");
             }
         }
 
@@ -64,5 +67,33 @@ public class LoginServiceImpl implements LoginServiceI {
             throw new InnerDataErrorException("用户不存在");
         }
         return userInfoVO;
+    }
+
+    @Override
+    public int modifyPassword(LoginDTO loginDTO) {
+        int i = 0;
+        switch (loginDTO.getUserType()) {
+            case 1:
+                Student student = new Student();
+                student.setLoginPassword(loginDTO.getPassword());
+                StudentExample studentExample = new StudentExample();
+                studentExample.createCriteria().andSnoEqualTo(loginDTO.getUsername());
+                i = studentMapper.updateByExampleSelective(student, studentExample);
+                break;
+            case 2:
+                Teacher teacher = new Teacher();
+                teacher.setLoginPassword(loginDTO.getPassword());
+                TeacherExample teacherExample = new TeacherExample();
+                teacherExample.createCriteria().andJobNoEqualTo(loginDTO.getUsername());
+                i = teacherMapper.updateByExampleSelective(teacher, teacherExample);
+                break;
+            default:{
+                throw new InnerDataErrorException("请选择正确的用户类型");
+            }
+        }
+        if (SystemConstant.ZERO == i) {
+            throw new OperationException("修改密码失败");
+        }
+        return i;
     }
 }

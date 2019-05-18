@@ -21,4 +21,6 @@ public class SystemConstant {
     public static final Integer ONE = 1;
 
     public static final Integer TWO = 2;
+
+    public static final String LOGIN_PASSWORD = "123456";
 }

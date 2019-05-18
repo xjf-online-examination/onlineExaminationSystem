@@ -12,10 +12,15 @@ import com.wxj.model.VO.ExamQuestionsVO;
 import com.wxj.service.ExamQuestionsServiceI;
 import com.wxj.utils.ResponseUtils;
 import com.wxj.utils.ValidateParamsUtil;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -31,6 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/examQuestions")
 public class ExamQuestionsController {
+    Logger logger = LoggerFactory.getLogger(ExamQuestionsController.class);
     @Autowired
     ExamQuestionsServiceI examQuestionsService;
 
@@ -133,7 +139,31 @@ public class ExamQuestionsController {
         return null;
     }
 
-    public Object examQuestionsExport() {
-        return null;
+    @RequestMapping(value = "/download", method = RequestMethod.GET)
+    public void download(HttpServletResponse response) {
+        OutputStream sos = null;
+        // 模板名称
+        String filename = "examQuestionsTemplate";
+        response.setContentType("application/msexcel;charset=UTF-8");
+        try {
+            sos = response.getOutputStream();
+            // 设置编码
+            response.addHeader("Content-Disposition", "attachment;filename=\"" + new String((filename + ".xlsx").getBytes("GBK"), "ISO8859_1") + "\"");
+            // 查找模板
+            XSSFWorkbook templatewb = new XSSFWorkbook(StudentController.class.getClassLoader().getResource("template/examQuestionsTemplate.xlsx").openStream());
+            templatewb.setSheetName(0, "试题信息");
+            templatewb.write(sos);
+            templatewb.close();
+        } catch (Exception e) {
+            logger.error("下载试题模版模板失败", e);
+        } finally {
+            if (null != sos) {
+                try {
+                    sos.flush();
+                    sos.close();
+                } catch (Exception e2) {
+                }
+            }
+        }
     }
 }

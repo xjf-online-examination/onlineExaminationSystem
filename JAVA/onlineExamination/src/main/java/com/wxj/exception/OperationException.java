@@ -29,7 +29,7 @@ public class OperationException extends BusinessRuntimeException {
 
     @Override
     public String getCode(){
-        return "E10_OPERATION_ERROR";
+        return "400";
     }
 
     @Override
