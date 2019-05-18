@@ -115,4 +115,11 @@ public interface StudentMapper {
      * @return
      */
     List<Achievement> selectAchievementByStudentId(Integer id);
+
+    /**
+     * 批量插入
+     * @param studentList
+     * @return
+     */
+    int bathInsert(@Param("list") List<Student> studentList);
 }

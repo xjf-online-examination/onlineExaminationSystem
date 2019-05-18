@@ -328,4 +328,14 @@
     LEFT JOIN course c on eq.course_code = c.code
     where ss.student_id = #{id,jdbcType=INTEGER}
   </select>
+
+  <insert id="bathInsert" parameterType="java.util.List">
+    insert into student (id, sno, name, login_password, class_id, create_time, modify_time, del_flag)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+       (#{item.id,jdbcType=INTEGER}, #{item.sno,jdbcType=CHAR}, #{item.name,jdbcType=CHAR}, #{item.loginPassword,jdbcType=CHAR},
+        #{item.classId,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP},
+        #{item.delFlag,jdbcType=CHAR})
+    </foreach>
+  </insert>
 </mapper>
