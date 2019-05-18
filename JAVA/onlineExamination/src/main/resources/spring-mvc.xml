@@ -32,6 +32,12 @@
 	<!-- 静态资源处理 css js images -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/"/>
+			<bean class="com.wxj.interceptor.LoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 
 	<!-- Configure to plugin JSON as request and response in method handler -->
 	<bean

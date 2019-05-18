@@ -19,10 +19,8 @@ import javax.servlet.http.HttpServletRequest;
  * <p>Title: LoginValidateAspect</p>
  * <p>Description: 校验securityKey</p>
  * <p>Copyright: Copyright (c) 2018</p>
- * <p>Company: www.hanshow.com</p>
- * 通过aop拦截所有的请求方法,获取请求的json字符串,对json串进行校验合法则继续通行,不合法则直接抛出WiseException异常<br/>
- * springmvc自动捕捉到该异常根据异常,直接将校验结果返回前端
- * @author guolin
+ * <p>Company: wxj</p>
+ * @author wangxiaojun
  * @version 1.0
  * @date 2018-06-09 11:48
  */

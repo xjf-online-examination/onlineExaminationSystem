@@ -119,7 +119,7 @@ public class ExamScheduleController {
     }
 
     /**
-     * 新增
+     * 删除
      * @param requestBean
      * @return
      */
