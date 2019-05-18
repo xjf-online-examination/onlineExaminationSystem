@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-16 14:40:30
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-17 12:58:13
+ * @Last Modified time: 2019-05-18 01:52:55
  */
 import axios from '@/libs/api.request';
 // 登录
@@ -33,7 +33,7 @@ export const login = ({
     userType: userType === '教师' ? 2 : 1,
   };
   return axios.request({
-    url: 'user/login',
+    url: 'open/user/login',
     data: {
       data,
     },
@@ -41,14 +41,14 @@ export const login = ({
   });
 };
 export const logout = token => axios.request({
-  url: 'user/logout',
+  url: 'open/user/logout',
   data: {
     securityKey: token,
   },
   method: 'post',
 });
 export const getUserInfo = (userType) => {
-  const role = userType === 1 ? 'teacher' : 'student';
+  const role = parseInt(userType) === 2 ? 'teacher' : 'student';
   return new Promise((resolve, reject) => {
     resolve(USER_MAP[role]);
   });

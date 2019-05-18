@@ -30,13 +30,13 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
-    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="ok">
-      <Form ref="classSearch" :model="teacher">
-        <FormItem prop="teacherCode" label="工号">
-          <Input type="text" v-model="teacher.teacherCode" placeholder="请输入工号"/>
+    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
+      <Form ref="classSearch" :model="teacher" :rule="rules">
+        <FormItem prop="jobNoRules" label="工号">
+          <Input type="text" v-model="teacher.jobNo" placeholder="请输入工号"/>
         </FormItem>
-        <FormItem prop="className" label="姓名">
-          <Input type="text" v-model="teacher.teacherName" placeholder="请输入姓名"/>
+        <FormItem prop="name" label="姓名">
+          <Input type="text" v-model="teacher.name" placeholder="请输入姓名"/>
         </FormItem>
       </Form>
     </Modal>
@@ -48,12 +48,28 @@
 
 <script>
 import Tables from '@/components/tables';
-import { getTeacherList, addTeacher } from '@/api/user';
+import {
+  getTeacherList, getTeacherByParams, addTeacher, editTeacher, deleteTeacher, resetTeacherPassword,
+} from '@/api/teacher';
 
 export default {
   name: 'teachers',
   components: {
     Tables,
+  },
+  props: {
+    jobNoRules: {
+      type: Array,
+      default: () => [
+        { required: true, message: '工号不能为空', trigger: 'blur' },
+      ],
+    },
+    nameRules: {
+      type: Array,
+      default: () => [
+        { required: true, message: '教师姓名不能为空', trigger: 'blur' },
+      ],
+    },
   },
   data() {
     return {
@@ -62,7 +78,7 @@ export default {
           title: '序号', type: 'index', align: 'center',
         },
         {
-          title: '工号', key: 'teacherNo', align: 'center',
+          title: '工号', key: 'jobNo', align: 'center',
         },
         {
           title: '教师姓名', key: 'name', align: 'center',
@@ -130,22 +146,21 @@ export default {
           ],
         }],
       tableData: [
-        {
-          no: 1, classCode: '191816', className: '19级财经1班', count: 35,
-        },
+
       ],
       searchData: {
-        jobNo: '123321',
-        name: 'xujiafei',
+        jobNo: '',
+        name: '',
         pageSize: 10,
         currentPage: 1,
       },
       teacher: {
-        teacherCode: '',
-        teacherName: '',
+        jobNo: '',
+        name: '',
       },
       modalVisible: false,
       modalTitle: '',
+      isAdd: true,
       showDeleteModal: false,
       selectIndex: 0,
     };
@@ -161,24 +176,37 @@ export default {
     },
     handleSearch() {
       console.log(this.searchData);
+      getTeacherByParams(this.searchData).then((res) => {
+        console.log(res);
+        if (res.responseCode === '200') {
+          this.tableData = [res.data];
+        }
+        // TODO: 搜索不到结果时
+      });
     },
     handleReset(name) {
       this.$refs[name].resetFields();
       console.log(this.searchData);
     },
     onEdit(index) {
-      console.log(index);
-      // TODO:
+      this.modalVisible = true;
+      this.modalTitle = '修改';
+      this.isAdd = false;
+      this.teacher = this.tableData[index];
     },
     onDelete(index) {
       console.log(index);
-      // TODO:
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
     onResetPwd(index) {
       console.log(index);
-      // TODO:
+      resetTeacherPassword(this.tableData[index].id).then((res) => {
+        if (res.responseCode === '201') {
+          this.getTeacherList();
+          this.$Message.success('密码重置成功');
+        }
+      });
     },
     onPageChange(params) {
       console.log(params);
@@ -189,28 +217,57 @@ export default {
       // TODO:
     },
     onAdd() {
-      // TODO:
       this.modalVisible = true;
-      this.modalTitle = '添加教师';
+      this.modalTitle = '添加';
+      this.isAdd = true;
     },
-    ok() {
-      // TODO:
+    save() {
       console.log(this.teacher);
+      if (this.isAdd) {
+        addTeacher(this.teacher).then((res) => {
+          console.log(res);
+          if (res.responseCode === '201') {
+            this.getTeacherList();
+            this.$Message.success('添加成功');
+          }
+        });
+      } else {
+        editTeacher(this.teacher).then((res) => {
+          console.log(res);
+          if (res.responseCode === '201') {
+            this.getTeacherList();
+            this.$Message.success('修改成功');
+          }
+        });
+      }
     },
-    deleteTeacher() {
+    deleteTeacher(index) {
       // TODO:
-      this.tableData.splice(this.selectIndex, 1);
+      // this.tableData.splice(this.selectIndex, 1);
+      deleteTeacher(this.tableData[this.selectIndex].id).then((res) => {
+        this.getTeacherList();
+      });
+    },
+    getTeacherList() {
+      getTeacherList(this.searchData).then((res) => {
+        if (res.responseCode === '200') {
+          this.tableData = res.data.list;
+        } else {
+          this.tableData = [];
+        }
+      });
     },
   },
   mounted() {
-    // addTeacher(this.searchData).then((res) => {
-    //   // this.tableData = res.data;
-    //   console.log(res);
-    // });
-    getTeacherList(this.searchData).then((res) => {
-      // this.tableData = res.data;
-      console.log(res);
-    });
+    this.getTeacherList();
+  },
+  computed: {
+    rules() {
+      return {
+        jobNo: this.jobNoRules,
+        name: this.nameRules,
+      };
+    },
   },
 };
 </script>

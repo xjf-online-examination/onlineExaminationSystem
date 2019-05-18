@@ -14,6 +14,10 @@ import {
   getToken,
   getUserType,
   setUserType,
+  setUserName,
+  getUserName,
+  getUserCode,
+  setUserCode,
 } from '@/libs/util';
 
 
@@ -23,7 +27,8 @@ export default {
     userId: '',
     avatarImgPath: '',
     token: getToken(),
-    userType: getUserType,
+    userType: getUserType(),
+    userCode: getUserCode(),
     access: '',
     hasGetInfo: false,
     unreadCount: 0,
@@ -41,6 +46,7 @@ export default {
     },
     setUserName(state, name) {
       state.userName = name;
+      setUserName(name);
     },
     setAccess(state, access) {
       state.access = access;
@@ -52,6 +58,10 @@ export default {
     setUserType(state, userType) {
       state.userType = userType;
       setUserType(userType);
+    },
+    setUserCode(state, userCode) {
+      state.userCode = userCode;
+      setUserCode(userCode);
     },
     setHasGetInfo(state, status) {
       state.hasGetInfo = status;
@@ -106,12 +116,11 @@ export default {
           password,
           userType,
         }).then((res) => {
-          const {
-            data,
-          } = res;
-          commit('setToken', data.data.securityKey);
-          commit('setUserType', data.data.userType);
-          resolve(data);
+          commit('setToken', res.data.securityKey);
+          commit('setUserType', res.data.userType);
+          commit('setUserName', res.data.username);
+          commit('setUserCode', res.data.userCode);
+          resolve(res);
         }).catch((err) => {
           reject(err);
         });
@@ -145,8 +154,6 @@ export default {
         try {
           getUserInfo(state.userType).then((res) => {
             commit('setAvatar', res.avatar);
-            commit('setUserName', res.name);
-            commit('setUserId', res.user_id);
             commit('setAccess', res.access);
             commit('setHasGetInfo', true);
             resolve(res);

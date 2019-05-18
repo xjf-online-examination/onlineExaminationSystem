@@ -1,5 +1,9 @@
 import axios from 'axios';
 import store from '@/store';
+import {
+  getToken,
+  getUserCode,
+} from './util';
 // import { Spin } from 'iview'
 const addErrorLog = (errorInfo) => {
   const {
@@ -49,6 +53,12 @@ class HttpRequest {
         // Spin.show() // 不建议开启，因为界面不友好
       }
       this.queue[url] = true;
+
+      // config.data.timestamp = new Date().getTime();
+      if (url.indexOf('login') < 0) {
+        config.data.securityKey = getToken();
+        config.data.userCode = getUserCode();
+      }
       return config;
     }, error => Promise.reject(error));
     // 响应拦截
@@ -56,12 +66,8 @@ class HttpRequest {
       this.destroy(url);
       const {
         data,
-        status,
       } = res;
-      return {
-        data,
-        status,
-      };
+      return data;
     }, (error) => {
       this.destroy(url);
       let errorInfo = error.response;

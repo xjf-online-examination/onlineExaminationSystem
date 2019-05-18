@@ -13,7 +13,7 @@ import {
 } from '@/libs/util';
 import {
   saveErrorLogger,
-} from '@/api/data';
+} from '@/api/teacher';
 import router from '@/router';
 import routers from '@/router/routers';
 import config from '@/config';
@@ -24,7 +24,7 @@ const {
 
 const closePage = (state, route) => {
   const nextRoute = getNextRoute(state.tagNavList, route);
-  state.tagNavList = state.tagNavList.filter((item) => !routeEqual(item, route));
+  state.tagNavList = state.tagNavList.filter(item => !routeEqual(item, route));
   router.push(nextRoute);
 };
 
@@ -75,8 +75,8 @@ export default {
       const router = getRouteTitleHandled(route);
       if (!routeHasExist(state.tagNavList, router)) {
         if (type === 'push') state.tagNavList.push(router);
-        else if (router.name === homeName) state.tagNavList.unshift(router)
-          else state.tagNavList.splice(1, 0, router)
+        else if (router.name === homeName) state.tagNavList.unshift(router);
+        else state.tagNavList.splice(1, 0, router);
         setTagNavListInLocalstorage([...state.tagNavList]);
       }
     },
@@ -96,8 +96,10 @@ export default {
       commit,
       rootState,
     }, info) {
-      if (!window.location.href.includes('error_logger_page')) {commit('setHasReadErrorLoggerStatus',
-        false)};
+      if (!window.location.href.includes('error_logger_page')) {
+        commit('setHasReadErrorLoggerStatus',
+          false);
+      }
       const {
         user: {
           token,

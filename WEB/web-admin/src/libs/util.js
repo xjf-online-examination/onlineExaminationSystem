@@ -39,6 +39,31 @@ export const getUserType = () => {
   if (userType) return userType;
   return false;
 };
+export const USER_NAME = 'userName';
+export const setUserName = (userName) => {
+  Cookies.set(USER_NAME, userName, {
+    expires: cookieExpires || 1,
+  });
+};
+
+export const getUserName = () => {
+  const userName = Cookies.get(USER_NAME);
+  if (userName) return userName;
+  return false;
+};
+
+export const USER_CODE = 'userCode';
+export const setUserCode = (userCode) => {
+  Cookies.set(USER_CODE, userCode, {
+    expires: cookieExpires || 1,
+  });
+};
+
+export const getUserCode = () => {
+  const userCode = Cookies.get(USER_CODE);
+  if (userCode) return userCode;
+  return false;
+};
 export const hasChild = item => item.children && item.children.length !== 0;
 
 const showThisMenuEle = (item, access) => {
