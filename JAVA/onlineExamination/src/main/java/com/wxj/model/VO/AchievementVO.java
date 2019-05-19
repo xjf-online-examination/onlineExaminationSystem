@@ -13,9 +13,17 @@ public class AchievementVO implements Serializable {
      */
     private String courseName;
     /**
+     * 试卷名称
+     */
+    private String examPaperName;
+    /**
+     * 考试时间
+     */
+    private String startTime;
+    /**
      * 考试安排title
      */
-    private String examScheduleTitile;
+    private String examScheduleTitle;
     /**
      * 成绩
      */

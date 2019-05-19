@@ -338,4 +338,6 @@
         #{item.delFlag,jdbcType=CHAR})
     </foreach>
   </insert>
+
+
 </mapper>

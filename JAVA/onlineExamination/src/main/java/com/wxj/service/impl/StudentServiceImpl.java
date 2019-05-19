@@ -16,6 +16,7 @@ import com.wxj.model.PO.Class;
 import com.wxj.model.PO.ClassExample;
 import com.wxj.model.PO.Student;
 import com.wxj.model.VO.AchievementVO;
+import com.wxj.model.VO.StudentExamScheduleVO;
 import com.wxj.model.VO.StudentVO;
 import com.wxj.service.StudentServiceI;
 import org.slf4j.Logger;
@@ -138,15 +139,13 @@ public class StudentServiceImpl implements StudentServiceI {
                 if (!studentLogic.noScore(entry.getValue())) {
                     achievementVO = new AchievementVO();
                     achievementVO.setCourseName(entry.getValue().iterator().next().getCourseName());
-                    achievementVO.setExamScheduleTitile(entry.getValue().iterator().next().getExamScheduleTitle());
+                    achievementVO.setExamScheduleTitle(entry.getValue().iterator().next().getExamScheduleTitle());
                     achievementVO.setAchievement(studentLogic.countScore(entry.getValue()));
                     achievementVOList.add(achievementVO);
                 } else {
                     continue;
                 }
             }
-
-
         }
         return achievementVOList;
     }
@@ -186,4 +185,5 @@ public class StudentServiceImpl implements StudentServiceI {
         }
         return studentMapper.bathInsert(studentList);
     }
+
 }

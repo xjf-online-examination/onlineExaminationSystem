@@ -6,6 +6,7 @@ import com.wxj.model.PO.ExamSchedule;
 import com.wxj.model.PO.ExamScheduleExample;
 import com.wxj.model.VO.ExamScheduleDetailsVO;
 import com.wxj.model.VO.ExamScheduleVO;
+import com.wxj.model.VO.StudentExamScheduleVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -82,4 +83,11 @@ public interface ExamScheduleMapper {
     Long countExamScheduleByParams(@Param("record") ExamScheduleParamsDTO examScheduleParamsDTO);
 
     ExamScheduleDetailsVO selectExamScheduleDetailsById(Integer id);
+
+    /**
+     * 根据sno查询考试安排
+     * @param sno
+     * @return
+     */
+    List<StudentExamScheduleVO> selectStudentExamScheduleBySno(String sno);
 }

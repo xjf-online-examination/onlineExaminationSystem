@@ -5,11 +5,11 @@ import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.exception.ParamEmptyException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
-import com.wxj.model.DTO.ExamQuestionsSaveDTO;
 import com.wxj.model.DTO.ExamScheduleParamsDTO;
 import com.wxj.model.DTO.ExamScheduleSaveDTO;
 import com.wxj.model.VO.ExamScheduleDetailsVO;
 import com.wxj.model.VO.ExamScheduleVO;
+import com.wxj.model.VO.StudentExamScheduleVO;
 import com.wxj.service.ExamScheduleServiceI;
 import com.wxj.utils.ResponseUtils;
 import com.wxj.utils.ValidateParamsUtil;
@@ -135,4 +135,11 @@ public class ExamScheduleController {
             return ResponseUtils.error(e);
         }
     }
+
+    @RequestMapping(value = "StudentExamSchedule", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object getStudentExamScheduleBySno(HttpServletRequest request, @RequestBody RequestBean requestBean) {
+        List<StudentExamScheduleVO> studentExamScheduleVOList = examScheduleService.getStudentExamScheduleBySno(requestBean.getUserCode());
+        return ResponseUtils.success("200", studentExamScheduleVOList);
+    }
+
 }

@@ -13,6 +13,7 @@ import com.wxj.model.PO.ExamPaperExample;
 import com.wxj.model.PO.ExamSchedule;
 import com.wxj.model.VO.ExamScheduleDetailsVO;
 import com.wxj.model.VO.ExamScheduleVO;
+import com.wxj.model.VO.StudentExamScheduleVO;
 import com.wxj.service.ExamScheduleServiceI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,5 +143,10 @@ public class ExamScheduleServiceImpl implements ExamScheduleServiceI {
     public int delete(Integer id) {
         //TODO:
         return 0;
+    }
+
+    @Override
+    public List<StudentExamScheduleVO> getStudentExamScheduleBySno(String sno) {
+        return examScheduleMapper.selectStudentExamScheduleBySno(sno);
     }
 }

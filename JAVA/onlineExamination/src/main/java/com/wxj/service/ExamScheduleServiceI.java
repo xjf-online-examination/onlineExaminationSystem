@@ -4,6 +4,7 @@ import com.wxj.model.DTO.ExamScheduleParamsDTO;
 import com.wxj.model.DTO.ExamScheduleSaveDTO;
 import com.wxj.model.VO.ExamScheduleDetailsVO;
 import com.wxj.model.VO.ExamScheduleVO;
+import com.wxj.model.VO.StudentExamScheduleVO;
 
 import java.util.List;
 
@@ -30,4 +31,11 @@ public interface ExamScheduleServiceI {
     int modify(ExamScheduleSaveDTO examScheduleSaveDTO);
 
     int delete(Integer id);
+
+    /**
+     * 根据sno查询考试安排
+     * @param sno
+     * @return
+     */
+    List<StudentExamScheduleVO> getStudentExamScheduleBySno(String sno);
 }

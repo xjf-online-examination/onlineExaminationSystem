@@ -344,5 +344,16 @@
     from exam_schedule
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectStudentExamScheduleBySno" parameterType="java.lang.String" resultType="com.wxj.model.VO.StudentExamScheduleVO">
+    select es.id examScheduleId, es.title examScheduleTitle, es.start_time startTime, es.duration, ep.id examPaperId, ep.name examPaperName
+    from student s
+    LEFT JOIN class_course cc on s.class_id = cc.class_id
+    LEFT JOIN course c on cc.course_id = c.id
+    LEFT JOIN exam_paper ep on c.code = ep.course_code
+    LEFT JOIN exam_schedule es on ep.id = es.exam_paper_id
+    where s.sno = #{sno,jdbcType=CHAR}
+    and now() &lt; date_add(es.start_time, interval es.duration minute)
+  </select>
 </mapper>
 

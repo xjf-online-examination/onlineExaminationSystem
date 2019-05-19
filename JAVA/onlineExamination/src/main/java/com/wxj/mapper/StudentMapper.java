@@ -7,6 +7,7 @@ import com.wxj.model.PO.Achievement;
 import com.wxj.model.PO.Student;
 import com.wxj.model.PO.StudentExample;
 import com.wxj.model.PO.UserInfo;
+import com.wxj.model.VO.StudentExamScheduleVO;
 import com.wxj.model.VO.StudentVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -122,4 +123,6 @@ public interface StudentMapper {
      * @return
      */
     int bathInsert(@Param("list") List<Student> studentList);
+
+
 }
