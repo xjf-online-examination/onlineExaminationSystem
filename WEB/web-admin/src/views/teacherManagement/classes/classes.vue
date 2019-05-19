@@ -92,9 +92,6 @@ export default {
           ],
         }],
       tableData: [
-        {
-          no: 1, classCode: '191816', className: '19级财经1班', count: 35,
-        },
       ],
       searchData: {
         className: '',
