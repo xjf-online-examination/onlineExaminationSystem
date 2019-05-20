@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * <p>Title: EntryAnswer</p>
+ * <p>Title: EntryStandardAnswer</p>
  * <p>Description:分录答案 </p>
  * <p>Copyright: Copyright (c) 2019</p>
  * <p>Company: www.hanshow.com</p>
  * @author wangxiaojun
- * @date 2019-05-20 21:43:47
+ * @date 2019-05-20 21:29:24
  * @version 1.0
  */
-public class EntryAnswer implements Serializable {
+public class EntryStandardAnswer implements Serializable {
     /**
     * 分页查询条件
     */
@@ -24,9 +24,9 @@ public class EntryAnswer implements Serializable {
     private Integer id;
 
     /**
-     * 学生答案ID
+     * 试题ID
      */
-    private Integer studentAnswerId;
+    private Integer examQuestionsId;
 
     /**
      * 类型 1:记 2:收 3:付 4:转
@@ -63,12 +63,12 @@ public class EntryAnswer implements Serializable {
         this.id = id;
     }
 
-    public Integer getStudentAnswerId() {
-        return studentAnswerId;
+    public Integer getExamQuestionsId() {
+        return examQuestionsId;
     }
 
-    public void setStudentAnswerId(Integer studentAnswerId) {
-        this.studentAnswerId = studentAnswerId;
+    public void setExamQuestionsId(Integer examQuestionsId) {
+        this.examQuestionsId = examQuestionsId;
     }
 
     public String getType() {
@@ -122,7 +122,7 @@ public class EntryAnswer implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", studentAnswerId=").append(studentAnswerId);
+        sb.append(", examQuestionsId=").append(examQuestionsId);
         sb.append(", type=").append(type);
         sb.append(", number=").append(number);
         sb.append(", createTime=").append(createTime);

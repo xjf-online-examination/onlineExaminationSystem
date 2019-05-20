@@ -209,6 +209,66 @@ public class EntryAnswerExample {
             return (Criteria) this;
         }
 
+        public Criteria andStudentAnswerIdIsNull() {
+            addCriterion("student_answer_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdIsNotNull() {
+            addCriterion("student_answer_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdEqualTo(Integer value) {
+            addCriterion("student_answer_id =", value, "studentAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdNotEqualTo(Integer value) {
+            addCriterion("student_answer_id <>", value, "studentAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdGreaterThan(Integer value) {
+            addCriterion("student_answer_id >", value, "studentAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("student_answer_id >=", value, "studentAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdLessThan(Integer value) {
+            addCriterion("student_answer_id <", value, "studentAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdLessThanOrEqualTo(Integer value) {
+            addCriterion("student_answer_id <=", value, "studentAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdIn(List<Integer> values) {
+            addCriterion("student_answer_id in", values, "studentAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdNotIn(List<Integer> values) {
+            addCriterion("student_answer_id not in", values, "studentAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdBetween(Integer value1, Integer value2) {
+            addCriterion("student_answer_id between", value1, value2, "studentAnswerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAnswerIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("student_answer_id not between", value1, value2, "studentAnswerId");
+            return (Criteria) this;
+        }
+
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
             return (Criteria) this;

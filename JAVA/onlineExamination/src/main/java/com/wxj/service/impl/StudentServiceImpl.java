@@ -8,15 +8,11 @@ import com.wxj.constant.SystemConstant;
 import com.wxj.exception.OperationException;
 import com.wxj.exception.ParamInvalidException;
 import com.wxj.logic.StudentLogic;
-import com.wxj.mapper.ClassMapper;
-import com.wxj.mapper.StudentMapper;
+import com.wxj.mapper.*;
 import com.wxj.model.DTO.StudentParamsDTO;
-import com.wxj.model.PO.Achievement;
+import com.wxj.model.PO.*;
 import com.wxj.model.PO.Class;
-import com.wxj.model.PO.ClassExample;
-import com.wxj.model.PO.Student;
 import com.wxj.model.VO.AchievementVO;
-import com.wxj.model.VO.StudentExamScheduleVO;
 import com.wxj.model.VO.StudentVO;
 import com.wxj.service.StudentServiceI;
 import org.slf4j.Logger;
@@ -24,9 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +45,13 @@ public class StudentServiceImpl implements StudentServiceI {
     StudentLogic studentLogic;
     @Autowired
     ClassMapper classMapper;
+    @Autowired
+    EntryAnswerMapper entryAnswerMapper;
+    @Autowired
+    EntryAnswerDetailsMapper entryAnswerDetailsMapper;
+    @Autowired
+    StudentAnswerMapper studentAnswerMapper;
+
 
     @Override
     public List<StudentVO> listStudentVOByParams(StudentParamsDTO studentParamsDTO) {
@@ -113,8 +116,25 @@ public class StudentServiceImpl implements StudentServiceI {
 
     @Override
     public int delete(Integer id) {
-        //TODO:删除学生相关的
-        int i = studentMapper.deleteByPrimaryKey(id);
+        int i = 0;
+        i = studentMapper.deleteByPrimaryKey(id);
+        StudentAnswerExample studentAnswerExample = new StudentAnswerExample();
+        studentAnswerExample.createCriteria().andStudentIdEqualTo(id);
+        List<Integer> studentAnswerIdList = studentAnswerMapper.selectByExample(studentAnswerExample).stream().map(StudentAnswer::getId).collect(Collectors.toList());
+
+        i = studentAnswerMapper.deleteByExample(studentAnswerExample);
+
+        EntryAnswerExample entryAnswerExample = new EntryAnswerExample();
+        entryAnswerExample.createCriteria().andStudentAnswerIdIn(studentAnswerIdList);
+        List<Integer> entryAnswerIdList = entryAnswerMapper.selectByExample(entryAnswerExample).stream().map(EntryAnswer::getId).collect(Collectors.toList());
+
+        i = entryAnswerMapper.deleteByExample(entryAnswerExample);
+
+        EntryAnswerDetailsExample entryAnswerDetailsExample = new EntryAnswerDetailsExample();
+        entryAnswerDetailsExample.createCriteria().andEntryAnswerIdIn(entryAnswerIdList);
+        entryAnswerDetailsMapper.selectByExample(entryAnswerDetailsExample);
+
+        i = entryAnswerDetailsMapper.deleteByExample(entryAnswerDetailsExample);
         if (SystemConstant.ZERO == i) {
             throw new OperationException("删除失败");
         }
@@ -150,6 +170,7 @@ public class StudentServiceImpl implements StudentServiceI {
         return achievementVOList;
     }
 
+    @Transactional
     @Override
     public int resetPassword(Integer id) {
         Student student = new Student();
@@ -159,6 +180,7 @@ public class StudentServiceImpl implements StudentServiceI {
         if (SystemConstant.ZERO == i) {
             throw new OperationException("重置密码失败");
         }
+
         return i;
     }
 

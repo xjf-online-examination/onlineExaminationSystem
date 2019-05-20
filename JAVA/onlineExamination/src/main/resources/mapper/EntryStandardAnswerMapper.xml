@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wxj.mapper.EntryAnswerMapper">
-  <resultMap id="BaseResultMap" type="com.wxj.model.PO.EntryAnswer">
+<mapper namespace="com.wxj.mapper.EntryStandardAnswerMapper">
+  <resultMap id="BaseResultMap" type="com.wxj.model.PO.EntryStandardAnswer">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="student_answer_id" jdbcType="INTEGER" property="studentAnswerId" />
+    <result column="exam_questions_id" jdbcType="INTEGER" property="examQuestionsId" />
     <result column="type" jdbcType="CHAR" property="type" />
     <result column="number" jdbcType="CHAR" property="number" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -69,15 +69,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, student_answer_id, type, number, create_time, modify_time, del_flag
+    id, exam_questions_id, type, number, create_time, modify_time, del_flag
   </sql>
-  <select id="selectByExample" parameterType="com.wxj.model.PO.EntryAnswerExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.wxj.model.PO.EntryStandardAnswerExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from entry_answer
+    from entry_standard_answer
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,35 +88,35 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from entry_answer
+    from entry_standard_answer
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from entry_answer
+    delete from entry_standard_answer
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wxj.model.PO.EntryAnswerExample">
-    delete from entry_answer
+  <delete id="deleteByExample" parameterType="com.wxj.model.PO.EntryStandardAnswerExample">
+    delete from entry_standard_answer
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wxj.model.PO.EntryAnswer">
-    insert into entry_answer (id, student_answer_id, type, 
+  <insert id="insert" parameterType="com.wxj.model.PO.EntryStandardAnswer">
+    insert into entry_standard_answer (id, exam_questions_id, type, 
       number, create_time, modify_time, 
       del_flag)
-    values (#{id,jdbcType=INTEGER}, #{studentAnswerId,jdbcType=INTEGER}, #{type,jdbcType=CHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{examQuestionsId,jdbcType=INTEGER}, #{type,jdbcType=CHAR}, 
       #{number,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{delFlag,jdbcType=CHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wxj.model.PO.EntryAnswer">
-    insert into entry_answer
+  <insert id="insertSelective" parameterType="com.wxj.model.PO.EntryStandardAnswer">
+    insert into entry_standard_answer
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="studentAnswerId != null">
-        student_answer_id,
+      <if test="examQuestionsId != null">
+        exam_questions_id,
       </if>
       <if test="type != null">
         type,
@@ -138,8 +138,8 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="studentAnswerId != null">
-        #{studentAnswerId,jdbcType=INTEGER},
+      <if test="examQuestionsId != null">
+        #{examQuestionsId,jdbcType=INTEGER},
       </if>
       <if test="type != null">
         #{type,jdbcType=CHAR},
@@ -158,20 +158,20 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wxj.model.PO.EntryAnswerExample" resultType="java.lang.Long">
-    select count(*) from entry_answer
+  <select id="countByExample" parameterType="com.wxj.model.PO.EntryStandardAnswerExample" resultType="java.lang.Long">
+    select count(*) from entry_standard_answer
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update entry_answer
+    update entry_standard_answer
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.studentAnswerId != null">
-        student_answer_id = #{record.studentAnswerId,jdbcType=INTEGER},
+      <if test="record.examQuestionsId != null">
+        exam_questions_id = #{record.examQuestionsId,jdbcType=INTEGER},
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=CHAR},
@@ -194,9 +194,9 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update entry_answer
+    update entry_standard_answer
     set id = #{record.id,jdbcType=INTEGER},
-      student_answer_id = #{record.studentAnswerId,jdbcType=INTEGER},
+      exam_questions_id = #{record.examQuestionsId,jdbcType=INTEGER},
       type = #{record.type,jdbcType=CHAR},
       number = #{record.number,jdbcType=CHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -206,11 +206,11 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wxj.model.PO.EntryAnswer">
-    update entry_answer
+  <update id="updateByPrimaryKeySelective" parameterType="com.wxj.model.PO.EntryStandardAnswer">
+    update entry_standard_answer
     <set>
-      <if test="studentAnswerId != null">
-        student_answer_id = #{studentAnswerId,jdbcType=INTEGER},
+      <if test="examQuestionsId != null">
+        exam_questions_id = #{examQuestionsId,jdbcType=INTEGER},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=CHAR},
@@ -230,9 +230,9 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wxj.model.PO.EntryAnswer">
-    update entry_answer
-    set student_answer_id = #{studentAnswerId,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.wxj.model.PO.EntryStandardAnswer">
+    update entry_standard_answer
+    set exam_questions_id = #{examQuestionsId,jdbcType=INTEGER},
       type = #{type,jdbcType=CHAR},
       number = #{number,jdbcType=CHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

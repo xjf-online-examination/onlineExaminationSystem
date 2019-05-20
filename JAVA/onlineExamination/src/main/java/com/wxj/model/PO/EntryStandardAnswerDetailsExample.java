@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EntryAnswerDetailsExample {
+public class EntryStandardAnswerDetailsExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -15,7 +15,7 @@ public class EntryAnswerDetailsExample {
      *
      * @mbg.generated
      */
-    public EntryAnswerDetailsExample() {
+    public EntryStandardAnswerDetailsExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

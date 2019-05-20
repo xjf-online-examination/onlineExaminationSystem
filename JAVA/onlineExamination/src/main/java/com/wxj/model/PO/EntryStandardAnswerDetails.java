@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * <p>Title: EntryAnswerDetails</p>
+ * <p>Title: EntryStandardAnswerDetails</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2019</p>
  * <p>Company: www.hanshow.com</p>
  * @author wangxiaojun
- * @date 2019-05-20 21:41:05
+ * @date 2019-05-20 21:29:24
  * @version 1.0
  */
-public class EntryAnswerDetails implements Serializable {
+public class EntryStandardAnswerDetails implements Serializable {
     /**
     * 分页查询条件
     */
