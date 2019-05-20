@@ -10,6 +10,9 @@
     <result column="subject2" jdbcType="CHAR" property="subject2" />
     <result column="debit_amount" jdbcType="INTEGER" property="debitAmount" />
     <result column="credit_amount" jdbcType="INTEGER" property="creditAmount" />
+    <result column="total" jdbcType="CHAR" property="total" />
+    <result column="debit_total" jdbcType="INTEGER" property="debitTotal" />
+    <result column="credit_total" jdbcType="INTEGER" property="creditTotal" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
     <result column="del_flag" jdbcType="CHAR" property="delFlag" />
@@ -73,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, entry_answer_id, row, summary, subject1, subject2, debit_amount, credit_amount, 
-    create_time, modify_time, del_flag
+    id, entry_answer_id, row, summary, subject1, subject2, debit_amount, credit_amount,
+    total, debit_total, credit_total, create_time, modify_time, del_flag
   </sql>
   <select id="selectByExample" parameterType="com.wxj.model.PO.EntryAnswerDetailsExample" resultMap="BaseResultMap">
     select
@@ -91,7 +94,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from entry_answer_details
     where id = #{id,jdbcType=INTEGER}
@@ -107,13 +110,15 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wxj.model.PO.EntryAnswerDetails">
-    insert into entry_answer_details (id, entry_answer_id, row, 
-      summary, subject1, subject2, 
-      debit_amount, credit_amount, create_time, 
+    insert into entry_answer_details (id, entry_answer_id, row,
+      summary, subject1, subject2,
+      debit_amount, credit_amount, total,
+      debit_total, credit_total, create_time,
       modify_time, del_flag)
-    values (#{id,jdbcType=INTEGER}, #{entryAnswerId,jdbcType=INTEGER}, #{row,jdbcType=TINYINT}, 
-      #{summary,jdbcType=CHAR}, #{subject1,jdbcType=TINYINT}, #{subject2,jdbcType=CHAR}, 
-      #{debitAmount,jdbcType=INTEGER}, #{creditAmount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=INTEGER}, #{entryAnswerId,jdbcType=INTEGER}, #{row,jdbcType=TINYINT},
+      #{summary,jdbcType=CHAR}, #{subject1,jdbcType=TINYINT}, #{subject2,jdbcType=CHAR},
+      #{debitAmount,jdbcType=INTEGER}, #{creditAmount,jdbcType=INTEGER}, #{total,jdbcType=CHAR},
+      #{debitTotal,jdbcType=INTEGER}, #{creditTotal,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
       #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wxj.model.PO.EntryAnswerDetails">
@@ -142,6 +147,15 @@
       </if>
       <if test="creditAmount != null">
         credit_amount,
+      </if>
+      <if test="total != null">
+        total,
+      </if>
+      <if test="debitTotal != null">
+        debit_total,
+      </if>
+      <if test="creditTotal != null">
+        credit_total,
       </if>
       <if test="createTime != null">
         create_time,
@@ -177,6 +191,15 @@
       </if>
       <if test="creditAmount != null">
         #{creditAmount,jdbcType=INTEGER},
+      </if>
+      <if test="total != null">
+        #{total,jdbcType=CHAR},
+      </if>
+      <if test="debitTotal != null">
+        #{debitTotal,jdbcType=INTEGER},
+      </if>
+      <if test="creditTotal != null">
+        #{creditTotal,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -222,6 +245,15 @@
       <if test="record.creditAmount != null">
         credit_amount = #{record.creditAmount,jdbcType=INTEGER},
       </if>
+      <if test="record.total != null">
+        total = #{record.total,jdbcType=CHAR},
+      </if>
+      <if test="record.debitTotal != null">
+        debit_total = #{record.debitTotal,jdbcType=INTEGER},
+      </if>
+      <if test="record.creditTotal != null">
+        credit_total = #{record.creditTotal,jdbcType=INTEGER},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -239,16 +271,19 @@
   <update id="updateByExample" parameterType="map">
     update entry_answer_details
     set id = #{record.id,jdbcType=INTEGER},
-      entry_answer_id = #{record.entryAnswerId,jdbcType=INTEGER},
-      row = #{record.row,jdbcType=TINYINT},
-      summary = #{record.summary,jdbcType=CHAR},
-      subject1 = #{record.subject1,jdbcType=TINYINT},
-      subject2 = #{record.subject2,jdbcType=CHAR},
-      debit_amount = #{record.debitAmount,jdbcType=INTEGER},
-      credit_amount = #{record.creditAmount,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
-      del_flag = #{record.delFlag,jdbcType=CHAR}
+    entry_answer_id = #{record.entryAnswerId,jdbcType=INTEGER},
+    row = #{record.row,jdbcType=TINYINT},
+    summary = #{record.summary,jdbcType=CHAR},
+    subject1 = #{record.subject1,jdbcType=TINYINT},
+    subject2 = #{record.subject2,jdbcType=CHAR},
+    debit_amount = #{record.debitAmount,jdbcType=INTEGER},
+    credit_amount = #{record.creditAmount,jdbcType=INTEGER},
+    total = #{record.total,jdbcType=CHAR},
+    debit_total = #{record.debitTotal,jdbcType=INTEGER},
+    credit_total = #{record.creditTotal,jdbcType=INTEGER},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+    del_flag = #{record.delFlag,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -277,6 +312,15 @@
       <if test="creditAmount != null">
         credit_amount = #{creditAmount,jdbcType=INTEGER},
       </if>
+      <if test="total != null">
+        total = #{total,jdbcType=CHAR},
+      </if>
+      <if test="debitTotal != null">
+        debit_total = #{debitTotal,jdbcType=INTEGER},
+      </if>
+      <if test="creditTotal != null">
+        credit_total = #{creditTotal,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -298,6 +342,9 @@
       subject2 = #{subject2,jdbcType=CHAR},
       debit_amount = #{debitAmount,jdbcType=INTEGER},
       credit_amount = #{creditAmount,jdbcType=INTEGER},
+      total = #{total,jdbcType=CHAR},
+      debit_total = #{debitTotal,jdbcType=INTEGER},
+      credit_total = #{creditTotal,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       del_flag = #{delFlag,jdbcType=CHAR}

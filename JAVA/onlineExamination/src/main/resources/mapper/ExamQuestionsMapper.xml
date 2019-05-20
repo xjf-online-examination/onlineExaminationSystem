@@ -126,7 +126,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.wxj.model.PO.ExamQuestions">
+  <insert id="insertSelective" parameterType="com.wxj.model.PO.ExamQuestions" useGeneratedKeys="true" keyProperty="id">
     insert into exam_questions
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

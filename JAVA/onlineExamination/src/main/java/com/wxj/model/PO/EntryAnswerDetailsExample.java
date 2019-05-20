@@ -649,6 +649,196 @@ public class EntryAnswerDetailsExample {
             return (Criteria) this;
         }
 
+        public Criteria andTotalIsNull() {
+            addCriterion("total is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalIsNotNull() {
+            addCriterion("total is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalEqualTo(String value) {
+            addCriterion("total =", value, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNotEqualTo(String value) {
+            addCriterion("total <>", value, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalGreaterThan(String value) {
+            addCriterion("total >", value, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalGreaterThanOrEqualTo(String value) {
+            addCriterion("total >=", value, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalLessThan(String value) {
+            addCriterion("total <", value, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalLessThanOrEqualTo(String value) {
+            addCriterion("total <=", value, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalLike(String value) {
+            addCriterion("total like", value, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNotLike(String value) {
+            addCriterion("total not like", value, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalIn(List<String> values) {
+            addCriterion("total in", values, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNotIn(List<String> values) {
+            addCriterion("total not in", values, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalBetween(String value1, String value2) {
+            addCriterion("total between", value1, value2, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalNotBetween(String value1, String value2) {
+            addCriterion("total not between", value1, value2, "total");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalIsNull() {
+            addCriterion("debit_total is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalIsNotNull() {
+            addCriterion("debit_total is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalEqualTo(Integer value) {
+            addCriterion("debit_total =", value, "debitTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalNotEqualTo(Integer value) {
+            addCriterion("debit_total <>", value, "debitTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalGreaterThan(Integer value) {
+            addCriterion("debit_total >", value, "debitTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalGreaterThanOrEqualTo(Integer value) {
+            addCriterion("debit_total >=", value, "debitTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalLessThan(Integer value) {
+            addCriterion("debit_total <", value, "debitTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalLessThanOrEqualTo(Integer value) {
+            addCriterion("debit_total <=", value, "debitTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalIn(List<Integer> values) {
+            addCriterion("debit_total in", values, "debitTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalNotIn(List<Integer> values) {
+            addCriterion("debit_total not in", values, "debitTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalBetween(Integer value1, Integer value2) {
+            addCriterion("debit_total between", value1, value2, "debitTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalNotBetween(Integer value1, Integer value2) {
+            addCriterion("debit_total not between", value1, value2, "debitTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalIsNull() {
+            addCriterion("credit_total is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalIsNotNull() {
+            addCriterion("credit_total is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalEqualTo(Integer value) {
+            addCriterion("credit_total =", value, "creditTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalNotEqualTo(Integer value) {
+            addCriterion("credit_total <>", value, "creditTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalGreaterThan(Integer value) {
+            addCriterion("credit_total >", value, "creditTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalGreaterThanOrEqualTo(Integer value) {
+            addCriterion("credit_total >=", value, "creditTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalLessThan(Integer value) {
+            addCriterion("credit_total <", value, "creditTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalLessThanOrEqualTo(Integer value) {
+            addCriterion("credit_total <=", value, "creditTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalIn(List<Integer> values) {
+            addCriterion("credit_total in", values, "creditTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalNotIn(List<Integer> values) {
+            addCriterion("credit_total not in", values, "creditTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalBetween(Integer value1, Integer value2) {
+            addCriterion("credit_total between", value1, value2, "creditTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalNotBetween(Integer value1, Integer value2) {
+            addCriterion("credit_total not between", value1, value2, "creditTotal");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

@@ -109,7 +109,7 @@
       #{number,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{delFlag,jdbcType=CHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wxj.model.PO.EntryStandardAnswer">
+  <insert id="insertSelective" parameterType="com.wxj.model.PO.EntryStandardAnswer" useGeneratedKeys="true" keyProperty="id">
     insert into entry_standard_answer
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -240,4 +240,10 @@
       del_flag = #{delFlag,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectEntryStandardAnswerVOByExamQuestionsId" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.EntryStandardAnswerVO">
+    select id, type, number
+    from entry_standard_answer
+    where exam_questions_id = #{examQuestionsId,jdbcType=INTEGER}
+  </select>
 </mapper>

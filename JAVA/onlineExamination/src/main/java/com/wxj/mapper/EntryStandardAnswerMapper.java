@@ -2,6 +2,7 @@ package com.wxj.mapper;
 
 import com.wxj.model.PO.EntryStandardAnswer;
 import com.wxj.model.PO.EntryStandardAnswerExample;
+import com.wxj.model.VO.EntryStandardAnswerVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -72,4 +73,6 @@ public interface EntryStandardAnswerMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(EntryStandardAnswer record);
+
+    EntryStandardAnswerVO selectEntryStandardAnswerVOByExamQuestionsId(Integer examQuestionsId);
 }

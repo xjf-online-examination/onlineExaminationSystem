@@ -58,4 +58,8 @@ public class ExamQuestionsSaveDTO implements Serializable {
      * 分数
      */
     private Integer score;
+    /**
+     * 分录答案
+     */
+    private EntryStandardAnswerDTO entryStandardAnswerDTO;
 }

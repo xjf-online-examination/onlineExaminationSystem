@@ -9,7 +9,7 @@ import java.util.Date;
  * <p>Copyright: Copyright (c) 2019</p>
  * <p>Company: www.hanshow.com</p>
  * @author wangxiaojun
- * @date 2019-05-20 21:41:05
+ * @date 2019-05-21 00:26:41
  * @version 1.0
  */
 public class EntryAnswerDetails implements Serializable {
@@ -57,6 +57,21 @@ public class EntryAnswerDetails implements Serializable {
      * 贷方金额
      */
     private Integer creditAmount;
+
+    /**
+     * 合计大写
+     */
+    private String total;
+
+    /**
+     * 借方合计
+     */
+    private Integer debitTotal;
+
+    /**
+     * 贷方合计
+     */
+    private Integer creditTotal;
 
     /**
      * 创建时间
@@ -139,6 +154,30 @@ public class EntryAnswerDetails implements Serializable {
         this.creditAmount = creditAmount;
     }
 
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total == null ? null : total.trim();
+    }
+
+    public Integer getDebitTotal() {
+        return debitTotal;
+    }
+
+    public void setDebitTotal(Integer debitTotal) {
+        this.debitTotal = debitTotal;
+    }
+
+    public Integer getCreditTotal() {
+        return creditTotal;
+    }
+
+    public void setCreditTotal(Integer creditTotal) {
+        this.creditTotal = creditTotal;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -181,6 +220,9 @@ public class EntryAnswerDetails implements Serializable {
         sb.append(", subject2=").append(subject2);
         sb.append(", debitAmount=").append(debitAmount);
         sb.append(", creditAmount=").append(creditAmount);
+        sb.append(", total=").append(total);
+        sb.append(", debitTotal=").append(debitTotal);
+        sb.append(", creditTotal=").append(creditTotal);
         sb.append(", createTime=").append(createTime);
         sb.append(", modifyTime=").append(modifyTime);
         sb.append(", delFlag=").append(delFlag);
