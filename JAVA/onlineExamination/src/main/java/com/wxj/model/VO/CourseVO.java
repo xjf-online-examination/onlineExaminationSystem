@@ -1,6 +1,13 @@
 package com.wxj.model.VO;
 
-public class CourseVO {
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+
+@Getter
+@Setter
+public class CourseVO implements Serializable {
     /**
      * 课程ID
      */

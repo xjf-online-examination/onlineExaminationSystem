@@ -132,7 +132,7 @@ public class CourseController {
     }
 
     /**
-     * 所有课程ID，name供页面下拉菜单用
+     * 所有课程ID，className, courseName供页面下拉菜单用
      * @param request
      * @param requestBean
      * @return

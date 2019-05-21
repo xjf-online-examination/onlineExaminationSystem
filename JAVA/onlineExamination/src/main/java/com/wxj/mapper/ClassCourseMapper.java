@@ -74,5 +74,9 @@ public interface ClassCourseMapper {
      */
     int updateByPrimaryKey(ClassCourse record);
 
+    /**
+     * 所有课程ID，className, courseName供页面下拉菜单用
+     * @return
+     */
     List<ClassCourseSelectVO> selectClassCourseAll();
 }
