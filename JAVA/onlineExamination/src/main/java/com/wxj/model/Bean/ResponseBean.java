@@ -25,4 +25,9 @@ public class ResponseBean <T> implements Serializable{
 
 	@JSONField(ordinal = 4)
 	private T data;
+
+	public ResponseBean(String responseCode, String responseMsg) {
+		this.responseCode = responseCode;
+		this.responseMsg = responseMsg;
+	}
 }

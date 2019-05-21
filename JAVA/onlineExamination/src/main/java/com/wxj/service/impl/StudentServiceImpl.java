@@ -46,8 +46,6 @@ public class StudentServiceImpl implements StudentServiceI {
     @Autowired
     ClassMapper classMapper;
     @Autowired
-    EntryAnswerMapper entryAnswerMapper;
-    @Autowired
     EntryAnswerDetailsMapper entryAnswerDetailsMapper;
     @Autowired
     StudentAnswerMapper studentAnswerMapper;
@@ -124,16 +122,8 @@ public class StudentServiceImpl implements StudentServiceI {
 
         i = studentAnswerMapper.deleteByExample(studentAnswerExample);
 
-        EntryAnswerExample entryAnswerExample = new EntryAnswerExample();
-        entryAnswerExample.createCriteria().andStudentAnswerIdIn(studentAnswerIdList);
-        List<Integer> entryAnswerIdList = entryAnswerMapper.selectByExample(entryAnswerExample).stream().map(EntryAnswer::getId).collect(Collectors.toList());
-
-        i = entryAnswerMapper.deleteByExample(entryAnswerExample);
-
         EntryAnswerDetailsExample entryAnswerDetailsExample = new EntryAnswerDetailsExample();
-        entryAnswerDetailsExample.createCriteria().andEntryAnswerIdIn(entryAnswerIdList);
-        entryAnswerDetailsMapper.selectByExample(entryAnswerDetailsExample);
-
+        entryAnswerDetailsExample.createCriteria().andEntryAnswerIdIn(studentAnswerIdList);
         i = entryAnswerDetailsMapper.deleteByExample(entryAnswerDetailsExample);
         if (SystemConstant.ZERO == i) {
             throw new OperationException("删除失败");

@@ -6,17 +6,13 @@ import com.wxj.constant.ExamConstant;
 import com.wxj.constant.SystemConstant;
 import com.wxj.exception.OperationException;
 import com.wxj.mapper.EntryStandardAnswerDetailsMapper;
-import com.wxj.mapper.EntryStandardAnswerMapper;
 import com.wxj.mapper.ExamQuestionsMapper;
 import com.wxj.model.DTO.EntryStandardAnswerDetailsDTO;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
-import com.wxj.model.PO.EntryStandardAnswer;
 import com.wxj.model.PO.EntryStandardAnswerDetails;
-import com.wxj.model.PO.EntryStandardAnswerExample;
 import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.VO.EntryStandardAnswerDetailsVO;
-import com.wxj.model.VO.EntryStandardAnswerVO;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
 import com.wxj.service.ExamQuestionsServiceI;
@@ -44,8 +40,6 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     @Autowired
     ExamQuestionsMapper examQuestionsMapper;
     @Autowired
-    EntryStandardAnswerMapper entryStandardAnswerMapper;
-    @Autowired
     EntryStandardAnswerDetailsMapper entryStandardAnswerDetailsMapper;
 
     @Override
@@ -63,12 +57,9 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     public ExamQuestionsDetailsVO getExamQuestionsDetailsById(Integer id) {
         ExamQuestionsDetailsVO examQuestionsDetailsVO = examQuestionsMapper.getExamQuestionsDetailsById(id);
         if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestionsDetailsVO.getType())) {
-            EntryStandardAnswerVO entryStandardAnswerVO = entryStandardAnswerMapper.selectEntryStandardAnswerVOByExamQuestionsId(examQuestionsDetailsVO.getId());
+            List<EntryStandardAnswerDetailsVO> entryStandardAnswerDetailsVOList = entryStandardAnswerDetailsMapper.selectEntryStandardAnswerDetailsVOByEntryStandardAnswerId(examQuestionsDetailsVO.getId());
 
-            List<EntryStandardAnswerDetailsVO> entryStandardAnswerDetailsVOList = entryStandardAnswerDetailsMapper.selectEntryStandardAnswerDetailsVOByEntryStandardAnswerId(entryStandardAnswerVO.getId());
-
-            entryStandardAnswerVO.setEntryStandardAnswerDetailsVOList(entryStandardAnswerDetailsVOList);
-            examQuestionsDetailsVO.setEntryStandardAnswerVO(entryStandardAnswerVO);
+            examQuestionsDetailsVO.setEntryStandardAnswerDetailsVOList(entryStandardAnswerDetailsVOList);
         }
         return examQuestionsDetailsVO;
     }
@@ -77,7 +68,6 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     @Override
     public int save(ExamQuestionsSaveDTO examQuestionsSaveDTO) {
         int examQuestionsInsertSize = 0;
-        int entryStandardAnswerInsertSize = 0;
         int entryStandardAnswerDetailsInsertSize = 0;
         Date date = new Date();
         ExamQuestions examQuestions = new ExamQuestions();
@@ -94,31 +84,23 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
         examQuestionsInsertSize = examQuestionsMapper.insertSelective(examQuestions);
 
         if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestions.getType())) {
-            EntryStandardAnswer entryStandardAnswer = new EntryStandardAnswer();
-            entryStandardAnswer.setExamQuestionsId(examQuestions.getId());
-            entryStandardAnswer.setType(examQuestionsSaveDTO.getEntryStandardAnswerDTO().getType());
-            entryStandardAnswer.setNumber(examQuestionsSaveDTO.getEntryStandardAnswerDTO().getNumber());
-            entryStandardAnswer.setCreateTime(date);
-            entryStandardAnswer.setModifyTime(date);
-            entryStandardAnswer.setDelFlag(SystemConstant.NOUGHT);
-            entryStandardAnswerInsertSize = entryStandardAnswerMapper.insertSelective(entryStandardAnswer);
-
             List<EntryStandardAnswerDetails> list = Lists.newArrayList();
             EntryStandardAnswerDetails entryStandardAnswerDetails;
-            for (int i=0,size=examQuestionsSaveDTO.getEntryStandardAnswerDTO().getEntryStandardAnswerDetailsDTOList().size(); i<size; i++) {
+            for (int i=0,size=examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().size(); i<size; i++) {
                 entryStandardAnswerDetails = new EntryStandardAnswerDetails();
-                EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDTO().getEntryStandardAnswerDetailsDTOList().get(i);
+                EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
                 BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
-                entryStandardAnswerDetails.setEntryAnswerId(entryStandardAnswer.getId());
+                entryStandardAnswerDetails.setEntryAnswerId(examQuestions.getId());
                 entryStandardAnswerDetails.setRow(entryStandardAnswerDetailsDTO.getRow().byteValue());
                 entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1().byteValue());
                 entryStandardAnswerDetails.setCreateTime(date);
                 entryStandardAnswerDetails.setModifyTime(date);
                 entryStandardAnswerDetails.setDelFlag(SystemConstant.NOUGHT);
+                list.add(entryStandardAnswerDetails);
             }
             entryStandardAnswerDetailsInsertSize = entryStandardAnswerDetailsMapper.batchInsert(list);
         }
-        if (SystemConstant.ZERO == examQuestionsInsertSize || SystemConstant.ZERO == entryStandardAnswerInsertSize || SystemConstant.ZERO == entryStandardAnswerDetailsInsertSize) {
+        if (SystemConstant.ZERO == examQuestionsInsertSize || SystemConstant.ZERO == entryStandardAnswerDetailsInsertSize) {
             throw new OperationException("插入失败");
         }
         return examQuestionsInsertSize;
@@ -126,6 +108,7 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
 
     @Override
     public int modify(ExamQuestionsSaveDTO examQuestionsSaveDTO) {
+        Date date = new Date();
         ExamQuestions examQuestions = new ExamQuestions();
         BeanUtils.copyProperties(examQuestionsSaveDTO, examQuestions);
 
@@ -134,13 +117,23 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
         examQuestions.setOptionc(examQuestionsSaveDTO.getOptionC());
         examQuestions.setOptiond(examQuestionsSaveDTO.getOptionD());
         examQuestions.setOptione(examQuestionsSaveDTO.getOptionE());
-        examQuestions.setModifyTime(new Date());
+        examQuestions.setModifyTime(date);
 
-        int i = examQuestionsMapper.updateByPrimaryKeySelective(examQuestions);
-        if (SystemConstant.ZERO == i) {
-            throw new OperationException("修改失败");
+        examQuestionsMapper.updateByPrimaryKeySelective(examQuestions);
+
+        if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestions.getType())) {
+            EntryStandardAnswerDetails entryStandardAnswerDetails;
+            for (int i=0,size=examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().size(); i<size; i++) {
+                entryStandardAnswerDetails = new EntryStandardAnswerDetails();
+                EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
+                BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
+                entryStandardAnswerDetails.setRow(entryStandardAnswerDetailsDTO.getRow().byteValue());
+                entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1().byteValue());
+                entryStandardAnswerDetails.setModifyTime(date);
+                entryStandardAnswerDetailsMapper.updateByPrimaryKeySelective(entryStandardAnswerDetails);
+            }
         }
-        return i;
+        return 0;
     }
 
     @Override

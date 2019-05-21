@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -69,6 +70,6 @@ public class ExamQuestionsDetailsVO implements Serializable {
     /**
      * 分录答案
      */
-    private EntryStandardAnswerVO entryStandardAnswerVO;
+    private List<EntryStandardAnswerDetailsVO> entryStandardAnswerDetailsVOList;
 
 }

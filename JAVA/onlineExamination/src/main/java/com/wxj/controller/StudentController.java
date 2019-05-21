@@ -8,7 +8,6 @@ import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.StudentParamsDTO;
 import com.wxj.model.VO.AchievementVO;
-import com.wxj.model.VO.StudentExamScheduleVO;
 import com.wxj.model.VO.StudentVO;
 import com.wxj.service.StudentServiceI;
 import com.wxj.utils.ResponseUtils;

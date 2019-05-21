@@ -5,11 +5,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
 public class ExamQuestionsSaveDTO implements Serializable {
+    private Integer id;
     /**
      * 课程编号
      */
@@ -61,5 +63,5 @@ public class ExamQuestionsSaveDTO implements Serializable {
     /**
      * 分录答案
      */
-    private EntryStandardAnswerDTO entryStandardAnswerDTO;
+    private List<EntryStandardAnswerDetailsDTO> entryStandardAnswerDetailsDTOList;
 }

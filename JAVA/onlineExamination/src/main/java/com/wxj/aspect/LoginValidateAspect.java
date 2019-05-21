@@ -7,6 +7,7 @@ import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.exception.ParamEmptyException;
 import com.wxj.exception.PermissionException;
 import com.wxj.model.Bean.RequestBean;
+import com.wxj.model.Bean.ResponseBean;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -62,7 +63,8 @@ public class LoginValidateAspect {
         if (null == securityKey || !securityKey.equals(baseQUERY.getSecurityKey())) {
             logger.info("securityKey校验失败,userId={}", baseQUERY.getUserCode());
             request.getSession().setAttribute(loginKey,"");
-            throw new PermissionException("登陆过期");
+            ResponseBean responseBean = new ResponseBean("401", "登陆过期");
+            throw new PermissionException(JSONObject.fromObject(responseBean).toString());
         }
     }
 

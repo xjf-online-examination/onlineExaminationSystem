@@ -18,6 +18,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class EntryStandardAnswerDetailsDTO implements Serializable {
+    private Integer id;
     /**
      * 分录答案ID
      */
