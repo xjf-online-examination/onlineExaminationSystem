@@ -9,7 +9,7 @@ import java.io.Serializable;
  * <p>Title: ExamPaperQuestionsDTO</p >
  * <p>Description: </p >
  * <p>Copyright: Copyright (c) 2018</p >
- * <p>Company: www.hanshow.com</p >
+ * <p>Company: wxj</p >
  *
  * @author wangxiaojun
  * @version 1.0

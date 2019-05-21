@@ -3,6 +3,8 @@ package com.wxj.model.VO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * <p>Title: TeacherVO</p >
  * <p>Description: </p >
@@ -15,7 +17,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class TeacherVO {
+public class TeacherVO implements Serializable {
 
     /**
      * ID
