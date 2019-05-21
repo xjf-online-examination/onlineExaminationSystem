@@ -135,6 +135,12 @@ public class ClassController {
         }
     }
 
+    /**
+     * 所有课程ID，name供页面下拉菜单用
+     * @param request
+     * @param requestBean
+     * @return
+     */
     @RequestMapping(value = "/listAll", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object listClassALL(HttpServletRequest request, @RequestBody RequestBean requestBean) {
         return ResponseUtils.success("200", classService.listClassAll());

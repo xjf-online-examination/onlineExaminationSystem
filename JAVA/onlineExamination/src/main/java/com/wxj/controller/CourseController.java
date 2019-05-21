@@ -131,4 +131,15 @@ public class CourseController {
         }
     }
 
+    /**
+     * 所有课程ID，name供页面下拉菜单用
+     * @param request
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/listClassCourse", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listClassCourseALL(HttpServletRequest request, @RequestBody RequestBean requestBean) {
+        return ResponseUtils.success("200", courseService.listClassCourseAll());
+    }
+
 }

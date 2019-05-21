@@ -133,6 +133,6 @@ public class ClassServiceImpl implements ClassServiceI {
 
     @Override
     public List<ClassSelectVO> listClassAll() {
-        return classMapper.listClassAll();
+        return classMapper.selectClassAll();
     }
 }

@@ -1,6 +1,7 @@
 package com.wxj.service;
 
 import com.wxj.model.DTO.CourseParamsDTO;
+import com.wxj.model.VO.ClassCourseSelectVO;
 import com.wxj.model.VO.CourseVO;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface CourseServiceI {
     int modify(CourseParamsDTO courseParamsDTO);
 
     int delete(Integer id);
+
+    List<ClassCourseSelectVO> listClassCourseAll();
 }

@@ -11,6 +11,7 @@ import com.wxj.model.PO.ClassCourse;
 import com.wxj.model.PO.ClassCourseExample;
 import com.wxj.model.PO.Course;
 import com.wxj.model.PO.CourseExample;
+import com.wxj.model.VO.ClassCourseSelectVO;
 import com.wxj.model.VO.CourseVO;
 import com.wxj.service.CourseServiceI;
 import org.springframework.beans.BeanUtils;
@@ -126,5 +127,10 @@ public class CourseServiceImpl implements CourseServiceI {
         //删除这个课程的试卷
         //删除这个试卷的考试安排
         return 0;
+    }
+
+    @Override
+    public List<ClassCourseSelectVO> listClassCourseAll() {
+        return classCourseMapper.selectClassCourseAll();
     }
 }

@@ -94,5 +94,5 @@ public interface ClassMapper {
      * 获取所有班级ID，name供下拉菜单用
      * @return
      */
-    List<ClassSelectVO> listClassAll();
+    List<ClassSelectVO> selectClassAll();
 }

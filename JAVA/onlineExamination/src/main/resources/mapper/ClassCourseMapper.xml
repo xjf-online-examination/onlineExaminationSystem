@@ -225,4 +225,11 @@
       del_flag = #{delFlag,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectClassCourseAll" resultType="com.wxj.model.VO.ClassCourseSelectVO">
+    select cc.id, c1.name className, c2.name courseName
+    from class_course cc
+    left join class c1 on cc.class_id = c1.id
+    left join course c2 on cc.course_id = c2.id
+  </select>
 </mapper>
