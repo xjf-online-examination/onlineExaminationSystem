@@ -16,13 +16,13 @@
     <tables
       ref="tables"
       search-place="top"
-      v-model="tableData"
+      v-model="tableData.list"
       :columns="columns"
       @on-delete="handleDelete"
     />
     <div class="table-pagenation m-t-s">
       <Page
-        :total="100"
+        :total="tableData.count"
         show-elevator
         show-total
         show-sizer
@@ -145,9 +145,10 @@ export default {
             ]),
           ],
         }],
-      tableData: [
-
-      ],
+      tableData: {
+        list: [],
+        count: 0,
+      },
       searchData: {
         jobNo: '',
         name: '',
@@ -166,23 +167,8 @@ export default {
     };
   },
   methods: {
-    handleDelete(params) {
-      console.log(params);
-    },
-    exportExcel() {
-      this.$refs.tables.exportCsv({
-        filename: `table-${(new Date()).valueOf()}.csv`,
-      });
-    },
     handleSearch() {
-      console.log(this.searchData);
-      getTeacherByParams(this.searchData).then((res) => {
-        console.log(res);
-        if (res.responseCode === '200') {
-          this.tableData = [res.data];
-        }
-        // TODO: 搜索不到结果时
-      });
+      this.getTeacherList(this.searchData);
     },
     handleReset(name) {
       this.$refs[name].resetFields();
@@ -209,12 +195,12 @@ export default {
       });
     },
     onPageChange(params) {
-      console.log(params);
-      // TODO:
+      this.searchData.currentPage = params;
+      this.getTeacherList(this.searchData);
     },
     onPageSizeChange(params) {
-      console.log(params);
-      // TODO:
+      this.searchData.pageSize = params;
+      this.getTeacherList(this.searchData);
     },
     onAdd() {
       this.modalVisible = true;
@@ -251,7 +237,7 @@ export default {
     getTeacherList() {
       getTeacherList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
-          this.tableData = res.data.list;
+          this.tableData = res.data;
         } else {
           this.tableData = [];
         }

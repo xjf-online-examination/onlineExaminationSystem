@@ -1,26 +1,38 @@
 <template>
   <div>
-    <Form ref="classSearch" :model="searchData" inline>
-      <FormItem prop="classCode" label="学号" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.studentNo" placeholder="学号"/>
+    <Form ref="searchData" :model="searchData" inline>
+      <FormItem label="学号" label-position="left" class="search-flex">
+        <Input type="text" v-model="searchData.sno" placeholder="学号"/>
       </FormItem>
-      <FormItem prop="className" label="姓名" label-position="left" class="search-flex">
+      <FormItem label="姓名" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.name" placeholder="姓名"/>
       </FormItem>
-      <FormItem prop="className" label="班级" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.className" placeholder="班级"/>
+      <FormItem label="班级" label-position="left" class="search-flex">
+        <Select v-model="searchData.classId" filterable placeholder="班级">
+          <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+        </Select>
       </FormItem>
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
-        <Button type="default" @click="handleReset('classSearch')" class="m-l-s">重置</Button>
+        <Button type="default" @click="handleReset('searchData')" class="m-l-s">重置</Button>
       </FormItem>
     </Form>
-    <div class="m-b-s">
+    <div class="m-b-s flex-display">
       <Button type="primary" @click="onAdd()">添加</Button>
-      <Button type="primary" @click="onImport()" class="m-l-s">导入</Button>
+      <Upload
+        class="m-l-s"
+        :action="baseUrl+'/students/import'"
+        :data="uploadData"
+        accept=".xlsx, .xlx"
+        :show-upload-list="false"
+        @on-success="importSuccess()"
+        @on-error="importError()"
+      >
+        <Button type="primary">导入</Button>
+      </Upload>
       <Button type="primary" @click="onDownload()" class="m-l-s">下载模板</Button>
     </div>
-    <tables ref="tables" v-model="tableData.list" :columns="columns" @on-delete="handleDelete"/>
+    <tables ref="tables" v-model="tableData.list" :columns="columns"/>
     <div class="table-pagenation m-t-s">
       <Page
         :total="tableData.count"
@@ -40,7 +52,9 @@
           <Input type="text" v-model="student.name" placeholder="请输入姓名"/>
         </FormItem>
         <FormItem prop="name" label="班级">
-          <Input type="text" v-model="student.classId" placeholder="请输入姓名"/>
+          <Select v-model="student.classId" filterable placeholder="请选择班级">
+            <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+          </Select>
         </FormItem>
       </Form>
     </Modal>
@@ -51,10 +65,19 @@
 </template>
 
 <script>
+import FileSaver from 'file-saver';
 import Tables from '@/components/tables';
+import config from '@/config';
 import {
-  getStudentList, addStudent, editStudent, deleteStudent, resetStudentPassword,
+  getStudentList, addStudent, editStudent, deleteStudent, resetStudentPassword, downloadStudentTemplate, getAllClasses,
 } from '@/api/teacher';
+import {
+  getToken,
+  getUserCode,
+} from '@/libs/util';
+
+const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro;
+
 
 export default {
   name: 'students',
@@ -63,6 +86,11 @@ export default {
   },
   data () {
     return {
+      baseUrl,
+      uploadData: {
+        securityKey: getToken(),
+        userCode: getUserCode(),
+      },
       columns: [
         {
           title: '序号', type: 'index', align: 'center',
@@ -159,23 +187,23 @@ export default {
       isAdd: true,
       showDeleteModal: false,
       selectIndex: 0,
+      classList: [],
     };
   },
   methods: {
-    handleDelete (params) {
-      console.log(params);
-    },
-    exportExcel () {
-      this.$refs.tables.exportCsv({
-        filename: `table-${(new Date()).valueOf()}.csv`,
-      });
-    },
     handleSearch () {
       console.log(this.searchData);
+      this.getStudentList(this.searchData);
     },
     handleReset (name) {
-      this.$refs[name].resetFields();
-      console.log(this.searchData);
+      this.searchData = {
+        classId: '',
+        sno: '',
+        name: '',
+        currentPage: 1,
+        pageSize: 10,
+      };
+      this.getStudentList(this.searchData);
     },
     onEdit (index) {
       this.modalVisible = true;
@@ -197,12 +225,12 @@ export default {
       this.selectIndex = index;
     },
     onPageChange (params) {
-      console.log(params);
-      /* todo */
+      this.searchData.currentPage = params;
+      this.getStudentList(this.searchData);
     },
     onPageSizeChange (params) {
-      console.log(params);
-      /* todo */
+      this.searchData.pageSize = params;
+      this.getStudentList(this.searchData);
     },
     onAdd () {
       this.modalVisible = true;
@@ -252,15 +280,42 @@ export default {
         }
       });
     },
+    getAllClasses () {
+      getAllClasses().then((res) => {
+        if (res.responseCode === '200') {
+          this.classList = res.data;
+        }
+      });
+    },
+    onDownload () {
+      downloadStudentTemplate().then((res) => {
+        const blob = new Blob([res], {
+          type: 'application/octet-stream',
+        });
+        // const header = headers('Content-Disposition');
+        const fileName = `studentTemplate_${new Date().getTime()}.xlsx`;
+        FileSaver.saveAs(blob, fileName);
+      });
+    },
+    importSuccess (res) {
+      console.log(res);
+    },
+    importError (res) {
+      console.log(res);
+    },
   },
   mounted () {
     this.getStudentList();
+    this.getAllClasses();
   },
 };
 </script>
 <style lang="less" scoped>
 .search-flex {
   display: inline-flex;
+}
+.flex-display {
+  display: -webkit-box;
 }
 .table-pagenation {
   display: flex;
