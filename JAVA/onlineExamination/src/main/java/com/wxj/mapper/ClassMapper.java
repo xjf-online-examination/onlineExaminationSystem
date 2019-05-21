@@ -3,6 +3,7 @@ package com.wxj.mapper;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.wxj.model.PO.Class;
 import com.wxj.model.PO.ClassExample;
+import com.wxj.model.VO.ClassSelectVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -88,4 +89,10 @@ public interface ClassMapper {
      * @return
      */
     Long countClassByParams(@Param("record")Class record);
+
+    /**
+     * 获取所有班级ID，name供下拉菜单用
+     * @return
+     */
+    List<ClassSelectVO> listClassAll();
 }

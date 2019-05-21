@@ -254,4 +254,9 @@
       and name like concat('%', #{record.name,jdbcType=CHAR}, '%')
     </if>
   </select>
+
+  <select id="listClassAll" resultType="com.wxj.model.VO.ClassSelectVO">
+    select id, name
+    from class
+  </select>
 </mapper>

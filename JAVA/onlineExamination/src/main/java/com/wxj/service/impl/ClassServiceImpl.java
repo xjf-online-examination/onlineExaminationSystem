@@ -11,6 +11,7 @@ import com.wxj.model.DTO.ClassParamsDTO;
 import com.wxj.model.DTO.StudentParamsDTO;
 import com.wxj.model.PO.Class;
 import com.wxj.model.PO.ClassExample;
+import com.wxj.model.VO.ClassSelectVO;
 import com.wxj.model.VO.ClassVO;
 import com.wxj.service.ClassServiceI;
 import org.springframework.beans.BeanUtils;
@@ -128,5 +129,10 @@ public class ClassServiceImpl implements ClassServiceI {
 
         //删除教师与班级与课程对应关系
         return 0;
+    }
+
+    @Override
+    public List<ClassSelectVO> listClassAll() {
+        return classMapper.listClassAll();
     }
 }

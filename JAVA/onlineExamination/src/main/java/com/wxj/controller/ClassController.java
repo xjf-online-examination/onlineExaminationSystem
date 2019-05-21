@@ -122,7 +122,7 @@ public class ClassController {
      * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE, consumes = "application/json;charset=utf-8")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             if (null == requestBean.getData()) {
@@ -133,6 +133,11 @@ public class ClassController {
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }
+    }
+
+    @RequestMapping(value = "/listAll", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listClassALL(HttpServletRequest request, @RequestBody RequestBean requestBean) {
+        return ResponseUtils.success("200", classService.listClassAll());
     }
 
 }

@@ -1,6 +1,7 @@
 package com.wxj.service;
 
 import com.wxj.model.DTO.ClassParamsDTO;
+import com.wxj.model.VO.ClassSelectVO;
 import com.wxj.model.VO.ClassVO;
 
 import java.util.List;
@@ -45,4 +46,10 @@ public interface ClassServiceI {
     int modify(ClassParamsDTO classParamsDTO);
 
     int delete(Integer id);
+
+    /**
+     * 获取所有班级ID，name供下拉菜单用
+     * @return
+     */
+    List<ClassSelectVO> listClassAll();
 }
