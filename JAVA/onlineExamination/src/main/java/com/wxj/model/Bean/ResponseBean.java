@@ -29,5 +29,6 @@ public class ResponseBean <T> implements Serializable{
 	public ResponseBean(String responseCode, String responseMsg) {
 		this.responseCode = responseCode;
 		this.responseMsg = responseMsg;
+		this.timestamp = System.currentTimeMillis()+"";
 	}
 }
