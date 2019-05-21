@@ -1,27 +1,46 @@
 package com.wxj.controller;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.wxj.constant.SystemConstant;
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.exception.ParamEmptyException;
+import com.wxj.exception.ParamInvalidException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
+import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
 import com.wxj.service.ExamQuestionsServiceI;
 import com.wxj.utils.ResponseUtils;
+import com.wxj.utils.StringUtil;
 import com.wxj.utils.ValidateParamsUtil;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>Title: ExamQuestionsController</p >
@@ -134,9 +153,118 @@ public class ExamQuestionsController {
         }
     }
 
+    @RequestMapping(value = "/import", method = RequestMethod.POST)
+    public Object examQuestionsImport(MultipartHttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) {
+        try {
+            // 读取上传的文件
+            CommonsMultipartFile cf = (CommonsMultipartFile) file;
+            DiskFileItem fi = (DiskFileItem) cf.getFileItem();
+            InputStream inputStream = fi.getInputStream();
+            Workbook wb = null;
+            wb = new XSSFWorkbook(inputStream);// 解析xlsx格式
+            Sheet rs = wb.getSheetAt(0);
+            if (rs != null) {
+                // 创建集合list
+                List<ExamQuestions> examQuestionsList = Lists.newArrayList();
+                Row rowZero = rs.getRow(0);
+                Map<String,Integer> map = Maps.newHashMap();
+                for (int i = 0; i < rowZero.getLastCellNum() ; i++) {
+                    rowZero.getCell(i).setCellType(CellType.STRING);
+                    map.put(rowZero.getCell(i).toString(),i);
+                }
+                //获取Excel中的数据
+                int sum = rs.getLastRowNum();
+                for (int i = 1; i <= sum; i++) {
+                    ExamQuestions examQuestions = new ExamQuestions();
+                    Row row = rs.getRow(i);
+                    //读区数据
+                    if(row.getCell(map.get("课程编号")) !=null){
+                        row.getCell(map.get("课程编号")).setCellType(CellType.STRING);
+                        String courseCode = row.getCell(map.get("课程编号")).toString();
+                        if (courseCode == null || "".equals(courseCode) || "null".equals(courseCode)) {
+                            throw new ParamInvalidException("课程编号不能为空");
+                        }
+                        examQuestions.setCourseCode(courseCode.trim());
+                    }else{
+                        throw new ParamEmptyException("课程编号不能为空");
+                    }
+                    if (row.getCell(map.get("试题类型")) != null) {
+                        row.getCell(map.get("试题类型")).setCellType(CellType.STRING);
+                        String type = row.getCell(map.get("试题类型")).toString();
+                        if (type == null || "".equals(type) || "null".equals(type)) {
+                            throw new ParamInvalidException("试题类型不能为空");
+                        }
+                        examQuestions.setType(type.trim());
+                    }else{
+                        throw new ParamEmptyException("试题类型不能为空");
+                    }
+                    if (row.getCell(map.get("题目")) != null) {
+                        row.getCell(map.get("题目")).setCellType(CellType.STRING);
+                        String title = row.getCell(map.get("题目")).toString();
+                        if (title == null || "".equals(title) || "null".equals(title)) {
+                            throw new ParamInvalidException("题目不能为空");
+                        }
+                        examQuestions.setTitle(title.trim());
+                    } else {
+                        throw new ParamEmptyException("题目不能为空");
+                    }
 
-    public Object examQuestionsImport() {
-        return null;
+                    row.getCell(map.get("选项A")).setCellType(CellType.STRING);
+                    String optiona = row.getCell(map.get("选项A")).toString();
+                    examQuestions.setOptiona(optiona);
+
+                    row.getCell(map.get("选项B")).setCellType(CellType.STRING);
+                    String optionb = row.getCell(map.get("选项B")).toString();
+                    examQuestions.setOptionb(optionb);
+
+                    row.getCell(map.get("选项C")).setCellType(CellType.STRING);
+                    String optionc = row.getCell(map.get("选项C")).toString();
+                    examQuestions.setOptionc(optionc);
+
+                    row.getCell(map.get("选项D")).setCellType(CellType.STRING);
+                    String optiond = row.getCell(map.get("选项D")).toString();
+                    examQuestions.setOptiond(optiond);
+
+                    row.getCell(map.get("选项E")).setCellType(CellType.STRING);
+                    String optione = row.getCell(map.get("选项E")).toString();
+                    examQuestions.setOptione(optione);
+
+                    row.getCell(map.get("单选答案")).setCellType(CellType.STRING);
+                    String singleAnswer = row.getCell(map.get("单选答案")).toString();
+                    examQuestions.setSingleAnswer(singleAnswer);
+
+                    row.getCell(map.get("多选或不定项选择答案")).setCellType(CellType.STRING);
+                    String multipleAnswer1 = row.getCell(map.get("多选或不定项选择答案")).toString();
+                    examQuestions.setMultipleAnswer(multipleAnswer1);
+
+                    row.getCell(map.get("判断题答案")).setCellType(CellType.STRING);
+                    String yesNoAnswer = row.getCell(map.get("判断题答案")).toString();
+                    examQuestions.setYesNoAnswer(yesNoAnswer);
+
+                    row.getCell(map.get("分值")).setCellType(CellType.STRING);
+                    Integer score = Integer.valueOf(row.getCell(map.get("分值")).toString());
+                    examQuestions.setScore(score);
+
+                    examQuestions.setCode(StringUtil.getRandom());
+                    Date date = new Date();
+                    examQuestions.setCreateTime(date);
+                    examQuestions.setModifyTime(date);
+                    examQuestions.setDelFlag(SystemConstant.NOUGHT);
+
+                    examQuestionsList.add(examQuestions);
+                }
+                examQuestionsService.examQuestionsImport(examQuestionsList);
+            }
+            return ResponseUtils.success("200");
+        } catch (FileNotFoundException e) {
+            logger.error("com.wxj.controller.StudentController.studentImport数据解析错误", e);
+            return ResponseUtils.error(e.getMessage());
+        } catch (IOException e) {
+            logger.error("com.wxj.controller.StudentController.studentImport数据解析错误", e);
+            return ResponseUtils.error(e.getMessage());
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
     }
 
     @RequestMapping(value = "/download", method = RequestMethod.GET)

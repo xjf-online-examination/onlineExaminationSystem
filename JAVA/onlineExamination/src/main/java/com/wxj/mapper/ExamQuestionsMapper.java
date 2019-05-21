@@ -82,4 +82,6 @@ public interface ExamQuestionsMapper {
     Long countExamQuestionsByParams(@Param("record")ExamQuestionsParamsDTO record);
 
     ExamQuestionsDetailsVO getExamQuestionsDetailsById(Integer id);
+
+    int batchInsert(List<ExamQuestions> examQuestionsList);
 }

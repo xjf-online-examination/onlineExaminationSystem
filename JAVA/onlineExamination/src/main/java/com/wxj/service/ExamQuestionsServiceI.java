@@ -2,6 +2,7 @@ package com.wxj.service;
 
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
+import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
 
@@ -30,4 +31,6 @@ public interface ExamQuestionsServiceI {
     int modify(ExamQuestionsSaveDTO examQuestionsSaveDTO);
 
     int delete(Integer id);
+
+    int examQuestionsImport(List<ExamQuestions> examQuestionsList);
 }

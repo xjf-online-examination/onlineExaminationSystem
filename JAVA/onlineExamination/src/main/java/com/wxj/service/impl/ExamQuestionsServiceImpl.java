@@ -89,6 +89,7 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
             for (int i=0,size=examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().size(); i<size; i++) {
                 entryStandardAnswerDetails = new EntryStandardAnswerDetails();
                 EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
+
                 BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
                 entryStandardAnswerDetails.setEntryAnswerId(examQuestions.getId());
                 entryStandardAnswerDetails.setRow(entryStandardAnswerDetailsDTO.getRow().byteValue());
@@ -140,5 +141,10 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     public int delete(Integer id) {
         //TODO:
         return 0;
+    }
+
+    @Override
+    public int examQuestionsImport(List<ExamQuestions> examQuestionsList) {
+        return examQuestionsMapper.batchInsert(examQuestionsList);
     }
 }

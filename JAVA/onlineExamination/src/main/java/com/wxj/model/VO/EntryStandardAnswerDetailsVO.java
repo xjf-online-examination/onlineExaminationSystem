@@ -36,7 +36,7 @@ public class EntryStandardAnswerDetailsVO implements Serializable {
     /**
      * 摘要分数
      */
-    private Integer summaryScore;
+    private Float summaryScore;
 
     /**
      * 一级科目
@@ -46,7 +46,7 @@ public class EntryStandardAnswerDetailsVO implements Serializable {
     /**
      * 一级科目分数
      */
-    private Integer subject1Score;
+    private Float subject1Score;
 
     /**
      * 二级科目
@@ -56,7 +56,7 @@ public class EntryStandardAnswerDetailsVO implements Serializable {
     /**
      * 二级科目分数
      */
-    private Integer subject2Score;
+    private Float subject2Score;
 
     /**
      * 借方金额
@@ -66,7 +66,7 @@ public class EntryStandardAnswerDetailsVO implements Serializable {
     /**
      * 借方金额分数
      */
-    private Integer debitAmountScore;
+    private Float debitAmountScore;
 
     /**
      * 贷方金额
@@ -76,7 +76,7 @@ public class EntryStandardAnswerDetailsVO implements Serializable {
     /**
      * 贷方金额分数
      */
-    private Integer creditAmountScore;
+    private Float creditAmountScore;
 
     /**
      * 合计大写
@@ -84,12 +84,27 @@ public class EntryStandardAnswerDetailsVO implements Serializable {
     private String total;
 
     /**
+     * 合计大写分数
+     */
+    private Float totalScore;
+
+    /**
      * 借方合计
      */
     private Integer debitTotal;
 
     /**
+     * 借方合计分数
+     */
+    private Float debitTotalScore;
+
+    /**
      * 贷方合计
      */
     private Integer creditTotal;
+
+    /**
+     * 贷方合计分数
+     */
+    private Float creditTotalScore;
 }

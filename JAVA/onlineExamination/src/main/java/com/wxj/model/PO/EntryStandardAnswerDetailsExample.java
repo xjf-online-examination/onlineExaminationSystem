@@ -409,52 +409,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreEqualTo(Integer value) {
+        public Criteria andSummaryScoreEqualTo(Float value) {
             addCriterion("summary_score =", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreNotEqualTo(Integer value) {
+        public Criteria andSummaryScoreNotEqualTo(Float value) {
             addCriterion("summary_score <>", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreGreaterThan(Integer value) {
+        public Criteria andSummaryScoreGreaterThan(Float value) {
             addCriterion("summary_score >", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreGreaterThanOrEqualTo(Integer value) {
+        public Criteria andSummaryScoreGreaterThanOrEqualTo(Float value) {
             addCriterion("summary_score >=", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreLessThan(Integer value) {
+        public Criteria andSummaryScoreLessThan(Float value) {
             addCriterion("summary_score <", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreLessThanOrEqualTo(Integer value) {
+        public Criteria andSummaryScoreLessThanOrEqualTo(Float value) {
             addCriterion("summary_score <=", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreIn(List<Integer> values) {
+        public Criteria andSummaryScoreIn(List<Float> values) {
             addCriterion("summary_score in", values, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreNotIn(List<Integer> values) {
+        public Criteria andSummaryScoreNotIn(List<Float> values) {
             addCriterion("summary_score not in", values, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreBetween(Integer value1, Integer value2) {
+        public Criteria andSummaryScoreBetween(Float value1, Float value2) {
             addCriterion("summary_score between", value1, value2, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreNotBetween(Integer value1, Integer value2) {
+        public Criteria andSummaryScoreNotBetween(Float value1, Float value2) {
             addCriterion("summary_score not between", value1, value2, "summaryScore");
             return (Criteria) this;
         }
@@ -529,52 +529,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreEqualTo(Integer value) {
+        public Criteria andSubject1ScoreEqualTo(Float value) {
             addCriterion("subject1_score =", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreNotEqualTo(Integer value) {
+        public Criteria andSubject1ScoreNotEqualTo(Float value) {
             addCriterion("subject1_score <>", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreGreaterThan(Integer value) {
+        public Criteria andSubject1ScoreGreaterThan(Float value) {
             addCriterion("subject1_score >", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreGreaterThanOrEqualTo(Integer value) {
+        public Criteria andSubject1ScoreGreaterThanOrEqualTo(Float value) {
             addCriterion("subject1_score >=", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreLessThan(Integer value) {
+        public Criteria andSubject1ScoreLessThan(Float value) {
             addCriterion("subject1_score <", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreLessThanOrEqualTo(Integer value) {
+        public Criteria andSubject1ScoreLessThanOrEqualTo(Float value) {
             addCriterion("subject1_score <=", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreIn(List<Integer> values) {
+        public Criteria andSubject1ScoreIn(List<Float> values) {
             addCriterion("subject1_score in", values, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreNotIn(List<Integer> values) {
+        public Criteria andSubject1ScoreNotIn(List<Float> values) {
             addCriterion("subject1_score not in", values, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreBetween(Integer value1, Integer value2) {
+        public Criteria andSubject1ScoreBetween(Float value1, Float value2) {
             addCriterion("subject1_score between", value1, value2, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreNotBetween(Integer value1, Integer value2) {
+        public Criteria andSubject1ScoreNotBetween(Float value1, Float value2) {
             addCriterion("subject1_score not between", value1, value2, "subject1Score");
             return (Criteria) this;
         }
@@ -659,52 +659,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreEqualTo(Integer value) {
+        public Criteria andSubject2ScoreEqualTo(Float value) {
             addCriterion("subject2_score =", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreNotEqualTo(Integer value) {
+        public Criteria andSubject2ScoreNotEqualTo(Float value) {
             addCriterion("subject2_score <>", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreGreaterThan(Integer value) {
+        public Criteria andSubject2ScoreGreaterThan(Float value) {
             addCriterion("subject2_score >", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreGreaterThanOrEqualTo(Integer value) {
+        public Criteria andSubject2ScoreGreaterThanOrEqualTo(Float value) {
             addCriterion("subject2_score >=", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreLessThan(Integer value) {
+        public Criteria andSubject2ScoreLessThan(Float value) {
             addCriterion("subject2_score <", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreLessThanOrEqualTo(Integer value) {
+        public Criteria andSubject2ScoreLessThanOrEqualTo(Float value) {
             addCriterion("subject2_score <=", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreIn(List<Integer> values) {
+        public Criteria andSubject2ScoreIn(List<Float> values) {
             addCriterion("subject2_score in", values, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreNotIn(List<Integer> values) {
+        public Criteria andSubject2ScoreNotIn(List<Float> values) {
             addCriterion("subject2_score not in", values, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreBetween(Integer value1, Integer value2) {
+        public Criteria andSubject2ScoreBetween(Float value1, Float value2) {
             addCriterion("subject2_score between", value1, value2, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreNotBetween(Integer value1, Integer value2) {
+        public Criteria andSubject2ScoreNotBetween(Float value1, Float value2) {
             addCriterion("subject2_score not between", value1, value2, "subject2Score");
             return (Criteria) this;
         }
@@ -779,52 +779,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreEqualTo(Integer value) {
+        public Criteria andDebitAmountScoreEqualTo(Float value) {
             addCriterion("debit_amount_score =", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreNotEqualTo(Integer value) {
+        public Criteria andDebitAmountScoreNotEqualTo(Float value) {
             addCriterion("debit_amount_score <>", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreGreaterThan(Integer value) {
+        public Criteria andDebitAmountScoreGreaterThan(Float value) {
             addCriterion("debit_amount_score >", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreGreaterThanOrEqualTo(Integer value) {
+        public Criteria andDebitAmountScoreGreaterThanOrEqualTo(Float value) {
             addCriterion("debit_amount_score >=", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreLessThan(Integer value) {
+        public Criteria andDebitAmountScoreLessThan(Float value) {
             addCriterion("debit_amount_score <", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreLessThanOrEqualTo(Integer value) {
+        public Criteria andDebitAmountScoreLessThanOrEqualTo(Float value) {
             addCriterion("debit_amount_score <=", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreIn(List<Integer> values) {
+        public Criteria andDebitAmountScoreIn(List<Float> values) {
             addCriterion("debit_amount_score in", values, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreNotIn(List<Integer> values) {
+        public Criteria andDebitAmountScoreNotIn(List<Float> values) {
             addCriterion("debit_amount_score not in", values, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreBetween(Integer value1, Integer value2) {
+        public Criteria andDebitAmountScoreBetween(Float value1, Float value2) {
             addCriterion("debit_amount_score between", value1, value2, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreNotBetween(Integer value1, Integer value2) {
+        public Criteria andDebitAmountScoreNotBetween(Float value1, Float value2) {
             addCriterion("debit_amount_score not between", value1, value2, "debitAmountScore");
             return (Criteria) this;
         }
@@ -899,52 +899,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreEqualTo(Integer value) {
+        public Criteria andCreditAmountScoreEqualTo(Float value) {
             addCriterion("credit_amount_score =", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreNotEqualTo(Integer value) {
+        public Criteria andCreditAmountScoreNotEqualTo(Float value) {
             addCriterion("credit_amount_score <>", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreGreaterThan(Integer value) {
+        public Criteria andCreditAmountScoreGreaterThan(Float value) {
             addCriterion("credit_amount_score >", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreGreaterThanOrEqualTo(Integer value) {
+        public Criteria andCreditAmountScoreGreaterThanOrEqualTo(Float value) {
             addCriterion("credit_amount_score >=", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreLessThan(Integer value) {
+        public Criteria andCreditAmountScoreLessThan(Float value) {
             addCriterion("credit_amount_score <", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreLessThanOrEqualTo(Integer value) {
+        public Criteria andCreditAmountScoreLessThanOrEqualTo(Float value) {
             addCriterion("credit_amount_score <=", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreIn(List<Integer> values) {
+        public Criteria andCreditAmountScoreIn(List<Float> values) {
             addCriterion("credit_amount_score in", values, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreNotIn(List<Integer> values) {
+        public Criteria andCreditAmountScoreNotIn(List<Float> values) {
             addCriterion("credit_amount_score not in", values, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreBetween(Integer value1, Integer value2) {
+        public Criteria andCreditAmountScoreBetween(Float value1, Float value2) {
             addCriterion("credit_amount_score between", value1, value2, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreNotBetween(Integer value1, Integer value2) {
+        public Criteria andCreditAmountScoreNotBetween(Float value1, Float value2) {
             addCriterion("credit_amount_score not between", value1, value2, "creditAmountScore");
             return (Criteria) this;
         }
@@ -1019,6 +1019,66 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
+        public Criteria andTotalScoreIsNull() {
+            addCriterion("total_score is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreIsNotNull() {
+            addCriterion("total_score is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreEqualTo(Float value) {
+            addCriterion("total_score =", value, "totalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreNotEqualTo(Float value) {
+            addCriterion("total_score <>", value, "totalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreGreaterThan(Float value) {
+            addCriterion("total_score >", value, "totalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreGreaterThanOrEqualTo(Float value) {
+            addCriterion("total_score >=", value, "totalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreLessThan(Float value) {
+            addCriterion("total_score <", value, "totalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreLessThanOrEqualTo(Float value) {
+            addCriterion("total_score <=", value, "totalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreIn(List<Float> values) {
+            addCriterion("total_score in", values, "totalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreNotIn(List<Float> values) {
+            addCriterion("total_score not in", values, "totalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreBetween(Float value1, Float value2) {
+            addCriterion("total_score between", value1, value2, "totalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalScoreNotBetween(Float value1, Float value2) {
+            addCriterion("total_score not between", value1, value2, "totalScore");
+            return (Criteria) this;
+        }
+
         public Criteria andDebitTotalIsNull() {
             addCriterion("debit_total is null");
             return (Criteria) this;
@@ -1079,6 +1139,66 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
+        public Criteria andDebitTotalScoreIsNull() {
+            addCriterion("debit_total_score is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreIsNotNull() {
+            addCriterion("debit_total_score is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreEqualTo(Float value) {
+            addCriterion("debit_total_score =", value, "debitTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreNotEqualTo(Float value) {
+            addCriterion("debit_total_score <>", value, "debitTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreGreaterThan(Float value) {
+            addCriterion("debit_total_score >", value, "debitTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreGreaterThanOrEqualTo(Float value) {
+            addCriterion("debit_total_score >=", value, "debitTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreLessThan(Float value) {
+            addCriterion("debit_total_score <", value, "debitTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreLessThanOrEqualTo(Float value) {
+            addCriterion("debit_total_score <=", value, "debitTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreIn(List<Float> values) {
+            addCriterion("debit_total_score in", values, "debitTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreNotIn(List<Float> values) {
+            addCriterion("debit_total_score not in", values, "debitTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreBetween(Float value1, Float value2) {
+            addCriterion("debit_total_score between", value1, value2, "debitTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andDebitTotalScoreNotBetween(Float value1, Float value2) {
+            addCriterion("debit_total_score not between", value1, value2, "debitTotalScore");
+            return (Criteria) this;
+        }
+
         public Criteria andCreditTotalIsNull() {
             addCriterion("credit_total is null");
             return (Criteria) this;
@@ -1136,6 +1256,66 @@ public class EntryStandardAnswerDetailsExample {
 
         public Criteria andCreditTotalNotBetween(Integer value1, Integer value2) {
             addCriterion("credit_total not between", value1, value2, "creditTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreIsNull() {
+            addCriterion("credit_total_score is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreIsNotNull() {
+            addCriterion("credit_total_score is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreEqualTo(Float value) {
+            addCriterion("credit_total_score =", value, "creditTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreNotEqualTo(Float value) {
+            addCriterion("credit_total_score <>", value, "creditTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreGreaterThan(Float value) {
+            addCriterion("credit_total_score >", value, "creditTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreGreaterThanOrEqualTo(Float value) {
+            addCriterion("credit_total_score >=", value, "creditTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreLessThan(Float value) {
+            addCriterion("credit_total_score <", value, "creditTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreLessThanOrEqualTo(Float value) {
+            addCriterion("credit_total_score <=", value, "creditTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreIn(List<Float> values) {
+            addCriterion("credit_total_score in", values, "creditTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreNotIn(List<Float> values) {
+            addCriterion("credit_total_score not in", values, "creditTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreBetween(Float value1, Float value2) {
+            addCriterion("credit_total_score between", value1, value2, "creditTotalScore");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreditTotalScoreNotBetween(Float value1, Float value2) {
+            addCriterion("credit_total_score not between", value1, value2, "creditTotalScore");
             return (Criteria) this;
         }
 

@@ -447,4 +447,20 @@
     from exam_questions
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into exam_questions (id, course_code, code,
+    type, title, optionA, optionB,
+    optionC, optionD, optionE, single_answer,
+    multiple_answer, yes_no_answer, score,
+    create_time, modify_time, del_flag)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=INTEGER}, #{item.courseCode,jdbcType=CHAR}, #{item.code,jdbcType=CHAR},
+      #{item.type,jdbcType=CHAR}, #{item.title,jdbcType=VARCHAR}, #{item.optiona,jdbcType=CHAR}, #{item.optionb,jdbcType=CHAR},
+      #{item.optionc,jdbcType=CHAR}, #{item.optiond,jdbcType=CHAR}, #{item.optione,jdbcType=CHAR}, #{item.singleAnswer,jdbcType=CHAR},
+      #{item.multipleAnswer,jdbcType=CHAR}, #{item.yesNoAnswer,jdbcType=CHAR}, #{item.score,jdbcType=INTEGER},
+      #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP}, #{item.delFlag,jdbcType=CHAR})
+    </foreach>
+  </insert>
 </mapper>

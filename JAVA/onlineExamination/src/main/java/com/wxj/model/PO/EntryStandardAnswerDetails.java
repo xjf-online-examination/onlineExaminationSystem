@@ -9,7 +9,7 @@ import java.util.Date;
  * <p>Copyright: Copyright (c) 2019</p>
  * <p>Company: www.hanshow.com</p>
  * @author wangxiaojun
- * @date 2019-05-21 00:33:18
+ * @date 2019-05-21 23:51:55
  * @version 1.0
  */
 public class EntryStandardAnswerDetails implements Serializable {
@@ -41,7 +41,7 @@ public class EntryStandardAnswerDetails implements Serializable {
     /**
      * 摘要分数
      */
-    private Integer summaryScore;
+    private Float summaryScore;
 
     /**
      * 一级科目
@@ -51,7 +51,7 @@ public class EntryStandardAnswerDetails implements Serializable {
     /**
      * 一级科目分数
      */
-    private Integer subject1Score;
+    private Float subject1Score;
 
     /**
      * 二级科目
@@ -61,7 +61,7 @@ public class EntryStandardAnswerDetails implements Serializable {
     /**
      * 二级科目分数
      */
-    private Integer subject2Score;
+    private Float subject2Score;
 
     /**
      * 借方金额
@@ -71,7 +71,7 @@ public class EntryStandardAnswerDetails implements Serializable {
     /**
      * 借方金额分数
      */
-    private Integer debitAmountScore;
+    private Float debitAmountScore;
 
     /**
      * 贷方金额
@@ -81,7 +81,7 @@ public class EntryStandardAnswerDetails implements Serializable {
     /**
      * 贷方金额分数
      */
-    private Integer creditAmountScore;
+    private Float creditAmountScore;
 
     /**
      * 合计大写
@@ -89,14 +89,29 @@ public class EntryStandardAnswerDetails implements Serializable {
     private String total;
 
     /**
+     * 合计大写分数
+     */
+    private Float totalScore;
+
+    /**
      * 借方合计
      */
     private Integer debitTotal;
 
     /**
+     * 借方合计分数
+     */
+    private Float debitTotalScore;
+
+    /**
      * 贷方合计
      */
     private Integer creditTotal;
+
+    /**
+     * 贷方合计分数
+     */
+    private Float creditTotalScore;
 
     /**
      * 创建时间
@@ -147,11 +162,11 @@ public class EntryStandardAnswerDetails implements Serializable {
         this.summary = summary == null ? null : summary.trim();
     }
 
-    public Integer getSummaryScore() {
+    public Float getSummaryScore() {
         return summaryScore;
     }
 
-    public void setSummaryScore(Integer summaryScore) {
+    public void setSummaryScore(Float summaryScore) {
         this.summaryScore = summaryScore;
     }
 
@@ -163,11 +178,11 @@ public class EntryStandardAnswerDetails implements Serializable {
         this.subject1 = subject1;
     }
 
-    public Integer getSubject1Score() {
+    public Float getSubject1Score() {
         return subject1Score;
     }
 
-    public void setSubject1Score(Integer subject1Score) {
+    public void setSubject1Score(Float subject1Score) {
         this.subject1Score = subject1Score;
     }
 
@@ -179,11 +194,11 @@ public class EntryStandardAnswerDetails implements Serializable {
         this.subject2 = subject2 == null ? null : subject2.trim();
     }
 
-    public Integer getSubject2Score() {
+    public Float getSubject2Score() {
         return subject2Score;
     }
 
-    public void setSubject2Score(Integer subject2Score) {
+    public void setSubject2Score(Float subject2Score) {
         this.subject2Score = subject2Score;
     }
 
@@ -195,11 +210,11 @@ public class EntryStandardAnswerDetails implements Serializable {
         this.debitAmount = debitAmount;
     }
 
-    public Integer getDebitAmountScore() {
+    public Float getDebitAmountScore() {
         return debitAmountScore;
     }
 
-    public void setDebitAmountScore(Integer debitAmountScore) {
+    public void setDebitAmountScore(Float debitAmountScore) {
         this.debitAmountScore = debitAmountScore;
     }
 
@@ -211,11 +226,11 @@ public class EntryStandardAnswerDetails implements Serializable {
         this.creditAmount = creditAmount;
     }
 
-    public Integer getCreditAmountScore() {
+    public Float getCreditAmountScore() {
         return creditAmountScore;
     }
 
-    public void setCreditAmountScore(Integer creditAmountScore) {
+    public void setCreditAmountScore(Float creditAmountScore) {
         this.creditAmountScore = creditAmountScore;
     }
 
@@ -227,6 +242,14 @@ public class EntryStandardAnswerDetails implements Serializable {
         this.total = total == null ? null : total.trim();
     }
 
+    public Float getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(Float totalScore) {
+        this.totalScore = totalScore;
+    }
+
     public Integer getDebitTotal() {
         return debitTotal;
     }
@@ -235,12 +258,28 @@ public class EntryStandardAnswerDetails implements Serializable {
         this.debitTotal = debitTotal;
     }
 
+    public Float getDebitTotalScore() {
+        return debitTotalScore;
+    }
+
+    public void setDebitTotalScore(Float debitTotalScore) {
+        this.debitTotalScore = debitTotalScore;
+    }
+
     public Integer getCreditTotal() {
         return creditTotal;
     }
 
     public void setCreditTotal(Integer creditTotal) {
         this.creditTotal = creditTotal;
+    }
+
+    public Float getCreditTotalScore() {
+        return creditTotalScore;
+    }
+
+    public void setCreditTotalScore(Float creditTotalScore) {
+        this.creditTotalScore = creditTotalScore;
     }
 
     public Date getCreateTime() {
@@ -291,8 +330,11 @@ public class EntryStandardAnswerDetails implements Serializable {
         sb.append(", creditAmount=").append(creditAmount);
         sb.append(", creditAmountScore=").append(creditAmountScore);
         sb.append(", total=").append(total);
+        sb.append(", totalScore=").append(totalScore);
         sb.append(", debitTotal=").append(debitTotal);
+        sb.append(", debitTotalScore=").append(debitTotalScore);
         sb.append(", creditTotal=").append(creditTotal);
+        sb.append(", creditTotalScore=").append(creditTotalScore);
         sb.append(", createTime=").append(createTime);
         sb.append(", modifyTime=").append(modifyTime);
         sb.append(", delFlag=").append(delFlag);
