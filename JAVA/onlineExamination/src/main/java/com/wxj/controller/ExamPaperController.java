@@ -9,7 +9,6 @@ import com.wxj.model.DTO.ExamPaperParamsDTO;
 import com.wxj.model.DTO.ExamPaperSaveModifyDTO;
 import com.wxj.model.VO.ExamPaperDetailsVO;
 import com.wxj.model.VO.ExamPaperVO;
-import com.wxj.model.VO.ExamQuestionsVO;
 import com.wxj.service.ExamPaperServiceI;
 import com.wxj.utils.ResponseUtils;
 import com.wxj.utils.ValidateParamsUtil;
@@ -44,7 +43,7 @@ public class ExamPaperController {
 
             int count = examPaperService.countExamPaperByParams(examPaperParamsDTO);
 
-            PageBean<ExamQuestionsVO> pageBean = new PageBean(count, examPaperParamsDTO.getCurrentPage(), examPaperParamsDTO.getPageSize(), examPaperVOList);
+            PageBean<ExamPaperVO> pageBean = new PageBean(count, examPaperParamsDTO.getCurrentPage(), examPaperParamsDTO.getPageSize(), examPaperVOList);
             return ResponseUtils.success("200",pageBean);
         } catch (BusinessException e) {
             return ResponseUtils.error(e);
