@@ -1,11 +1,11 @@
 <template>
   <div>
     <Form ref="classSearch" :model="searchData" inline>
-      <FormItem prop="classCode" label="班级编号" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.classCode" placeholder="班级编号"/>
+      <FormItem prop="code" label="班级编号" label-position="left" class="search-flex">
+        <Input type="text" v-model="searchData.code" placeholder="班级编号"/>
       </FormItem>
-      <FormItem prop="className" label="班级名称" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.className" placeholder="班级名称"/>
+      <FormItem prop="name" label="班级名称" label-position="left" class="search-flex">
+        <Input type="text" v-model="searchData.name" placeholder="班级名称"/>
       </FormItem>
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
@@ -16,13 +16,13 @@
     <tables
       ref="tables"
       search-place="top"
-      v-model="tableData"
+      v-model="tableData.list"
       :columns="columns"
       @on-delete="handleDelete"
     />
     <div class="table-pagenation m-t-s">
       <Page
-        :total="100"
+        :total="tableData.count"
         show-elevator
         show-total
         show-sizer
@@ -30,12 +30,28 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
+    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
+      <Form ref="classSearch" :model="classes" :rule="rules">
+        <FormItem prop="code" label="班级编号">
+          <Input type="text" v-model="classes.code" placeholder="请输入班级编号"/>
+        </FormItem>
+        <FormItem prop="name" label="班级名称">
+          <Input type="text" v-model="classes.name" placeholder="请输入班级名称"/>
+        </FormItem>
+      </Form>
+    </Modal>
+    <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteClass">
+      <p>是否删除该班级，删除后无法恢复？</p>
+    </Modal>
   </div>
 </template>
 
 
 <script>
 import Tables from '@/components/tables';
+import {
+  getClassList, addClass, editClass, deleteClass,
+} from '@/api/teacher';
 
 export default {
   name: 'classes',
@@ -49,13 +65,13 @@ export default {
           title: '序号', type: 'index', align: 'center',
         },
         {
-          title: '班级编号', key: 'classCode', align: 'center',
+          title: '班级编号', key: 'code', align: 'center',
         },
         {
-          title: '班级名称', key: 'className', align: 'center',
+          title: '班级名称', key: 'name', align: 'center',
         },
         {
-          title: '人数', key: 'count', align: 'center',
+          title: '人数', key: 'number', align: 'center',
         },
         {
           title: '操作',
@@ -91,49 +107,108 @@ export default {
             ]),
           ],
         }],
-      tableData: [
-      ],
-      searchData: {
-        className: '',
-        classCode: '',
+      tableData: {
+        list: [],
+        count: 0,
       },
+      searchData: {
+        name: '',
+        code: '',
+        currentPage: 1,
+        pageSize: 10,
+      },
+      classes: {
+        name: '',
+        code: '',
+      },
+      modalVisible: false,
+      modalTitle: '',
+      isAdd: true,
+      showDeleteModal: false,
+      selectIndex: 0,
     };
   },
   methods: {
-    handleDelete(params) {
-      console.log(params);
-    },
-    exportExcel() {
-      this.$refs.tables.exportCsv({
-        filename: `table-${(new Date()).valueOf()}.csv`,
-      });
-    },
     handleSearch() {
-      console.log(this.searchData);
+      this.getClassList(this.searchData);
     },
     handleReset(name) {
-      this.$refs[name].resetFields();
-      console.log(this.searchData);
+      this.searchData = {
+        code: '',
+        name: '',
+        currentPage: 1,
+        pageSize: 10,
+      };
+      this.getClassList(this.searchData);
     },
     onEdit(index) {
-      console.log(index);
-      /* todo */
+      this.modalVisible = true;
+      this.modalTitle = '修改';
+      this.isAdd = false;
+      this.classes = this.tableData.list[index];
     },
     onDelete(index) {
-      console.log(index);
-      /* TODO */
+      this.showDeleteModal = true;
+      this.selectIndex = index;
     },
     onPageChange(params) {
-      console.log(params);
-      /* todo */
+      this.searchData.currentPage = params;
+      this.getStudentList(this.searchData);
     },
     onPageSizeChange(params) {
-      console.log(params);
-      /* todo */
+      this.searchData.pageSize = params;
+      this.getStudentList(this.searchData);
     },
     onAdd() {
-      /* todo */
+      this.modalVisible = true;
+      this.modalTitle = '添加';
+      this.isAdd = true;
     },
+    save() {
+      if (this.isAdd) {
+        addClass(this.classes).then((res) => {
+          console.log(res);
+          if (res.responseCode === '201') {
+            this.getClassList();
+            this.$Message.success('添加成功');
+          } else {
+            this.$Message.success('添加失败');
+          }
+        });
+      } else {
+        editClass(this.classes).then((res) => {
+          console.log(res);
+          if (res.responseCode === '201') {
+            this.getClassList();
+            this.$Message.success('修改成功');
+          } else {
+            this.$Message.success('修改失败');
+          }
+        });
+      }
+    },
+    deleteClass() {
+      deleteClass(this.tableData.list[this.selectIndex].id).then((res) => {
+        if (res.responseCode === '204') {
+          this.$Message.success('删除成功');
+          this.getClassList();
+        } else {
+          this.$Message.error('删除失败');
+        }
+      });
+    },
+    getClassList() {
+      getClassList(this.searchData).then((res) => {
+        if (res.responseCode === '200') {
+          this.tableData = res.data;
+        } else {
+          this.tableData = { list: [], count: 0 };
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getClassList();
   },
 };
 </script>

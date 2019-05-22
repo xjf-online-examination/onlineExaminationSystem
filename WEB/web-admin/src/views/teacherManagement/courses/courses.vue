@@ -1,14 +1,16 @@
 <template>
   <div>
-    <Form ref="classSearch" :model="searchData" inline>
-      <FormItem prop="classCode" label="试卷编号" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.classCode" placeholder="试卷编号"/>
+    <Form ref="courseSearch" :model="searchData" inline>
+      <FormItem prop="code" label="课程编号" label-position="left" class="search-flex">
+        <Input type="text" v-model="searchData.code" placeholder="课程编号"/>
       </FormItem>
-      <FormItem prop="className" label="试卷名称" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.className" placeholder="试卷名称"/>
+      <FormItem prop="name" label="课程名称" label-position="left" class="search-flex">
+        <Input type="text" v-model="searchData.name" placeholder="课程名称"/>
       </FormItem>
-      <FormItem prop="className" label="所属课程" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.className" placeholder="所属课程"/>
+      <FormItem prop="classId" label="所属班级" label-position="left" class="search-flex">
+        <Select v-model="searchData.classId" filterable placeholder="所属班级">
+          <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+        </Select>
       </FormItem>
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
@@ -17,18 +19,11 @@
     </Form>
     <div class="m-b-s">
       <Button type="primary" @click="onAdd()">添加</Button>
-      <Button type="primary" @click="onImport()" class="m-l-s">导入</Button>
     </div>
-    <tables
-      ref="tables"
-      search-place="top"
-      v-model="tableData"
-      :columns="columns"
-      @on-delete="handleDelete"
-    />
+    <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
     <div class="table-pagenation m-t-s">
       <Page
-        :total="100"
+        :total="tableData.count"
         show-elevator
         show-total
         show-sizer
@@ -36,15 +31,36 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
+    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
+      <Form ref="classSearch" :model="course" :rule="rules">
+        <FormItem prop="jobNoRules" label="课程编号">
+          <Input type="text" v-model="course.code" placeholder="请输入课程编号"/>
+        </FormItem>
+        <FormItem prop="name" label="课程名称">
+          <Input type="text" v-model="course.name" placeholder="请输入课程名称"/>
+        </FormItem>
+        <FormItem prop="name" label="班级">
+          <Select v-model="course.classId" filterable placeholder="请选择班级">
+            <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+          </Select>
+        </FormItem>
+      </Form>
+    </Modal>
+    <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteCourse">
+      <p>是否删除该课程，删除后无法恢复？</p>
+    </Modal>
   </div>
 </template>
 
 
 <script>
 import Tables from '@/components/tables';
+import {
+  getCourseList, addCourse, editCourse, deletCourse, getAllClasses,
+} from '@/api/teacher';
 
 export default {
-  name: 'classes',
+  name: 'course',
   components: {
     Tables,
   },
@@ -55,19 +71,13 @@ export default {
           title: '序号', type: 'index', align: 'center',
         },
         {
-          title: '试卷编号', key: 'paperCode', align: 'center',
+          title: '课程编号', key: 'code', align: 'center',
         },
         {
-          title: '试卷名称', key: 'paperName', align: 'center',
+          title: '课程名称', key: 'name', align: 'center',
         },
         {
-          title: '试卷题量', key: 'paperCount', align: 'center',
-        },
-        {
-          title: '所属课程', key: 'course', align: 'center',
-        },
-        {
-          title: '出卷人', key: 'user', align: 'center',
+          title: '所属班级', key: 'className', align: 'center',
         },
         {
           title: '操作',
@@ -100,69 +110,120 @@ export default {
                   },
                 },
               }, '删除'),
-              h('a', {
-                props: {
-                  type: 'text',
-                  size: 'small',
-                },
-                style: {
-                  'margin-left': '10px',
-                },
-                on: {
-                  click: () => {
-                    this.onDetail(params.index);
-                  },
-                },
-              }, '详情'),
             ]),
           ],
         }],
-      tableData: [
-        {
-          no: 1, classCode: '191816', className: '19级财经1班', count: 35,
-        },
-      ],
+      tableData: { list: [], count: 0 },
       searchData: {
-        courseName: '',
-        courseCode: '',
+        name: '',
+        code: '',
+        classId: '',
+        currentPage: 1,
+        pageSize: 10,
       },
+      course: {
+        name: '',
+        code: '',
+        classId: '',
+      },
+      modalVisible: false,
+      modalTitle: '',
+      isAdd: true,
+      showDeleteModal: false,
+      selectIndex: 0,
+      classList: [],
     };
   },
   methods: {
-    handleDelete(params) {
-      console.log(params);
-    },
-    exportExcel() {
-      this.$refs.tables.exportCsv({
-        filename: `table-${(new Date()).valueOf()}.csv`,
-      });
-    },
     handleSearch() {
-      console.log(this.searchData);
+      this.getCourseList(this.searchData);
     },
     handleReset(name) {
-      this.$refs[name].resetFields();
-      console.log(this.searchData);
+      this.searchData = {
+        code: '',
+        name: '',
+        classId: '',
+        currentPage: 1,
+        pageSize: 10,
+      };
+      this.getCourseList(this.searchData);
     },
     onEdit(index) {
-      console.log(index);
-      /* todo */
+      this.modalVisible = true;
+      this.modalTitle = '修改';
+      this.isAdd = false;
+      this.course = this.tableData.list[index];
     },
     onDelete(index) {
-      console.log(index);
-      /* TODO */
+      this.showDeleteModal = true;
+      this.selectIndex = index;
     },
     onPageChange(params) {
-      console.log(params);
-      /* todo */
+      this.searchData.currentPage = params;
+      this.getCourseList(this.searchData);
     },
     onPageSizeChange(params) {
-      console.log(params);
-      /* todo */
+      this.searchData.pageSize = params;
+      this.getCourseList(this.searchData);
     },
     onAdd() {
-      /* todo */
+      this.modalVisible = true;
+      this.modalTitle = '添加';
+      this.isAdd = true;
     },
+    save() {
+      if (this.isAdd) {
+        addCourse(this.course).then((res) => {
+          console.log(res);
+          if (res.responseCode === '201') {
+            this.getCourseList();
+            this.$Message.success('添加成功');
+          } else {
+            this.$Message.success('添加失败');
+          }
+        });
+      } else {
+        editCourse(this.course).then((res) => {
+          console.log(res);
+          if (res.responseCode === '201') {
+            this.getCourseList();
+            this.$Message.success('修改成功');
+          } else {
+            this.$Message.success('修改失败');
+          }
+        });
+      }
+    },
+    deleteCourse() {
+      deleteCourse(this.tableData.list[this.selectIndex].id).then((res) => {
+        if (res.responseCode === '204') {
+          this.$Message.success('删除成功');
+          this.getCourseList();
+        } else {
+          this.$Message.error('删除失败');
+        }
+      });
+    },
+    getCourseList() {
+      getCourseList(this.searchData).then((res) => {
+        if (res.responseCode === '200') {
+          this.tableData = res.data;
+        } else {
+          this.tableData = { list: [], count: 0 };
+        }
+      });
+    },
+    getAllClasses() {
+      getAllClasses().then((res) => {
+        if (res.responseCode === '200') {
+          this.classList = res.data;
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getCourseList();
+    this.getAllClasses();
   },
 };
 </script>

@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-18 02:31:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-19 02:21:00
+ * @Last Modified time: 2019-05-22 01:11:19
  */
 <template>
   <div>
@@ -157,7 +157,7 @@ export default {
       ],
     },
   },
-  data() {
+  data () {
     return {
       columns: [
         {
@@ -260,43 +260,43 @@ export default {
     };
   },
   methods: {
-    handleDelete(params) {
+    handleDelete (params) {
       console.log(params);
     },
-    exportExcel() {
+    exportExcel () {
       this.$refs.tables.exportCsv({
         filename: `table-${(new Date()).valueOf()}.csv`,
       });
     },
-    handleSearch() {
+    handleSearch () {
       console.log(this.searchData);
     },
-    handleReset(name) {
+    handleReset (name) {
       this.$refs[name].resetFields();
       console.log(this.searchData);
     },
-    onEdit(index) {
+    onEdit (index) {
       console.log(index);
       /* todo */
     },
-    onDelete(index) {
+    onDelete (index) {
       console.log(index);
       /* TODO */
     },
-    onPageChange(params) {
+    onPageChange (params) {
       console.log(params);
       /* todo */
     },
-    onPageSizeChange(params) {
+    onPageSizeChange (params) {
       console.log(params);
       /* todo */
     },
-    onAdd() {
+    onAdd () {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    handleAddOption() {
+    handleAddOption () {
       if (this.options.items.length === 5) {
         this.errMsg = '选项不能大于5个';
       } else {
@@ -306,16 +306,16 @@ export default {
         });
       }
     },
-    handleRemoveOption(index) {
+    handleRemoveOption (index) {
       // TODO:
       this.options.items.splice(index, 1);
     },
   },
-  mounted() {
+  mounted () {
     // this.getTeacherList();
   },
   computed: {
-    rules() {
+    rules () {
       return {
         courseCode: this.courseCodeRules,
         type: this.typeRules,

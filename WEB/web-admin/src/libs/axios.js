@@ -55,7 +55,7 @@ class HttpRequest {
       this.queue[url] = true;
 
       // config.data.timestamp = new Date().getTime();
-      if (url.indexOf('login') < 0) {
+      if (url.indexOf('login') < 0 && config.method.toUpperCase() === 'POST') {
         config.data.securityKey = getToken();
         config.data.userCode = getUserCode();
       }

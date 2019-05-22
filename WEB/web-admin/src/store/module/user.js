@@ -135,6 +135,7 @@ export default {
         logout(state.token).then(() => {
           commit('setToken', '');
           commit('setAccess', []);
+          localStorage.tagNaveList = [];
           resolve();
         }).catch((err) => {
           reject(err);
