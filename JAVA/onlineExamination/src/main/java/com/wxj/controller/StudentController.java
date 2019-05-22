@@ -11,6 +11,7 @@ import com.wxj.model.VO.AchievementVO;
 import com.wxj.model.VO.StudentVO;
 import com.wxj.service.StudentServiceI;
 import com.wxj.utils.ResponseUtils;
+import com.wxj.utils.StringUtil;
 import com.wxj.utils.ValidateParamsUtil;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.poi.ss.usermodel.CellType;
@@ -164,9 +165,9 @@ public class StudentController {
      * @return 200
      */
     @RequestMapping(value = "/achievement", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object achievement(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
+    public Object achievement(HttpServletRequest request, @RequestBody RequestBean<String> requestBean) {
         try {
-            if (null == requestBean.getData()) {
+            if (StringUtil.isEmptyTrim(requestBean.getData())) {
                 throw new ParamEmptyException("data不能为空");
             }
             List<AchievementVO> achievementVOList = studentService.achievement(requestBean.getData());
@@ -175,6 +176,8 @@ public class StudentController {
             return ResponseUtils.error(e);
         }
     }
+
+    //TODO:答题
 
     /**
      * 重置密码

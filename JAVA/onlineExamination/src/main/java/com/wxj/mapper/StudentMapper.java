@@ -112,10 +112,10 @@ public interface StudentMapper {
 
     /**
      * 查询成绩
-     * @param id
+     * @param sno
      * @return
      */
-    List<Achievement> selectAchievementByStudentId(Integer id);
+    List<Achievement> selectAchievementByStudentId(String sno);
 
     /**
      * 批量插入

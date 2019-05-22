@@ -136,6 +136,12 @@ public class ExamScheduleController {
         }
     }
 
+    /**
+     * 学生查看考试安排
+     * @param request
+     * @param requestBean
+     * @return
+     */
     @RequestMapping(value = "StudentExamSchedule", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object getStudentExamScheduleBySno(HttpServletRequest request, @RequestBody RequestBean requestBean) {
         List<StudentExamScheduleVO> studentExamScheduleVOList = examScheduleService.getStudentExamScheduleBySno(requestBean.getUserCode());

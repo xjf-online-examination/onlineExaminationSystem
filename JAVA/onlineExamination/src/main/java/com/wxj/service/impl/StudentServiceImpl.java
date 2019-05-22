@@ -132,9 +132,9 @@ public class StudentServiceImpl implements StudentServiceI {
     }
 
     @Override
-    public List<AchievementVO> achievement(Integer id) {
+    public List<AchievementVO> achievement(String sno) {
         List<AchievementVO> achievementVOList = Lists.newArrayList();
-        List<Achievement> achievementList = studentMapper.selectAchievementByStudentId(id);
+        List<Achievement> achievementList = studentMapper.selectAchievementByStudentId(sno);
         if (achievementList.size() > 0) {
             //按考试安排分组
             Multimap<Integer, Achievement> achievementMultimap = ArrayListMultimap.create();

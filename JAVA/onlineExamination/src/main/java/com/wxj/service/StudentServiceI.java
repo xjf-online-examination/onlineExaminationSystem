@@ -51,10 +51,10 @@ public interface StudentServiceI {
 
     /**
      * 成绩
-     * @param id
+     * @param sno
      * @return
      */
-    List<AchievementVO> achievement(Integer id);
+    List<AchievementVO> achievement(String sno);
 
     /**
      * 重置密码
