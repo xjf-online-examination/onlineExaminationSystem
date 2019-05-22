@@ -4,9 +4,13 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.wxj.constant.SystemConstant;
 import com.wxj.exception.OperationException;
 import com.wxj.exception.ParamInvalidException;
+import com.wxj.mapper.TeacherClassCourseMapper;
 import com.wxj.mapper.TeacherMapper;
+import com.wxj.model.DTO.TaughtSaveDTO;
 import com.wxj.model.DTO.TeacherParamsDTO;
 import com.wxj.model.PO.Teacher;
+import com.wxj.model.PO.TeacherClassCourse;
+import com.wxj.model.PO.TeacherClassCourseExample;
 import com.wxj.model.PO.TeacherExample;
 import com.wxj.model.VO.TeacherTaughtVO;
 import com.wxj.model.VO.TeacherVO;
@@ -15,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -33,6 +38,8 @@ import java.util.List;
 public class TeacherServiceImpl implements TeacherServiceI {
     @Autowired
     TeacherMapper teacherMapper;
+    @Autowired
+    TeacherClassCourseMapper teacherClassCourseMapper;
 
     @Override
     public List<TeacherVO> listTeacherByParams(TeacherParamsDTO teacherParamsDTO) {
@@ -102,6 +109,33 @@ public class TeacherServiceImpl implements TeacherServiceI {
     @Override
     public List<TeacherTaughtVO> listTaughtByTeacherId(Integer id) {
         return teacherMapper.selectTaughtByTeacherId(id);
+    }
+
+    @Transactional
+    @Override
+    public int saveTaught(TaughtSaveDTO taughtSaveDTO) {
+        Date date = new Date();
+
+        int i = 0;
+        TeacherClassCourse teacherClassCourse;
+        for (Integer classCourseId : taughtSaveDTO.getClassCourseIdList()) {
+            teacherClassCourse = new TeacherClassCourse();
+            teacherClassCourse.setTeacherId(taughtSaveDTO.getTeacherId());
+            teacherClassCourse.setClassCourseId(classCourseId);
+            teacherClassCourse.setCreateTime(date);
+            teacherClassCourse.setModifyTime(date);
+            teacherClassCourse.setDelFlag(SystemConstant.NOUGHT);
+            i += teacherClassCourseMapper.insertSelective(teacherClassCourse);
+        }
+        if (SystemConstant.ZERO == i) {
+            throw new OperationException(" 插入失败");
+        }
+        return i;
+    }
+
+    @Override
+    public int deleteTaught(Integer id) {
+        return teacherClassCourseMapper.deleteByPrimaryKey(id);
     }
 
     @Override

@@ -279,7 +279,7 @@
   </select>
 
   <select id="selectTaughtByTeacherId" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.TeacherTaughtVO">
-    select c.name className, cou.code courseCode, cou.name courseName
+    select tcc.id,c.name className, cou.code courseCode, cou.name courseName
     from teacher t
     LEFT JOIN teacher_class_course tcc on t.id = tcc.teacher_id
     LEFT JOIN class_course cc on tcc.class_course_id = cc.id

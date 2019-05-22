@@ -5,6 +5,7 @@ import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.exception.ParamEmptyException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
+import com.wxj.model.DTO.TaughtSaveDTO;
 import com.wxj.model.DTO.TeacherParamsDTO;
 import com.wxj.model.VO.TeacherTaughtVO;
 import com.wxj.model.VO.TeacherVO;
@@ -153,9 +154,45 @@ public class TeacherController {
         }
     }
 
-    //TODO：添加授课
+    /**
+     * 添加授课
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "taught", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object saveTaught(HttpServletRequest request, @RequestBody RequestBean<TaughtSaveDTO> requestBean) {
+        try {
+            TaughtSaveDTO taughtSaveDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(taughtSaveDTO, "teacherId");
+            if (taughtSaveDTO.getClassCourseIdList() == null || taughtSaveDTO.getClassCourseIdList().size() == 0) {
+                throw new ParamEmptyException("classCourseIdList");
+            }
+            teacherService.saveTaught(taughtSaveDTO);
+            return ResponseUtils.success("201");
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        }  catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
 
-    //TODO:删除授课
+    /**
+     * 删除教师相关的信息
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/deleteTaught", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object deleteTaught(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
+        try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
+            teacherService.deleteTaught(requestBean.getData());
+            return ResponseUtils.success("204");
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
 
     /**
      * 重置密码

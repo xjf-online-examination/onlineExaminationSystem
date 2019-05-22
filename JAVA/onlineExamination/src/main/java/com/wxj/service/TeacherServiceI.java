@@ -1,5 +1,6 @@
 package com.wxj.service;
 
+import com.wxj.model.DTO.TaughtSaveDTO;
 import com.wxj.model.DTO.TeacherParamsDTO;
 import com.wxj.model.VO.TeacherTaughtVO;
 import com.wxj.model.VO.TeacherVO;
@@ -59,6 +60,20 @@ public interface TeacherServiceI {
      * @return
      */
     List<TeacherTaughtVO> listTaughtByTeacherId(Integer id);
+
+    /**
+     * 添加授课
+     * @param taughtSaveDTO
+     * @return
+     */
+    int saveTaught(TaughtSaveDTO taughtSaveDTO);
+
+    /**
+     * 删除授课
+     * @param id
+     * @return
+     */
+    int deleteTaught(Integer id);
 
     /**
      * 修改密码
