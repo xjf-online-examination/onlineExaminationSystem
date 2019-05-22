@@ -3,6 +3,7 @@ package com.wxj.mapper;
 import com.wxj.model.PO.ClassCourse;
 import com.wxj.model.PO.ClassCourseExample;
 import com.wxj.model.VO.ClassCourseSelectVO;
+import com.wxj.model.VO.CourseVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -79,4 +80,6 @@ public interface ClassCourseMapper {
      * @return
      */
     List<ClassCourseSelectVO> selectClassCourseAll();
+
+    List<CourseVO> selectCourseAll();
 }

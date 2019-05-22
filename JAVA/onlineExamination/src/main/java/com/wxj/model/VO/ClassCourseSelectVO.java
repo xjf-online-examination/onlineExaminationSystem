@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>Title: ClassCourseSelectVO</p >
  * <p>Description: </p >
  * <p>Copyright: Copyright (c) 2018</p >
- * <p>Company: wxj</p >
+ * <p>Company: wxj </p >
  *
  * @author wangxiaojun
  * @version 1.0
@@ -18,9 +19,9 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class ClassCourseSelectVO implements Serializable {
-    private Integer id;
-
-    private String className;
 
     private String courseName;
+
+    private List<ClassNameVO> classNameVOList;
+
 }

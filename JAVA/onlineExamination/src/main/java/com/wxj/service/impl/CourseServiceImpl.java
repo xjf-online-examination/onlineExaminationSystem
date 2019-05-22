@@ -1,6 +1,7 @@
 package com.wxj.service.impl;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.google.common.collect.Lists;
 import com.wxj.constant.SystemConstant;
 import com.wxj.exception.OperationException;
 import com.wxj.exception.ParamInvalidException;
@@ -133,4 +134,23 @@ public class CourseServiceImpl implements CourseServiceI {
     public List<ClassCourseSelectVO> listClassCourseAll() {
         return classCourseMapper.selectClassCourseAll();
     }
+
+    @Override
+    public List<CourseVO> listCourseAll() {
+        CourseExample courseExample = new CourseExample();
+        courseExample.createCriteria();
+        List<Course> courseList = courseMapper.selectByExample(courseExample);
+
+        List<CourseVO> courseVOList = Lists.newArrayList();
+        CourseVO courseVO;
+        for (Course course : courseList) {
+            courseVO = new CourseVO();
+            courseVO.setId(course.getId());
+            courseVO.setCode(course.getCode());
+            courseVO.setName(course.getName());
+            courseVOList.add(courseVO);
+        }
+        return courseVOList;
+    }
+
 }

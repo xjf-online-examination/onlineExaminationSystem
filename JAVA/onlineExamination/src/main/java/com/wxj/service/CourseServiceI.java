@@ -29,8 +29,14 @@ public interface CourseServiceI {
     int delete(Integer id);
 
     /**
-     * 所有课程ID，className, courseName供页面下拉菜单用
+     * 所有课程ID，className, courseName供新增教师授课下拉菜单用
      * @return
      */
     List<ClassCourseSelectVO> listClassCourseAll();
+
+    /**
+     * 所有课程ID，courseCode, courseName供试题和试卷新增下拉菜单用
+     * @return
+     */
+    List<CourseVO> listCourseAll();
 }

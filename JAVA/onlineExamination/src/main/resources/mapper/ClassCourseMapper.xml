@@ -226,8 +226,16 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectClassCourseAll" resultType="com.wxj.model.VO.ClassCourseSelectVO">
-    select cc.id, c1.name className, c2.name courseName
+  <resultMap id="ClassCourseResultMap" type="com.wxj.model.VO.ClassCourseSelectVO">
+    <result column="course_name" jdbcType="INTEGER" property="courseName" />
+    <collection property="classNameVOList" ofType="com.wxj.model.VO.ClassNameVO" javaType="java.util.ArrayList">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="class_name" jdbcType="INTEGER" property="className" />
+    </collection>
+  </resultMap>
+
+  <select id="selectClassCourseAll" resultMap="ClassCourseResultMap">
+    select cc.id, c1.name class_name, c2.name course_name
     from class_course cc
     left join class c1 on cc.class_id = c1.id
     left join course c2 on cc.course_id = c2.id

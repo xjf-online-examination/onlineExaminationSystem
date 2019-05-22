@@ -132,7 +132,7 @@ public class CourseController {
     }
 
     /**
-     * 所有课程ID，className, courseName供页面下拉菜单用
+     * 所有课程ID，className, courseName供教师模块下拉菜单用
      * @param request
      * @param requestBean
      * @return
@@ -140,6 +140,17 @@ public class CourseController {
     @RequestMapping(value = "/listClassCourse", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object listClassCourseALL(HttpServletRequest request, @RequestBody RequestBean requestBean) {
         return ResponseUtils.success("200", courseService.listClassCourseAll());
+    }
+
+    /**
+     * 所有课程ID，className, courseName供教师模块下拉菜单用
+     * @param request
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/listCourse", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listCourseALL(HttpServletRequest request, @RequestBody RequestBean requestBean) {
+        return ResponseUtils.success("200", courseService.listCourseAll());
     }
 
 }
