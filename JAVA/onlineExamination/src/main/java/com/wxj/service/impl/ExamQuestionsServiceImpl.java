@@ -17,6 +17,8 @@ import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
 import com.wxj.service.ExamQuestionsServiceI;
 import com.wxj.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,7 @@ import java.util.List;
  */
 @Service
 public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
+    Logger logger = LoggerFactory.getLogger(ExamQuestionsServiceImpl.class);
     @Autowired
     ExamQuestionsMapper examQuestionsMapper;
     @Autowired
@@ -145,6 +148,13 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
 
     @Override
     public int examQuestionsImport(List<ExamQuestions> examQuestionsList) {
-        return examQuestionsMapper.batchInsert(examQuestionsList);
+        int i = 0;
+        try {
+            i = examQuestionsMapper.batchInsert(examQuestionsList);
+        } catch (Exception e) {
+            logger.error("com.wxj.service.impl.ExamQuestionsServiceImpl.examQuestionsImport", e);
+            throw new OperationException("导入试题失败");
+        }
+        return i;
     }
 }
