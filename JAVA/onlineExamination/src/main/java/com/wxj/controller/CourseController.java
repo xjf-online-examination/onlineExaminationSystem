@@ -107,7 +107,7 @@ public class CourseController {
     public Object modify(HttpServletRequest request, @RequestBody RequestBean<CourseSaveDTO> requestBean) {
         try {
             CourseSaveDTO courseSaveDTO = requestBean.getData();
-            new ValidateParamsUtil().vaildParams(courseSaveDTO, "id");
+            new ValidateParamsUtil().vaildParams(courseSaveDTO, "id", "classIdList");
             courseService.modify(courseSaveDTO);
             return ResponseUtils.success("201");
         }  catch (BusinessException e) {
