@@ -159,7 +159,7 @@ public class TeacherController {
      * @param requestBean
      * @return
      */
-    @RequestMapping(value = "taught", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    @RequestMapping(value = "saveTaught", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object saveTaught(HttpServletRequest request, @RequestBody RequestBean<TaughtSaveDTO> requestBean) {
         try {
             TaughtSaveDTO taughtSaveDTO = requestBean.getData();
