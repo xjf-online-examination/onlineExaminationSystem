@@ -60,7 +60,7 @@
 <script>
 import Tables from '@/components/tables';
 import {
-  getCourseList, addCourse, editCourse, deletCourse, getAllClasses,
+  getCourseList, addCourse, editCourse, deleteCourse, getAllClasses,
 } from '@/api/teacher';
 import { isEmpty } from '@/utils/validate';
 
@@ -145,7 +145,7 @@ export default {
           { required: true, message: '课程姓名不能为空', trigger: 'blur' },
         ],
         classId: [
-          { required: true, message: '所属班级不能为空', trigger: 'change' },
+
         ],
       },
     };
@@ -217,10 +217,10 @@ export default {
     deleteCourse() {
       deleteCourse(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
-          this.$Notice.success('删除成功');
+          this.$Notice.success({ title: '删除成功' });
           this.getCourseList();
         } else {
-          this.$Notice.error('删除失败');
+          this.$Notice.error({ title: '删除失败' });
         }
       });
     },

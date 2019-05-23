@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-23 15:15:36
+ * @Last Modified time: 2019-05-24 00:25:28
  */
 import axios from '@/libs/api.request';
 
@@ -308,13 +308,27 @@ export const addCourse = data => axios.request({
   },
   method: 'post',
 });
-export const editCourse = data => axios.request({
-  url: 'course/modify',
-  data: {
-    data,
-  },
-  method: 'post',
-});
+export const editCourse = ({
+  id,
+  classId,
+  name,
+  code,
+}) => {
+  const data = {
+    id,
+    classId,
+    name,
+    code,
+  };
+  return axios.request({
+    url: 'course/modify',
+    data: {
+      data,
+    },
+    method: 'post',
+  });
+};
+
 export const deleteCourse = id => axios.request({
   url: 'course/delete',
   data: {
