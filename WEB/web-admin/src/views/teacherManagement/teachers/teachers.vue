@@ -172,7 +172,7 @@ export default {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
-      this.teacher = this.tableData.list[index];
+      this.teacher = Object.assign({}, this.tableData.list[index]);
     },
     onDelete(index) {
       console.log(index);

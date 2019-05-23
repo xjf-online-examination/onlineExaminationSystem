@@ -99,7 +99,6 @@ export default {
         teacherId: this.id,
         classCourseIdList: [],
       },
-      courseList: [],
       modalVisible: false,
       modalTitle: '',
       showDeleteModal: false,
@@ -176,15 +175,7 @@ export default {
         }
       });
     },
-    getAllCourseList() {
-      getAllCourseList().then((res) => {
-        if (res.responseCode === '200') {
-          this.courseList = res.data;
-        } else {
-          this.courseList = [];
-        }
-      });
-    },
+
   },
   mounted() {
     this.getCourseList();

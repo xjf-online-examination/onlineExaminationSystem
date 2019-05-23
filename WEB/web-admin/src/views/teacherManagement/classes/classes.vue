@@ -152,7 +152,7 @@ export default {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
-      this.classes = this.tableData.list[index];
+      this.classes = Object.assign({}, this.tableData.list[index]);
     },
     onDelete(index) {
       this.showDeleteModal = true;
