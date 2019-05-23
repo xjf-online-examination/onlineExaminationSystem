@@ -1,20 +1,20 @@
 <template>
   <div>
-    <Form ref="searchData" :model="searchData" inline>
-      <FormItem label="学号" label-position="left" class="search-flex">
+    <Form ref="searchForm" :model="searchData" inline>
+      <FormItem prop="sno" label="学号" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.sno" placeholder="学号"/>
       </FormItem>
-      <FormItem label="姓名" label-position="left" class="search-flex">
+      <FormItem prop="name" label="姓名" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.name" placeholder="姓名"/>
       </FormItem>
-      <FormItem label="班级" label-position="left" class="search-flex">
+      <FormItem prop="classId" label="班级" label-position="left" class="search-flex">
         <Select v-model="searchData.classId" filterable placeholder="班级">
           <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </FormItem>
       <FormItem>
-        <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
-        <Button type="default" @click="handleReset('searchData')" class="m-l-s">重置</Button>
+        <Button type="primary" icon="ios-search" @click="handleSearch('searchForm')">搜索</Button>
+        <Button type="default" @click="handleReset('searchForm')" class="m-l-s">重置</Button>
       </FormItem>
     </Form>
     <div class="m-b-s flex-display">
@@ -43,25 +43,29 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
-    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
-      <Form ref="classSearch" :model="student" :rule="rules">
-        <FormItem prop="jobNoRules" label="学号">
+    <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
+      <Form ref="studentForm" :model="student" :rules="rules">
+        <FormItem prop="sno" label="学号">
           <Input type="text" v-model="student.sno" placeholder="请输入工号"/>
         </FormItem>
         <FormItem prop="name" label="姓名">
           <Input type="text" v-model="student.name" placeholder="请输入姓名"/>
         </FormItem>
-        <FormItem prop="name" label="班级">
+        <FormItem prop="classId" label="班级">
           <Select v-model="student.classId" filterable placeholder="请选择班级">
             <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button type="text" @click="cancel('studentForm')">取消</Button>
+        <Button type="primary" @click="save('studentForm')">确定</Button>
+      </div>
     </Modal>
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteStudent">
       <p>是否删除该学生，删除后无法恢复？</p>
     </Modal>
-    <Modal v-model="showScoreModal" title="学生成绩">
+    <Modal v-model="showScoreModal" title="学生成绩" :mask-closable="false">
       <tables ref="tables" v-model="scoreTable" :columns="scoreTableColumns"/>
     </Modal>
   </div>
@@ -72,12 +76,13 @@ import FileSaver from 'file-saver';
 import Tables from '@/components/tables';
 import config from '@/config';
 import {
-  getStudentList, addStudent, editStudent, deleteStudent, resetStudentPassword, downloadStudentTemplate, getAllClasses,
+  getStudentList, addStudent, editStudent, deleteStudent, resetStudentPassword, downloadStudentTemplate, getAllClasses, getScoreListByCode,
 } from '@/api/teacher';
 import {
   getToken,
   getUserCode,
 } from '@/libs/util';
+import { isNumber } from '@/utils/validate';
 
 const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro;
 
@@ -203,6 +208,18 @@ export default {
         }],
       scoreTable: [],
       showScoreModal: false,
+      rules: {
+        sno: [
+          { required: true, message: '学号不能为空', trigger: 'blur' },
+          { validator: isNumber, message: '学号只能由数字组成', trigger: 'blur' },
+        ],
+        name: [
+          { required: true, message: '学生姓名不能为空', trigger: 'blur' },
+        ],
+        classId: [
+          { required: true, message: '所属班级不能为空', trigger: 'blur' },
+        ],
+      },
     };
   },
   methods: {
@@ -211,13 +228,7 @@ export default {
       this.getStudentList(this.searchData);
     },
     handleReset(name) {
-      this.searchData = {
-        classId: '',
-        sno: '',
-        name: '',
-        currentPage: 1,
-        pageSize: 10,
-      };
+      this.$refs[name].resetFields();
       this.getStudentList(this.searchData);
     },
     onEdit(index) {
@@ -257,7 +268,7 @@ export default {
       this.showScoreModal = true;
       getScoreListByCode(this.tableData.list[index].sno).then((res) => {
         if (res.responseCode === '200') {
-          this.scoreTable = res.data.list;
+          this.scoreTable = res.data;
         } else {
           this.scoreTable = [];
         }
@@ -268,37 +279,46 @@ export default {
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save() {
-      console.log(this.teacher);
-      if (this.isAdd) {
-        addStudent(this.student).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getStudentList();
-            this.$Message.success('添加成功');
+    save(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          if (this.isAdd) {
+            addStudent(this.student).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getStudentList();
+                this.$Notice.success({ title: '添加成功' });
+              } else {
+                this.$Notice.success({ title: '添加失败' });
+              }
+              this.modalVisible = false;
+            });
           } else {
-            this.$Message.success('添加失败');
+            editStudent(this.student).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getStudentList();
+                this.$Notice.success({ title: '修改成功' });
+              } else {
+                this.$Notice.success({ title: '修改失败' });
+              }
+              this.modalVisible = false;
+            });
           }
-        });
-      } else {
-        editStudent(this.student).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getStudentList();
-            this.$Message.success('修改成功');
-          } else {
-            this.$Message.success('修改失败');
-          }
-        });
-      }
+        }
+      });
+    },
+    cancel(name) {
+      this.modalVisible = false;
+      this.$refs[name].resetFields();
     },
     deleteStudent() {
       deleteStudent(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
-          this.$Message.success('删除成功');
+          this.$Notice.success({ title: '删除成功' });
           this.getStudentList();
         } else {
-          this.$Message.error('删除失败');
+          this.$Notice.error({ title: '删除失败' });
         }
       });
     },

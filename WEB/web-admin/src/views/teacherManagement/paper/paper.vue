@@ -42,8 +42,8 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
-    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
-      <Form ref="classSearch" :model="course" :rule="rules">
+    <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
+      <Form ref="classSearch" :model="course" :rules="rules">
         <FormItem prop="jobNoRules" label="试卷编号">
           <Input type="text" v-model="paper.code" placeholder="请输入试卷编号"/>
         </FormItem>

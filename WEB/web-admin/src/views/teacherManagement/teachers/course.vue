@@ -13,29 +13,32 @@
       </FormItem>
     </Form>-->
     <Button type="primary" @click="onAdd()" class="m-b-s">添加</Button>
-    <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
-    <div class="table-pagenation m-t-s" v-if="tableData.count>0">
-      <Page
-        :total="tableData.count"
-        show-elevator
-        show-total
-        show-sizer
-        @on-change="onPageChange"
-        @on-page-size-change="onPageSizeChange"
-      />
-    </div>
-    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="ok">
-      <Form ref="classSearch" :model="course">
-        <FormItem prop="teacherCode" label="请选择授课，可多选">
-          <Select v-model="course.course" multiple style="width:260px">
-            <Option
-              v-for="item in courseList"
-              :value="item"
-              :key="item"
-            >{{ item.className+" : "+item.courseName }}</Option>
+    <tables ref="tables" search-place="top" v-model="tableData" :columns="columns"/>
+    <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
+      <Form ref="courseForm" :model="course" :rules="rules">
+        <FormItem prop="classCourseIdList" label="请选择授课，可多选" label-position="top">
+          <Select v-model="course.classCourseIdList" multiple style="width:260px">
+            <OptionGroup
+              :label="course.courseName"
+              v-for="(course,index) in classCourseList"
+              v-bind:key="index"
+            >
+              <Option
+                v-for="classes in course.classNameVOList"
+                :value="classes.id"
+                :key="classes.id"
+              >{{ classes.className}}</Option>
+            </OptionGroup>
           </Select>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button type="text" @click="cancel('courseForm')">取消</Button>
+        <Button type="primary" @click="save('courseForm')">确定</Button>
+      </div>
+    </Modal>
+    <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteTaught">
+      <p>是否删除该教师授课，删除后无法恢复？</p>
     </Modal>
   </div>
 </template>
@@ -43,8 +46,9 @@
 <script>
 import Tables from '@/components/tables';
 import {
-  getAllCourses, taught, addCourseForTeacher,
+  getAllClassCourses, getAllCourseList, taught, addCourseForTeacher, deleteTaught,
 } from '@/api/teacher';
+import { isListEmpty } from '@/utils/validate';
 
 export default {
   name: 'teacherCourse',
@@ -90,17 +94,21 @@ export default {
             ]),
           ],
         }],
-      tableData: {
-        list: [],
-        count: 0,
-      },
+      tableData: [],
       course: {
-        course: {},
+        teacherId: this.id,
+        classCourseIdList: [],
       },
       courseList: [],
       modalVisible: false,
       modalTitle: '',
       showDeleteModal: false,
+      selectIndex: 0,
+      rules: {
+        classCourseIdList: [
+          { validator: isListEmpty, message: '请选择授课', trigger: 'blur' },
+        ],
+      },
     };
   },
   methods: {
@@ -117,11 +125,36 @@ export default {
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save() {
-      addCourseForTeacher(this.course).then((res) => {
-        if (res.responseCode === '201') {
-          this.getTeacherList();
-          this.$Message.success('添加成功');
+    onDelete(index) {
+      this.showDeleteModal = true;
+      this.selectIndex = index;
+    },
+    save(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          addCourseForTeacher(this.course).then((res) => {
+            if (res.responseCode === '201') {
+              this.getCourseList();
+              this.$Notice.success({ title: '添加成功' });
+            } else {
+              this.$Notice.error({ title: '添加失败' });
+            }
+            this.modalVisible = false;
+          });
+        }
+      });
+    },
+    cancel(name) {
+      this.$refs[name].resetFields();
+      this.modalVisible = false;
+    },
+    deleteTaught() {
+      deleteTaught(this.tableData[this.selectIndex].id).then((res) => {
+        if (res.responseCode === '204') {
+          this.$Notice.success({ title: '删除成功' });
+          this.getCourseList();
+        } else {
+          this.$Notice.error({ title: '删除失败' });
         }
       });
     },
@@ -130,15 +163,21 @@ export default {
         if (res.responseCode === '200') {
           this.tableData = res.data;
         } else {
-          this.tableData = {
-            list: [],
-            count: 0,
-          };
+          this.tableData = [];
         }
       });
     },
-    getAllCourses() {
-      getAllCourses(this.id).then((res) => {
+    getAllClassCourses() {
+      getAllClassCourses().then((res) => {
+        if (res.responseCode === '200') {
+          this.classCourseList = res.data;
+        } else {
+          this.classCourseList = [];
+        }
+      });
+    },
+    getAllCourseList() {
+      getAllCourseList().then((res) => {
         if (res.responseCode === '200') {
           this.courseList = res.data;
         } else {
@@ -149,7 +188,8 @@ export default {
   },
   mounted() {
     this.getCourseList();
-    this.getAllCourses();
+    this.getAllClassCourses();
+    this.getAllCourseList();
   },
 };
 </script>

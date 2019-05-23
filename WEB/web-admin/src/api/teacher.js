@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-23 10:54:52
+ * @Last Modified time: 2019-05-23 15:15:36
  */
 import axios from '@/libs/api.request';
 
@@ -99,9 +99,16 @@ export const taught = id => axios.request({
 export const addCourseForTeacher = ({
   ...course
 }) => axios.request({
-  url: 'teacher/taught1',
+  url: 'teacher/saveTaught',
   data: {
     data: course,
+  },
+  method: 'post',
+});
+export const deleteTaught = id => axios.request({
+  url: 'teacher/deleteTaught',
+  data: {
+    data: id,
   },
   method: 'post',
 });
@@ -315,8 +322,13 @@ export const deleteCourse = id => axios.request({
   },
   method: 'post',
 });
-export const getAllCourses = () => axios.request({
+export const getAllClassCourses = () => axios.request({
   url: 'course/listClassCourse',
+  data: {},
+  method: 'post',
+});
+export const getAllCourseList = () => axios.request({
+  url: 'course/listCourse',
   data: {},
   method: 'post',
 });

@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-18 02:31:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-22 21:08:25
+ * @Last Modified time: 2019-05-23 18:18:16
  */
 <template>
   <div>
@@ -50,8 +50,8 @@
       />
     </div>
     <Journalizing></Journalizing>
-    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
-      <Form ref="classSearch" :model="question" :rule="rules">
+    <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
+      <Form ref="classSearch" :model="question" :rules="rules">
         <FormItem prop="courseCode" label="课程编号">
           <Input type="text" v-model="question.code" placeholder="请输入课程编号"/>
         </FormItem>

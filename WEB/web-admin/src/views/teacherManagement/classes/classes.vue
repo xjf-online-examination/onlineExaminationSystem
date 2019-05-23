@@ -30,8 +30,8 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
-    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
-      <Form ref="classSearch" :model="classes" :rule="rules">
+    <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
+      <Form ref="classForm" :model="classes" :rules="rules">
         <FormItem prop="code" label="班级编号">
           <Input type="text" v-model="classes.code" placeholder="请输入班级编号"/>
         </FormItem>
@@ -39,6 +39,10 @@
           <Input type="text" v-model="classes.name" placeholder="请输入班级名称"/>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button type="text" @click="cancel('classForm')">取消</Button>
+        <Button type="primary" @click="save('classForm')">确定</Button>
+      </div>
     </Modal>
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteClass">
       <p>是否删除该班级，删除后无法恢复？</p>
@@ -126,6 +130,14 @@ export default {
       isAdd: true,
       showDeleteModal: false,
       selectIndex: 0,
+      rules: {
+        code: [
+          { required: true, message: '班级编号不能为空', trigger: 'blur' },
+        ],
+        name: [
+          { required: true, message: '班级姓名不能为空', trigger: 'blur' },
+        ],
+      },
     };
   },
   methods: {
@@ -133,12 +145,7 @@ export default {
       this.getClassList(this.searchData);
     },
     handleReset(name) {
-      this.searchData = {
-        code: '',
-        name: '',
-        currentPage: 1,
-        pageSize: 10,
-      };
+      this.$refs[name].resetFields();
       this.getClassList(this.searchData);
     },
     onEdit(index) {
@@ -164,36 +171,46 @@ export default {
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save() {
-      if (this.isAdd) {
-        addClass(this.classes).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getClassList();
-            this.$Message.success('添加成功');
+    save(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          if (this.isAdd) {
+            addClass(this.classes).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getClassList();
+                this.$Notice.success({ title: '添加成功' });
+              } else {
+                this.$Notice.success({ title: '添加失败' });
+              }
+              this.modalVisible = false;
+            });
           } else {
-            this.$Message.success('添加失败');
+            editClass(this.classes).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getClassList();
+                this.$Notice.success({ title: '修改成功' });
+              } else {
+                this.$Notice.success({ title: '修改失败' });
+              }
+              this.modalVisible = false;
+            });
           }
-        });
-      } else {
-        editClass(this.classes).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getClassList();
-            this.$Message.success('修改成功');
-          } else {
-            this.$Message.success('修改失败');
-          }
-        });
-      }
+        }
+      });
+    },
+    cancel(name) {
+      this.modalVisible = false;
+      this.$refs[name].resetFields();
     },
     deleteClass() {
       deleteClass(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
-          this.$Message.success('删除成功');
+          this.$Notice.success({ title: '删除成功' });
           this.getClassList();
         } else {
-          this.$Message.error('删除失败');
+          this.$Notice.error({ title: '删除失败' });
         }
       });
     },

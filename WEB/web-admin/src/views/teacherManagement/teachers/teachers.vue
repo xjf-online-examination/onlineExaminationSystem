@@ -13,13 +13,7 @@
       </FormItem>
     </Form>
     <Button type="primary" @click="onAdd()" class="m-b-s">添加</Button>
-    <tables
-      ref="tables"
-      search-place="top"
-      v-model="tableData.list"
-      :columns="columns"
-      @on-delete="handleDelete"
-    />
+    <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
     <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
         :total="tableData.count"
@@ -30,15 +24,19 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
-    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
-      <Form ref="classSearch" :model="teacher" :rule="rules">
-        <FormItem prop="jobNoRules" label="工号">
+    <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
+      <Form ref="teacherForm" :model="teacher" :rules="rules">
+        <FormItem prop="jobNo" label="工号">
           <Input type="text" v-model="teacher.jobNo" placeholder="请输入工号"/>
         </FormItem>
         <FormItem prop="name" label="姓名">
           <Input type="text" v-model="teacher.name" placeholder="请输入姓名"/>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button type="text" @click="cancel('teacherForm')">取消</Button>
+        <Button type="primary" @click="save('teacherForm')">确定</Button>
+      </div>
     </Modal>
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteTeacher">
       <p>是否删除该教师，删除后无法恢复？</p>
@@ -51,27 +49,14 @@ import Tables from '@/components/tables';
 import {
   getTeacherList, addTeacher, editTeacher, deleteTeacher, resetTeacherPassword,
 } from '@/api/teacher';
+import { isNumber } from '@/utils/validate';
 
 export default {
   name: 'teachers',
   components: {
     Tables,
   },
-  props: {
-    jobNoRules: {
-      type: Array,
-      default: () => [
-        { required: true, message: '工号不能为空', trigger: 'blur' },
-      ],
-    },
-    nameRules: {
-      type: Array,
-      default: () => [
-        { required: true, message: '教师姓名不能为空', trigger: 'blur' },
-      ],
-    },
-  },
-  data () {
+  data() {
     return {
       columns: [
         {
@@ -164,37 +149,46 @@ export default {
       isAdd: true,
       showDeleteModal: false,
       selectIndex: 0,
+      rules: {
+        jobNo: [
+          { required: true, message: '工号不能为空', trigger: 'blur' },
+          { validator: isNumber, message: '工号只能由数字组成', trigger: 'blur' },
+        ],
+        name: [
+          { required: true, message: '教师姓名不能为空', trigger: 'blur' },
+        ],
+      },
     };
   },
   methods: {
-    handleSearch () {
+    handleSearch() {
       this.getTeacherList(this.searchData);
     },
-    handleReset (name) {
+    handleReset(name) {
       this.$refs[name].resetFields();
-      console.log(this.searchData);
+      this.getTeacherList(this.searchData);
     },
-    onEdit (index) {
+    onEdit(index) {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
       this.teacher = this.tableData.list[index];
     },
-    onDelete (index) {
+    onDelete(index) {
       console.log(index);
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onResetPwd (index) {
+    onResetPwd(index) {
       console.log(index);
       resetTeacherPassword(this.tableData.list[index].id).then((res) => {
         if (res.responseCode === '201') {
           this.getTeacherList();
-          this.$Message.success('密码重置成功');
+          this.$Notice.success({ title: '密码重置成功' });
         }
       });
     },
-    onViewCourse (index) {
+    onViewCourse(index) {
       this.$router.push({
         name: 'teacherCourse',
         query: {
@@ -202,45 +196,64 @@ export default {
         },
       });
     },
-    onPageChange (params) {
+    onPageChange(params) {
       this.searchData.currentPage = params;
       this.getTeacherList(this.searchData);
     },
-    onPageSizeChange (params) {
+    onPageSizeChange(params) {
       this.searchData.pageSize = params;
       this.getTeacherList(this.searchData);
     },
-    onAdd () {
-      this.modalVisible = true;
+    onAdd() {
       this.modalTitle = '添加';
       this.isAdd = true;
+      this.modalVisible = true;
     },
-    save () {
-      console.log(this.teacher);
-      if (this.isAdd) {
-        addTeacher(this.teacher).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getTeacherList();
-            this.$Message.success('添加成功');
+    save(name) {
+      console.info('name', name);
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          if (this.isAdd) {
+            addTeacher(this.teacher).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getTeacherList();
+                this.$Notice.success({ title: '添加成功' });
+              } else {
+                this.$Notice.error({ title: '添加失败' });
+              }
+              this.modalVisible = false;
+            });
+          } else {
+            editTeacher(this.teacher).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getTeacherList();
+                this.$Notice.success({ title: '修改成功' });
+              } else {
+                this.$Notice.error({ title: '修改失败' });
+              }
+              this.modalVisible = false;
+            });
           }
-        });
-      } else {
-        editTeacher(this.teacher).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getTeacherList();
-            this.$Message.success('修改成功');
-          }
-        });
-      }
-    },
-    deleteTeacher (index) {
-      deleteTeacher(this.tableData.list[this.selectIndex].id).then((res) => {
-        this.getTeacherList();
+        }
       });
     },
-    getTeacherList () {
+    cancel(name) {
+      this.modalVisible = false;
+      this.$refs[name].resetFields();
+    },
+    deleteTeacher() {
+      deleteTeacher(this.tableData.list[this.selectIndex].id).then((res) => {
+        if (res.responseCode === '204') {
+          this.$Notice.success({ title: '删除成功' });
+          this.getTeacherList();
+        } else {
+          this.$Notice.error({ title: '删除失败' });
+        }
+      });
+    },
+    getTeacherList() {
       getTeacherList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -250,16 +263,8 @@ export default {
       });
     },
   },
-  mounted () {
+  mounted() {
     this.getTeacherList();
-  },
-  computed: {
-    rules () {
-      return {
-        jobNo: this.jobNoRules,
-        name: this.nameRules,
-      };
-    },
   },
 };
 </script>

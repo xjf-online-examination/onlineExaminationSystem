@@ -7,16 +7,6 @@
       :columns="columns"
       @on-delete="handleDelete"
     />
-    <div class="table-pagenation m-t-s" v-if="tableData.count>0">
-      <Page
-        :total="tableData.count"
-        show-elevator
-        show-total
-        show-sizer
-        @on-change="onPageChange"
-        @on-page-size-change="onPageSizeChange"
-      />
-    </div>
   </div>
 </template>
 
@@ -46,10 +36,7 @@ export default {
       {
         title: '分数', key: 'achievement', align: 'center',
       }],
-      tableData: {
-        list: [],
-        count: 0,
-      },
+      tableData: [],
     };
   },
   methods: {
@@ -58,10 +45,7 @@ export default {
         if (res.responseCode === '200') {
           this.tableData = res.data;
         } else {
-          this.tableData = {
-            list: [],
-            count: 0,
-          };
+          this.tableData = [];
         }
       });
     },

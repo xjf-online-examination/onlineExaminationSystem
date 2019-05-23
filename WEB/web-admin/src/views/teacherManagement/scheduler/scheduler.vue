@@ -1,15 +1,15 @@
 <template>
   <div>
-    <Form ref="courseSearch" :model="searchData" inline>
-      <FormItem prop="code" label="试卷编号" label-position="left" class="search-flex">
+    <Form ref="schedulerSearch" :model="searchData" inline>
+      <FormItem prop="examPaperCode" label="试卷编号" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.examPaperCode" placeholder="试卷编号"/>
       </FormItem>
-      <FormItem prop="name" label="考试状态" label-position="left" class="search-flex">
+      <FormItem prop="status" label="考试状态" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.status" placeholder="考试状态"/>
       </FormItem>
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
-        <Button type="default" @click="handleReset('classSearch')" class="m-l-s">重置</Button>
+        <Button type="default" @click="handleReset('schedulerSearch')" class="m-l-s">重置</Button>
       </FormItem>
     </Form>
     <div class="m-b-s">
@@ -26,20 +26,20 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
-    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
-      <Form ref="classSearch" :model="scheduler" :rule="rules">
+    <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
+      <Form ref="schedulerForm" :model="scheduler" :rules="rules">
         <!-- <FormItem prop="jobNoRules" label="考试课程">
           <Select v-model="scheduler.courseId" filterable placeholder="请选择考试课程">
             <Option v-for="item in courseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>-->
-        <FormItem prop="name" label="考试安排名称">
+        <FormItem prop="title" label="考试安排名称">
           <Input type="text" v-model="scheduler.title" placeholder="请输入课程名称"/>
         </FormItem>
-        <FormItem prop="name" label="试卷编号">
+        <FormItem prop="examPaperCode" label="试卷编号">
           <Input type="text" v-model="scheduler.examPaperCode" placeholder="请输入课程名称"/>
         </FormItem>
-        <FormItem prop="name" label="考试开始时间">
+        <FormItem prop="startTime" label="考试开始时间">
           <DatePicker
             type="datetime"
             v-model="scheduler.startTime"
@@ -47,7 +47,7 @@
             style="width: 200px"
           ></DatePicker>
         </FormItem>
-        <FormItem prop="name" label="考试时长">
+        <FormItem prop="duration" label="考试时长">
           <InputNumber v-model="scheduler.duration"></InputNumber>
         </FormItem>
       </Form>

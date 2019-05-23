@@ -11,11 +11,10 @@ import { mapActions } from 'vuex';
 
 export default {
   name: 'User',
-  props: {
-    userName: {
-      type: String,
-      default: '',
-    },
+  data() {
+    return {
+      userName: this.$store.state.user.userName,
+    };
   },
   methods: {
     ...mapActions([

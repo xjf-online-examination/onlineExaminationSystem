@@ -14,7 +14,7 @@
       </FormItem>
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
-        <Button type="default" @click="handleReset('classSearch')" class="m-l-s">重置</Button>
+        <Button type="default" @click="handleReset('courseSearch')" class="m-l-s">重置</Button>
       </FormItem>
     </Form>
     <div class="m-b-s">
@@ -31,20 +31,24 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
-    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
-      <Form ref="classSearch" :model="course" :rule="rules">
-        <FormItem prop="jobNoRules" label="课程编号">
+    <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
+      <Form ref="courseForm" :model="course" :rules="rules">
+        <FormItem prop="code" label="课程编号">
           <Input type="text" v-model="course.code" placeholder="请输入课程编号"/>
         </FormItem>
         <FormItem prop="name" label="课程名称">
           <Input type="text" v-model="course.name" placeholder="请输入课程名称"/>
         </FormItem>
-        <FormItem prop="name" label="班级">
+        <FormItem prop="classId" label="班级">
           <Select v-model="course.classId" filterable placeholder="请选择班级">
             <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button type="text" @click="cancel('courseForm')">取消</Button>
+        <Button type="primary" @click="save('courseForm')">确定</Button>
+      </div>
     </Modal>
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteCourse">
       <p>是否删除该课程，删除后无法恢复？</p>
@@ -58,6 +62,7 @@ import Tables from '@/components/tables';
 import {
   getCourseList, addCourse, editCourse, deletCourse, getAllClasses,
 } from '@/api/teacher';
+import { isEmpty } from '@/utils/validate';
 
 export default {
   name: 'course',
@@ -132,6 +137,17 @@ export default {
       showDeleteModal: false,
       selectIndex: 0,
       classList: [],
+      rules: {
+        code: [
+          { required: true, message: '课程编号不能为空', trigger: 'blur' },
+        ],
+        name: [
+          { required: true, message: '课程姓名不能为空', trigger: 'blur' },
+        ],
+        classId: [
+          { required: true, message: '所属班级不能为空', trigger: 'change' },
+        ],
+      },
     };
   },
   methods: {
@@ -139,13 +155,7 @@ export default {
       this.getCourseList(this.searchData);
     },
     handleReset(name) {
-      this.searchData = {
-        code: '',
-        name: '',
-        classId: '',
-        currentPage: 1,
-        pageSize: 10,
-      };
+      this.$refs[name].resetFields();
       this.getCourseList(this.searchData);
     },
     onEdit(index) {
@@ -171,36 +181,46 @@ export default {
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save() {
-      if (this.isAdd) {
-        addCourse(this.course).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getCourseList();
-            this.$Message.success('添加成功');
+    save(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          if (this.isAdd) {
+            addCourse(this.course).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getCourseList();
+                this.$Notice.success({ title: '添加成功' });
+              } else {
+                this.$Notice.success({ title: '添加失败' });
+              }
+              this.modalVisible = false;
+            });
           } else {
-            this.$Message.success('添加失败');
+            editCourse(this.course).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getCourseList();
+                this.$Notice.success({ title: '修改成功' });
+              } else {
+                this.$Notice.success({ title: '修改失败' });
+              }
+              this.modalVisible = false;
+            });
           }
-        });
-      } else {
-        editCourse(this.course).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getCourseList();
-            this.$Message.success('修改成功');
-          } else {
-            this.$Message.success('修改失败');
-          }
-        });
-      }
+        }
+      });
+    },
+    cancel(name) {
+      this.$refs[name].resetFields();
+      this.modalVisible = false;
     },
     deleteCourse() {
       deleteCourse(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
-          this.$Message.success('删除成功');
+          this.$Notice.success('删除成功');
           this.getCourseList();
         } else {
-          this.$Message.error('删除失败');
+          this.$Notice.error('删除失败');
         }
       });
     },
