@@ -20,7 +20,7 @@
       :columns="columns"
       @on-delete="handleDelete"
     />
-    <div class="table-pagenation m-t-s">
+    <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
         :total="tableData.count"
         show-elevator
@@ -49,7 +49,7 @@
 <script>
 import Tables from '@/components/tables';
 import {
-  getTeacherList, getTeacherByParams, addTeacher, editTeacher, deleteTeacher, resetTeacherPassword,
+  getTeacherList, addTeacher, editTeacher, deleteTeacher, resetTeacherPassword,
 } from '@/api/teacher';
 
 export default {
@@ -71,7 +71,7 @@ export default {
       ],
     },
   },
-  data() {
+  data () {
     return {
       columns: [
         {
@@ -167,47 +167,55 @@ export default {
     };
   },
   methods: {
-    handleSearch() {
+    handleSearch () {
       this.getTeacherList(this.searchData);
     },
-    handleReset(name) {
+    handleReset (name) {
       this.$refs[name].resetFields();
       console.log(this.searchData);
     },
-    onEdit(index) {
+    onEdit (index) {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
-      this.teacher = this.tableData[index];
+      this.teacher = this.tableData.list[index];
     },
-    onDelete(index) {
+    onDelete (index) {
       console.log(index);
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onResetPwd(index) {
+    onResetPwd (index) {
       console.log(index);
-      resetTeacherPassword(this.tableData[index].id).then((res) => {
+      resetTeacherPassword(this.tableData.list[index].id).then((res) => {
         if (res.responseCode === '201') {
           this.getTeacherList();
           this.$Message.success('密码重置成功');
         }
       });
     },
-    onPageChange(params) {
+    onViewCourse (index) {
+      this.$router.push({
+        name: 'teacherCourse',
+        query: {
+          id: this.tableData.list[index].id,
+        },
+      });
+    },
+    onPageChange (params) {
       this.searchData.currentPage = params;
       this.getTeacherList(this.searchData);
     },
-    onPageSizeChange(params) {
+    onPageSizeChange (params) {
       this.searchData.pageSize = params;
       this.getTeacherList(this.searchData);
     },
-    onAdd() {
+    onAdd () {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save() {
+    save () {
       console.log(this.teacher);
       if (this.isAdd) {
         addTeacher(this.teacher).then((res) => {
@@ -227,14 +235,12 @@ export default {
         });
       }
     },
-    deleteTeacher(index) {
-      // TODO:
-      // this.tableData.splice(this.selectIndex, 1);
-      deleteTeacher(this.tableData[this.selectIndex].id).then((res) => {
+    deleteTeacher (index) {
+      deleteTeacher(this.tableData.list[this.selectIndex].id).then((res) => {
         this.getTeacherList();
       });
     },
-    getTeacherList() {
+    getTeacherList () {
       getTeacherList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -244,11 +250,11 @@ export default {
       });
     },
   },
-  mounted() {
+  mounted () {
     this.getTeacherList();
   },
   computed: {
-    rules() {
+    rules () {
       return {
         jobNo: this.jobNoRules,
         name: this.nameRules,

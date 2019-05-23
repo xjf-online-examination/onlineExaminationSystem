@@ -1,11 +1,23 @@
 <template>
   <div>
     <Form ref="classSearch" :model="searchData" inline>
-      <FormItem prop="classCode" label="课程编号" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.classCode" placeholder="课程编号"/>
+      <FormItem prop="classCode" label="试卷编号" label-position="left" class="search-flex">
+        <Input type="text" v-model="searchData.code" placeholder="试卷编号"/>
       </FormItem>
-      <FormItem prop="className" label="课程名称" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.className" placeholder="课程名称"/>
+      <FormItem prop="className" label="试卷名称" label-position="left" class="search-flex">
+        <Input type="text" v-model="searchData.name" placeholder="试卷名称"/>
+      </FormItem>
+      <FormItem prop="classId" label="课程编号" label-position="left" class="search-flex">
+        <Select v-model="searchData.courseCode" filterable placeholder="课程编号">
+          <Option
+            v-for="item in courseList"
+            :value="item.id"
+            :key="item.id"
+          >{{ item.className +":"+ item.courseName }}</Option>
+        </Select>
+      </FormItem>
+      <FormItem prop="className" label="出卷人" label-position="left" class="search-flex">
+        <Input type="text" v-model="searchData.teacherName" placeholder="出卷人"/>
       </FormItem>
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
@@ -16,13 +28,13 @@
     <tables
       ref="tables"
       search-place="top"
-      v-model="tableData"
+      v-model="tableData.list"
       :columns="columns"
       @on-delete="handleDelete"
     />
-    <div class="table-pagenation m-t-s">
+    <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
-        :total="100"
+        :total="tableData.count"
         show-elevator
         show-total
         show-sizer
@@ -30,15 +42,46 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
+    <Modal v-model="modalVisible" :title="modalTitle" @on-ok="save">
+      <Form ref="classSearch" :model="course" :rule="rules">
+        <FormItem prop="jobNoRules" label="试卷编号">
+          <Input type="text" v-model="paper.code" placeholder="请输入试卷编号"/>
+        </FormItem>
+        <FormItem prop="name" label="试卷名称">
+          <Input type="text" v-model="paper.name" placeholder="请输入试卷名称"/>
+        </FormItem>
+        <FormItem prop="name" label="所属课程">
+          <Select v-model="paper.courseCode" filterable placeholder="请选择所属课程">
+            <Option
+              v-for="item in courseList"
+              :value="item.id"
+              :key="item.id"
+            >{{ item.className +":"+ item.courseName }}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="创建方式">
+          <RadioGroup v-model="paper.type">
+            <Radio label="1">自动</Radio>
+            <Radio label="2">手动</Radio>
+          </RadioGroup>
+        </FormItem>
+      </Form>
+    </Modal>
+    <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deletePaper">
+      <p>是否删除该试卷，删除后无法恢复？</p>
+    </Modal>
   </div>
 </template>
 
 
 <script>
 import Tables from '@/components/tables';
+import {
+  getPaperList, addPaper, automaticPaper, editPaper, deletePaper, getAllCourses,
+} from '@/api/teacher';
 
 export default {
-  name: 'classes',
+  name: 'paper',
   components: {
     Tables,
   },
@@ -49,13 +92,19 @@ export default {
           title: '序号', type: 'index', align: 'center',
         },
         {
-          title: '课程编号', key: 'courseCode', align: 'center',
+          title: '试卷编号', key: 'code', align: 'center',
         },
         {
-          title: '课程名称', key: 'courseName', align: 'center',
+          title: '试卷名称', key: 'name', align: 'center',
         },
         {
-          title: '所属班级', key: 'className', align: 'center',
+          title: '试卷题量', key: 'number', align: 'center',
+        },
+        {
+          title: '所属课程', key: 'courseName', align: 'center',
+        },
+        {
+          title: '出卷人', key: 'teacherName', align: 'center',
         },
         {
           title: '操作',
@@ -91,52 +140,138 @@ export default {
             ]),
           ],
         }],
-      tableData: [
-        {
-          no: 1, classCode: '191816', className: '19级财经1班', count: 35,
-        },
-      ],
-      searchData: {
-        courseName: '',
-        courseCode: '',
+      tableData: {
+        list: [],
+        count: 0,
       },
+      searchData: {
+        code: '',
+        name: '',
+        courseCode: '',
+        teacherName: '',
+        currentPage: 1,
+        pageSize: 10,
+      },
+      paper: {
+        name: '',
+        code: '',
+        courseCode: '',
+        operator: '',
+        type: 1,
+      },
+      modalVisible: false,
+      modalTitle: '',
+      isAdd: true,
+      showDeleteModal: false,
+      selectIndex: 0,
+      courseList: [],
     };
   },
   methods: {
-    handleDelete(params) {
-      console.log(params);
-    },
-    exportExcel() {
-      this.$refs.tables.exportCsv({
-        filename: `table-${(new Date()).valueOf()}.csv`,
-      });
-    },
     handleSearch() {
-      console.log(this.searchData);
+      this.getPaperList(this.searchData);
     },
     handleReset(name) {
-      this.$refs[name].resetFields();
-      console.log(this.searchData);
+      // this.$refs[name].resetFields();
+      this.searchData = {
+        code: '',
+        name: '',
+        courseCode: '',
+        teacherName: '',
+        currentPage: 1,
+        pageSize: 10,
+      };
+      this.getPaperList(this.searchData);
     },
     onEdit(index) {
-      console.log(index);
-      /* todo */
+      this.modalVisible = true;
+      this.modalTitle = '修改';
+      this.isAdd = false;
+      this.paper = this.tableData.list[index];
     },
     onDelete(index) {
-      console.log(index);
-      /* TODO */
+      this.showDeleteModal = true;
+      this.selectIndex = index;
     },
     onPageChange(params) {
-      console.log(params);
-      /* todo */
+      this.searchData.currentPage = params;
+      this.getPaperList(this.searchData);
     },
     onPageSizeChange(params) {
-      console.log(params);
-      /* todo */
+      this.searchData.pageSize = params;
+      this.getPaperList(this.searchData);
     },
     onAdd() {
-      /* todo */
+      this.modalVisible = true;
+      this.modalTitle = '添加';
+      this.isAdd = true;
     },
+    save() {
+      if (this.isAdd) {
+        if (this.paper.type === 1) {
+          automaticPaper(this.paper).then((res) => {
+            console.log(res);
+            if (res.responseCode === '201') {
+              this.getPaperList();
+              this.$Message.success('添加成功');
+            } else {
+              this.$Message.success('添加失败');
+            }
+          });
+        } else {
+          addPaper(this.paper).then((res) => {
+            console.log(res);
+            if (res.responseCode === '201') {
+              this.getPaperList();
+              this.$Message.success('添加成功');
+            } else {
+              this.$Message.success('添加失败');
+            }
+          });
+        }
+      } else {
+        editPaper(this.course).then((res) => {
+          console.log(res);
+          if (res.responseCode === '201') {
+            this.getPaperList();
+            this.$Message.success('修改成功');
+          } else {
+            this.$Message.success('修改失败');
+          }
+        });
+      }
+    },
+    deletePaper() {
+      deletePaper(this.tableData.list[this.selectIndex].id).then((res) => {
+        if (res.responseCode === '204') {
+          this.$Message.success('删除成功');
+          this.getCourseList();
+        } else {
+          this.$Message.error('删除失败');
+        }
+      });
+    },
+    getPaperList() {
+      getPaperList(this.searchData).then((res) => {
+        if (res.responseCode === '200') {
+          this.tableData = res.data;
+        } else {
+          this.tableData = { list: [], count: 0 };
+        }
+      });
+    },
+    getAllCourses() {
+      getAllCourses().then((res) => {
+        console.info('课程', res.data);
+        if (res.responseCode === '200') {
+          this.courseList = res.data;
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getPaperList();
+    this.getAllCourses();
   },
 };
 </script>

@@ -20,7 +20,7 @@
       :columns="columns"
       @on-delete="handleDelete"
     />
-    <div class="table-pagenation m-t-s">
+    <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
         :total="tableData.count"
         show-elevator
