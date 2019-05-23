@@ -18,4 +18,40 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class StudentEntryAnswerSaveDTO implements Serializable {
+    /**
+     * 第几行
+     */
+    private Integer row;
+    /**
+     * 摘要
+     */
+    private String summary;
+    /**
+     * 一级科目
+     */
+    private Integer subject1;
+    /**
+     * 二级科目
+     */
+    private String subject2;
+    /**
+     * 借方金额
+     */
+    private Integer debitAmount;
+    /**
+     * 贷方金额
+     */
+    private Integer creditAmount;
+    /**
+     * 合计
+     */
+    private String total;
+    /**
+     * 借方合计
+     */
+    private Integer debitTotal;
+    /**
+     * 贷方合计
+     */
+    private Integer creditTotal;
 }

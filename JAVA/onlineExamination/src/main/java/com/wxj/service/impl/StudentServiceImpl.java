@@ -115,9 +115,10 @@ public class StudentServiceImpl implements StudentServiceI {
     @Override
     public int delete(Integer id) {
         int i = 0;
+        Student student = studentMapper.selectByPrimaryKey(id);
         i = studentMapper.deleteByPrimaryKey(id);
         StudentAnswerExample studentAnswerExample = new StudentAnswerExample();
-        studentAnswerExample.createCriteria().andStudentIdEqualTo(id);
+        studentAnswerExample.createCriteria().andStudentSnoEqualTo(student.getSno());
         List<Integer> studentAnswerIdList = studentAnswerMapper.selectByExample(studentAnswerExample).stream().map(StudentAnswer::getId).collect(Collectors.toList());
 
         i = studentAnswerMapper.deleteByExample(studentAnswerExample);

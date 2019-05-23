@@ -3,9 +3,10 @@
 <mapper namespace="com.wxj.mapper.StudentAnswerMapper">
   <resultMap id="BaseResultMap" type="com.wxj.model.PO.StudentAnswer">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="student_sno" jdbcType="CHAR" property="studentSno" />
     <result column="exam_schedule_id" jdbcType="INTEGER" property="examScheduleId" />
     <result column="questions_no" jdbcType="TINYINT" property="questionsNo" />
+    <result column="questions_type" jdbcType="CHAR" property="questionsType" />
     <result column="answer" jdbcType="VARCHAR" property="answer" />
     <result column="score" jdbcType="REAL" property="score" />
     <result column="finish_flag" jdbcType="CHAR" property="finishFlag" />
@@ -74,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, student_id, exam_schedule_id, questions_no, answer, score, finish_flag, finish_time, 
-    operator, create_time, modify_time, del_flag
+    id, student_sno, exam_schedule_id, questions_no, questions_type, answer, score, finish_flag,
+    finish_time, operator, create_time, modify_time, del_flag
   </sql>
   <select id="selectByExample" parameterType="com.wxj.model.PO.StudentAnswerExample" resultMap="BaseResultMap">
     select
@@ -92,7 +93,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from student_answer
     where id = #{id,jdbcType=INTEGER}
@@ -108,16 +109,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wxj.model.PO.StudentAnswer">
-    insert into student_answer (id, student_id, exam_schedule_id, 
-      questions_no, answer, score, 
-      finish_flag, finish_time, operator, 
-      create_time, modify_time, del_flag
-      )
-    values (#{id,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{examScheduleId,jdbcType=INTEGER}, 
-      #{questionsNo,jdbcType=TINYINT}, #{answer,jdbcType=VARCHAR}, #{score,jdbcType=REAL}, 
-      #{finishFlag,jdbcType=CHAR}, #{finishTime,jdbcType=TIMESTAMP}, #{operator,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR}
-      )
+    insert into student_answer (id, student_sno, exam_schedule_id,
+      questions_no, questions_type, answer,
+      score, finish_flag, finish_time,
+      operator, create_time, modify_time,
+      del_flag)
+    values (#{id,jdbcType=INTEGER}, #{studentSno,jdbcType=CHAR}, #{examScheduleId,jdbcType=INTEGER},
+      #{questionsNo,jdbcType=TINYINT}, #{questionsType,jdbcType=CHAR}, #{answer,jdbcType=VARCHAR},
+      #{score,jdbcType=REAL}, #{finishFlag,jdbcType=CHAR}, #{finishTime,jdbcType=TIMESTAMP},
+      #{operator,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},
+      #{delFlag,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wxj.model.PO.StudentAnswer">
     insert into student_answer
@@ -125,14 +126,17 @@
       <if test="id != null">
         id,
       </if>
-      <if test="studentId != null">
-        student_id,
+      <if test="studentSno != null">
+        student_sno,
       </if>
       <if test="examScheduleId != null">
         exam_schedule_id,
       </if>
       <if test="questionsNo != null">
         questions_no,
+      </if>
+      <if test="questionsType != null">
+        questions_type,
       </if>
       <if test="answer != null">
         answer,
@@ -163,14 +167,17 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="studentId != null">
-        #{studentId,jdbcType=INTEGER},
+      <if test="studentSno != null">
+        #{studentSno,jdbcType=CHAR},
       </if>
       <if test="examScheduleId != null">
         #{examScheduleId,jdbcType=INTEGER},
       </if>
       <if test="questionsNo != null">
         #{questionsNo,jdbcType=TINYINT},
+      </if>
+      <if test="questionsType != null">
+        #{questionsType,jdbcType=CHAR},
       </if>
       <if test="answer != null">
         #{answer,jdbcType=VARCHAR},
@@ -210,14 +217,17 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.studentId != null">
-        student_id = #{record.studentId,jdbcType=INTEGER},
+      <if test="record.studentSno != null">
+        student_sno = #{record.studentSno,jdbcType=CHAR},
       </if>
       <if test="record.examScheduleId != null">
         exam_schedule_id = #{record.examScheduleId,jdbcType=INTEGER},
       </if>
       <if test="record.questionsNo != null">
         questions_no = #{record.questionsNo,jdbcType=TINYINT},
+      </if>
+      <if test="record.questionsType != null">
+        questions_type = #{record.questionsType,jdbcType=CHAR},
       </if>
       <if test="record.answer != null">
         answer = #{record.answer,jdbcType=VARCHAR},
@@ -251,17 +261,18 @@
   <update id="updateByExample" parameterType="map">
     update student_answer
     set id = #{record.id,jdbcType=INTEGER},
-      student_id = #{record.studentId,jdbcType=INTEGER},
-      exam_schedule_id = #{record.examScheduleId,jdbcType=INTEGER},
-      questions_no = #{record.questionsNo,jdbcType=TINYINT},
-      answer = #{record.answer,jdbcType=VARCHAR},
-      score = #{record.score,jdbcType=REAL},
-      finish_flag = #{record.finishFlag,jdbcType=CHAR},
-      finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
-      operator = #{record.operator,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
-      del_flag = #{record.delFlag,jdbcType=CHAR}
+    student_sno = #{record.studentSno,jdbcType=CHAR},
+    exam_schedule_id = #{record.examScheduleId,jdbcType=INTEGER},
+    questions_no = #{record.questionsNo,jdbcType=TINYINT},
+    questions_type = #{record.questionsType,jdbcType=CHAR},
+    answer = #{record.answer,jdbcType=VARCHAR},
+    score = #{record.score,jdbcType=REAL},
+    finish_flag = #{record.finishFlag,jdbcType=CHAR},
+    finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
+    operator = #{record.operator,jdbcType=INTEGER},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+    del_flag = #{record.delFlag,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -269,14 +280,17 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wxj.model.PO.StudentAnswer">
     update student_answer
     <set>
-      <if test="studentId != null">
-        student_id = #{studentId,jdbcType=INTEGER},
+      <if test="studentSno != null">
+        student_sno = #{studentSno,jdbcType=CHAR},
       </if>
       <if test="examScheduleId != null">
         exam_schedule_id = #{examScheduleId,jdbcType=INTEGER},
       </if>
       <if test="questionsNo != null">
         questions_no = #{questionsNo,jdbcType=TINYINT},
+      </if>
+      <if test="questionsType != null">
+        questions_type = #{questionsType,jdbcType=CHAR},
       </if>
       <if test="answer != null">
         answer = #{answer,jdbcType=VARCHAR},
@@ -307,9 +321,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wxj.model.PO.StudentAnswer">
     update student_answer
-    set student_id = #{studentId,jdbcType=INTEGER},
+    set student_sno = #{studentSno,jdbcType=CHAR},
       exam_schedule_id = #{examScheduleId,jdbcType=INTEGER},
       questions_no = #{questionsNo,jdbcType=TINYINT},
+      questions_type = #{questionsType,jdbcType=CHAR},
       answer = #{answer,jdbcType=VARCHAR},
       score = #{score,jdbcType=REAL},
       finish_flag = #{finishFlag,jdbcType=CHAR},

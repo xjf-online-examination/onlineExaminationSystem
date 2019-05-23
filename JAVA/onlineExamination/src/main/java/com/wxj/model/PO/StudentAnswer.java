@@ -9,7 +9,7 @@ import java.util.Date;
  * <p>Copyright: Copyright (c) 2019</p>
  * <p>Company: www.hanshow.com</p>
  * @author wangxiaojun
- * @date 2019-05-12 21:38:42
+ * @date 2019-05-24 01:21:05
  * @version 1.0
  */
 public class StudentAnswer implements Serializable {
@@ -24,9 +24,9 @@ public class StudentAnswer implements Serializable {
     private Integer id;
 
     /**
-     * 考生ID
+     * 考生学号
      */
-    private Integer studentId;
+    private String studentSno;
 
     /**
      * 考试安排ID
@@ -39,12 +39,17 @@ public class StudentAnswer implements Serializable {
     private Byte questionsNo;
 
     /**
+     * 试题类型1:单选题 2:多选题 3:不定项选择 4:判断题 5:简答题 6:分录
+     */
+    private String questionsType;
+
+    /**
      * 答案
      */
     private String answer;
 
     /**
-     * 得分
+     * 分数
      */
     private Float score;
 
@@ -88,12 +93,12 @@ public class StudentAnswer implements Serializable {
         this.id = id;
     }
 
-    public Integer getStudentId() {
-        return studentId;
+    public String getStudentSno() {
+        return studentSno;
     }
 
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
+    public void setStudentSno(String studentSno) {
+        this.studentSno = studentSno == null ? null : studentSno.trim();
     }
 
     public Integer getExamScheduleId() {
@@ -110,6 +115,14 @@ public class StudentAnswer implements Serializable {
 
     public void setQuestionsNo(Byte questionsNo) {
         this.questionsNo = questionsNo;
+    }
+
+    public String getQuestionsType() {
+        return questionsType;
+    }
+
+    public void setQuestionsType(String questionsType) {
+        this.questionsType = questionsType == null ? null : questionsType.trim();
     }
 
     public String getAnswer() {
@@ -187,9 +200,10 @@ public class StudentAnswer implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", studentId=").append(studentId);
+        sb.append(", studentSno=").append(studentSno);
         sb.append(", examScheduleId=").append(examScheduleId);
         sb.append(", questionsNo=").append(questionsNo);
+        sb.append(", questionsType=").append(questionsType);
         sb.append(", answer=").append(answer);
         sb.append(", score=").append(score);
         sb.append(", finishFlag=").append(finishFlag);

@@ -19,15 +19,28 @@ import java.util.List;
 @Setter
 @Getter
 public class StudentAnswerSaveDTO implements Serializable {
+    /**
+     * 学号
+     */
     private String sno;
-
+    /**
+     * 考试安排id
+     */
     private Integer examScheduleId;
-
+    /**
+     * 题号
+     */
     private Integer questionsNo;
-
+    /**
+     * 题目类型
+     */
     private String questionsType;
-
+    /**
+     * 答案
+     */
     private String answer;
-
+    /**
+     * 分录答案
+     */
     private List<StudentEntryAnswerSaveDTO> studentEntryAnswerSaveDTOList;
 }
