@@ -322,7 +322,7 @@
   <select id="selectAchievementByStudentId" parameterType="java.lang.String" resultType="com.wxj.model.PO.Achievement">
     select ss.exam_schedule_id examScheduleId, c.name courseName, es.title examScheduleTitle, eq.type questionsType,ss.finish_flag finisFlag, ss.score score
     from student_answer ss
-    left join sgudent s on ss.student_id = s.id
+    left join student s on ss.student_id = s.id
     LEFT JOIN exam_schedule es on ss.exam_schedule_id = es.id
     LEFT JOIN exam_paper_questions epq on es.exam_paper_id = epq.exam_paper_id
     LEFT JOIN exam_questions eq on epq.exam_questions_id = eq.id
