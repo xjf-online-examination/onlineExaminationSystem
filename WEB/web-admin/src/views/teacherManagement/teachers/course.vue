@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form ref="classSearch" :model="searchData" inline>
+    <!-- <Form ref="classSearch" :model="searchData" inline>
       <FormItem prop="classCode" label="班级编号" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.classCode" placeholder="班级编号"/>
       </FormItem>
@@ -11,18 +11,12 @@
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
         <Button type="default" @click="handleReset('classSearch')" class="m-l-s">重置</Button>
       </FormItem>
-    </Form>
+    </Form>-->
     <Button type="primary" @click="onAdd()" class="m-b-s">添加</Button>
-    <tables
-      ref="tables"
-      search-place="top"
-      v-model="tableData"
-      :columns="columns"
-      @on-delete="handleDelete"
-    />
-    <div class="table-pagenation m-t-s">
+    <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
+    <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
-        :total="100"
+        :total="tableData.count"
         show-elevator
         show-total
         show-sizer
@@ -31,12 +25,15 @@
       />
     </div>
     <Modal v-model="modalVisible" :title="modalTitle" @on-ok="ok">
-      <Form ref="classSearch" :model="teacher">
-        <FormItem prop="teacherCode" label="工号">
-          <Input type="text" v-model="teacher.teacherCode" placeholder="请输入工号"/>
-        </FormItem>
-        <FormItem prop="className" label="姓名">
-          <Input type="text" v-model="teacher.teacherName" placeholder="请输入姓名"/>
+      <Form ref="classSearch" :model="course">
+        <FormItem prop="teacherCode" label="请选择授课，可多选">
+          <Select v-model="course.course" multiple style="width:260px">
+            <Option
+              v-for="item in courseList"
+              :value="item"
+              :key="item"
+            >{{ item.className+" : "+item.courseName }}</Option>
+          </Select>
         </FormItem>
       </Form>
     </Modal>
@@ -45,6 +42,9 @@
 
 <script>
 import Tables from '@/components/tables';
+import {
+  getAllCourses, taught, addCourseForTeacher,
+} from '@/api/teacher';
 
 export default {
   name: 'teacherCourse',
@@ -53,15 +53,19 @@ export default {
   },
   data() {
     return {
+      id: this.$route.query.id,
       columns: [
         {
           title: '序号', type: 'index', align: 'center',
         },
         {
-          title: '工号', key: 'teacherNo', align: 'center',
+          title: '班级名称', key: 'className', align: 'center',
         },
         {
-          title: '教师姓名', key: 'name', align: 'center',
+          title: '课程名称', key: 'courseName', align: 'center',
+        },
+        {
+          title: '课程编号', key: 'courseCode', align: 'center',
         },
         {
           title: '操作',
@@ -69,17 +73,6 @@ export default {
           align: 'center',
           button: [
             (h, params) => h('div', [
-              h('a', {
-                props: {
-                  type: 'text',
-                  size: 'small',
-                },
-                on: {
-                  click: () => {
-                    this.onEdit(params.index);
-                  },
-                },
-              }, '修改'),
               h('a', {
                 props: {
                   type: 'text',
@@ -94,101 +87,69 @@ export default {
                   },
                 },
               }, '删除'),
-              h('a', {
-                props: {
-                  type: 'text',
-                  size: 'small',
-                },
-                style: {
-                  'margin-left': '10px',
-                },
-                on: {
-                  click: () => {
-                    this.onViewCourse(params.index);
-                  },
-                },
-              }, '课程'),
-              h('a', {
-                props: {
-                  type: 'text',
-                  size: 'small',
-                },
-                style: {
-                  'margin-left': '10px',
-                },
-                on: {
-                  click: () => {
-                    this.onResetPwd(params.index);
-                  },
-                },
-              }, '重置密码'),
             ]),
           ],
         }],
-      tableData: [
-        {
-          no: 1, classCode: '191816', className: '19级财经1班', count: 35,
-        },
-      ],
-      searchData: {
-        className: '',
-        classCode: '',
+      tableData: {
+        list: [],
+        count: 0,
       },
-      teacher: {
-        teacherCode: '',
-        teacherName: '',
+      course: {
+        course: {},
       },
+      courseList: [],
       modalVisible: false,
       modalTitle: '',
       showDeleteModal: false,
     };
   },
   methods: {
-    handleDelete(params) {
-      console.log(params);
-    },
-    exportExcel() {
-      this.$refs.tables.exportCsv({
-        filename: `table-${(new Date()).valueOf()}.csv`,
-      });
-    },
-    handleSearch() {
-      console.log(this.searchData);
-    },
-    handleReset(name) {
-      this.$refs[name].resetFields();
-      console.log(this.searchData);
-    },
-    onEdit(index) {
-      console.log(index);
-      // TODO:
-    },
-    onDelete(index) {
-      console.log(index);
-      // TODO:
-      this.showDeleteModal = true;
-    },
-    onResetPwd(index) {
-      console.log(index);
-      // TODO:
-    },
     onPageChange(params) {
-      console.log(params);
-      // TODO:
+      this.searchData.currentPage = params;
+      this.getCourseList(this.searchData);
     },
     onPageSizeChange(params) {
-      console.log(params);
-      // TODO:
+      this.searchData.pageSize = params;
+      this.getCourseList(this.searchData);
     },
     onAdd() {
-      // TODO:
       this.modalVisible = true;
-      this.modalTitle = '添加教师';
+      this.modalTitle = '添加';
+      this.isAdd = true;
     },
-    ok() {
-      // TODO:
-      console.log(this.teacher);
+    save() {
+      addCourseForTeacher(this.course).then((res) => {
+        if (res.responseCode === '201') {
+          this.getTeacherList();
+          this.$Message.success('添加成功');
+        }
+      });
     },
+    getCourseList() {
+      taught(this.id).then((res) => {
+        if (res.responseCode === '200') {
+          this.tableData = res.data;
+        } else {
+          this.tableData = {
+            list: [],
+            count: 0,
+          };
+        }
+      });
+    },
+    getAllCourses() {
+      getAllCourses(this.id).then((res) => {
+        if (res.responseCode === '200') {
+          this.courseList = res.data;
+        } else {
+          this.courseList = [];
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getCourseList();
+    this.getAllCourses();
   },
 };
 </script>

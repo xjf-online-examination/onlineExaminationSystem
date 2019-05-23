@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-22 02:34:40
+ * @Last Modified time: 2019-05-23 10:54:52
  */
 import axios from '@/libs/api.request';
 
@@ -86,6 +86,22 @@ export const resetTeacherPassword = id => axios.request({
   url: 'teacher/resetPassword',
   data: {
     data: id,
+  },
+  method: 'post',
+});
+export const taught = id => axios.request({
+  url: 'teacher/taught',
+  data: {
+    data: id,
+  },
+  method: 'post',
+});
+export const addCourseForTeacher = ({
+  ...course
+}) => axios.request({
+  url: 'teacher/taught1',
+  data: {
+    data: course,
   },
   method: 'post',
 });
@@ -174,6 +190,13 @@ export const downloadStudentTemplate = () => axios.request({
 });
 export const importStudents = () => axios.request({
   url: 'students/import',
+  method: 'post',
+});
+export const getScoreListByCode = sno => axios.request({
+  url: 'students/achievement',
+  data: {
+    data: sno,
+  },
   method: 'post',
 });
 /** ***********学生管理模块 end ************* */
@@ -298,6 +321,38 @@ export const getAllCourses = () => axios.request({
   method: 'post',
 });
 /** ***********班级管理模块 end ************* */
+
+
+/** ***********试卷管理模块 start *********** */
+export const getPaperList = data => axios.request({
+  url: 'examPaper/list',
+  data: {
+    data,
+  },
+  method: 'POST',
+});
+export const automaticPaper = data => axios.request({
+  url: 'examSchedule/automatic',
+  data: {
+    data,
+  },
+  method: 'post',
+});
+export const editPaper = data => axios.request({
+  url: 'examPaper/modify',
+  data: {
+    data,
+  },
+  method: 'post',
+});
+export const deletePaper = id => axios.request({
+  url: 'examPaper/delete',
+  data: {
+    data: id,
+  },
+  method: 'post',
+});
+/** ***********试卷管理模块 end ************* */
 
 /** ***********考试安排模块 start *********** */
 export const getSchedulerList = data => axios.request({

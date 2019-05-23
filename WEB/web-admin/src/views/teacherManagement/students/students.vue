@@ -33,7 +33,7 @@
       <Button type="primary" @click="onDownload()" class="m-l-s">下载模板</Button>
     </div>
     <tables ref="tables" v-model="tableData.list" :columns="columns"/>
-    <div class="table-pagenation m-t-s">
+    <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
         :total="tableData.count"
         show-elevator
@@ -61,6 +61,9 @@
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteStudent">
       <p>是否删除该学生，删除后无法恢复？</p>
     </Modal>
+    <Modal v-model="showScoreModal" title="学生成绩">
+      <tables ref="tables" v-model="scoreTable" :columns="scoreTableColumns"/>
+    </Modal>
   </div>
 </template>
 
@@ -84,7 +87,7 @@ export default {
   components: {
     Tables,
   },
-  data () {
+  data() {
     return {
       baseUrl,
       uploadData: {
@@ -188,14 +191,26 @@ export default {
       showDeleteModal: false,
       selectIndex: 0,
       classList: [],
+      scoreTableColumns: [
+        {
+          title: '序号', type: 'index', align: 'center',
+        },
+        {
+          title: '课程', key: 'courseName', align: 'center',
+        },
+        {
+          title: '成绩', key: 'achievement', align: 'center',
+        }],
+      scoreTable: [],
+      showScoreModal: false,
     };
   },
   methods: {
-    handleSearch () {
+    handleSearch() {
       console.log(this.searchData);
       this.getStudentList(this.searchData);
     },
-    handleReset (name) {
+    handleReset(name) {
       this.searchData = {
         classId: '',
         sno: '',
@@ -205,13 +220,13 @@ export default {
       };
       this.getStudentList(this.searchData);
     },
-    onEdit (index) {
+    onEdit(index) {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
       this.student = this.tableData.list[index];
     },
-    onResetPwd (index) {
+    onResetPwd(index) {
       console.log(index);
       resetStudentPassword(this.tableData.list[index].id).then((res) => {
         if (res.responseCode === '201') {
@@ -220,24 +235,40 @@ export default {
         }
       });
     },
-    onDelete (index) {
+    onDelete(index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange (params) {
+    onPageChange(params) {
       this.searchData.currentPage = params;
       this.getStudentList(this.searchData);
     },
-    onPageSizeChange (params) {
+    onPageSizeChange(params) {
       this.searchData.pageSize = params;
       this.getStudentList(this.searchData);
     },
-    onAdd () {
+    onScore(index) {
+      // this.$router.push({
+      //   name: 'studentScore',
+      //   query: {
+      //     id: this.tableData.list[index].id,
+      //   },
+      // });
+      this.showScoreModal = true;
+      getScoreListByCode(this.tableData.list[index].sno).then((res) => {
+        if (res.responseCode === '200') {
+          this.scoreTable = res.data.list;
+        } else {
+          this.scoreTable = [];
+        }
+      });
+    },
+    onAdd() {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save () {
+    save() {
       console.log(this.teacher);
       if (this.isAdd) {
         addStudent(this.student).then((res) => {
@@ -261,7 +292,7 @@ export default {
         });
       }
     },
-    deleteStudent () {
+    deleteStudent() {
       deleteStudent(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
           this.$Message.success('删除成功');
@@ -271,7 +302,7 @@ export default {
         }
       });
     },
-    getStudentList () {
+    getStudentList() {
       getStudentList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -280,14 +311,14 @@ export default {
         }
       });
     },
-    getAllClasses () {
+    getAllClasses() {
       getAllClasses().then((res) => {
         if (res.responseCode === '200') {
           this.classList = res.data;
         }
       });
     },
-    onDownload () {
+    onDownload() {
       downloadStudentTemplate().then((res) => {
         const blob = new Blob([res], {
           type: 'application/octet-stream',
@@ -297,14 +328,16 @@ export default {
         FileSaver.saveAs(blob, fileName);
       });
     },
-    importSuccess (res) {
+    importSuccess(res) {
       console.log(res);
+      // TODO:
     },
-    importError (res) {
+    importError(res) {
       console.log(res);
+      // TODO:
     },
   },
-  mounted () {
+  mounted() {
     this.getStudentList();
     this.getAllClasses();
   },

@@ -58,6 +58,15 @@ export default [{
       title: '教师管理',
     },
     component: () => import('@/views/teacherManagement/teachers/teachers'),
+  }, {
+    path: 'course',
+    name: 'teacherCourse',
+    meta: {
+      icon: 'ios-people',
+      title: '所授课程',
+      hideInMenu: true,
+    },
+    component: () => import('@/views/teacherManagement/teachers/course'),
   }],
 },
 {
@@ -76,6 +85,15 @@ export default [{
       title: '学生管理',
     },
     component: () => import('@/views/teacherManagement/students/students'),
+  }, {
+    path: 'score',
+    name: 'studentScore',
+    meta: {
+      icon: 'ios-school',
+      title: '学生成绩',
+      hideInMenu: true,
+    },
+    component: () => import('@/views/teacherManagement/students/score'),
   }],
 },
 {
@@ -119,7 +137,6 @@ export default [{
   name: 'paperManagement',
   meta: {
     hideInBread: true,
-    hideInMenu: true,
     access: ['teacher'],
   },
   component: Main,

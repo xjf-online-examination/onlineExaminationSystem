@@ -16,7 +16,7 @@
       <Button type="primary" @click="onAdd()">添加</Button>
     </div>
     <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
-    <div class="table-pagenation m-t-s">
+    <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
         :total="tableData.count"
         show-elevator

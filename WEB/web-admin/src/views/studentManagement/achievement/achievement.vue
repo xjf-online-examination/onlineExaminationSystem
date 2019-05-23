@@ -7,9 +7,9 @@
       :columns="columns"
       @on-delete="handleDelete"
     />
-    <div class="table-pagenation m-t-s">
+    <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
-        :total="100"
+        :total="tableData.count"
         show-elevator
         show-total
         show-sizer
@@ -22,6 +22,7 @@
 
 <script>
 import Tables from '@/components/tables';
+import { getScoreList } from '@/api/student';
 
 export default {
   name: 'achievement',
@@ -34,23 +35,46 @@ export default {
         title: '序号', type: 'index', align: 'center',
       },
       {
-        title: '试卷名称', key: 'name', align: 'center',
+        title: '课程', key: 'courseName', align: 'center',
       },
       {
-        title: '考试试卷', key: 'time', align: 'center',
+        title: '试卷名称', key: 'examPaperName', align: 'center',
       },
       {
-        title: '分数', key: 'score', align: 'center',
+        title: '考试时间', key: 'startTime', align: 'center',
+      },
+      {
+        title: '分数', key: 'achievement', align: 'center',
       }],
-      tableData: [
-        {
-          no: 1, name: '大学英语', time: '2019-05-05', count: 88,
-        },
-      ],
+      tableData: {
+        list: [],
+        count: 0,
+      },
     };
+  },
+  methods: {
+    getScoreList() {
+      getScoreList(this.$store.state.user.userCode).then((res) => {
+        if (res.responseCode === '200') {
+          this.tableData = res.data;
+        } else {
+          this.tableData = {
+            list: [],
+            count: 0,
+          };
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getScoreList();
   },
 };
 </script>
 
 <style lang="less" scoped>
+.table-pagenation {
+  display: flex;
+  justify-content: flex-end;
+}
 </style>
