@@ -8,6 +8,7 @@ import com.wxj.exception.ParamInvalidException;
 import com.wxj.mapper.ClassCourseMapper;
 import com.wxj.mapper.CourseMapper;
 import com.wxj.model.DTO.CourseParamsDTO;
+import com.wxj.model.DTO.CourseSaveDTO;
 import com.wxj.model.PO.ClassCourse;
 import com.wxj.model.PO.ClassCourseExample;
 import com.wxj.model.PO.Course;
@@ -54,11 +55,11 @@ public class CourseServiceImpl implements CourseServiceI {
 
     @Transactional
     @Override
-    public int save(CourseParamsDTO courseParamsDTO) {
+    public int save(CourseSaveDTO courseSaveDTO) {
         Date date = new Date();
 
         Course course = new Course();
-        BeanUtils.copyProperties(courseParamsDTO, course);
+        BeanUtils.copyProperties(courseSaveDTO, course);
         course.setCreateTime(date);
         course.setModifyTime(date);
         course.setDelFlag(SystemConstant.NOUGHT);
@@ -68,19 +69,21 @@ public class CourseServiceImpl implements CourseServiceI {
             if (SystemConstant.ZERO == i) {
                 throw new OperationException(" 插入失败");
             }
-            ClassCourse classCourse = new ClassCourse();
-            classCourse.setClassId(courseParamsDTO.getClassId());
-            classCourse.setCourseId(course.getId());
-            classCourse.setCreateTime(date);
-            classCourse.setModifyTime(date);
-            classCourse.setDelFlag(SystemConstant.NOUGHT);
-            i = classCourseMapper.insertSelective(classCourse);
-            if (SystemConstant.ZERO == i) {
-                throw new OperationException(" 插入失败");
+            for (Integer classId : courseSaveDTO.getClassIdList()) {
+                ClassCourse classCourse = new ClassCourse();
+                classCourse.setClassId(classId);
+                classCourse.setCourseId(course.getId());
+                classCourse.setCreateTime(date);
+                classCourse.setModifyTime(date);
+                classCourse.setDelFlag(SystemConstant.NOUGHT);
+                i = classCourseMapper.insertSelective(classCourse);
+                if (SystemConstant.ZERO == i) {
+                    throw new OperationException(" 插入失败");
+                }
             }
         } catch (DuplicateKeyException e) {
             CourseExample classExample = new CourseExample();
-            classExample.createCriteria().andCodeEqualTo(courseParamsDTO.getCode());
+            classExample.createCriteria().andCodeEqualTo(courseSaveDTO.getCode());
             Long size = courseMapper.countByExample(classExample);
             if (size > 0) {
                 throw new ParamInvalidException("code重复");
@@ -90,30 +93,39 @@ public class CourseServiceImpl implements CourseServiceI {
     }
 
     @Override
-    public int modify(CourseParamsDTO courseParamsDTO) {
+    public int modify(CourseSaveDTO courseSaveDTO) {
+        Date date = new Date();
         CourseExample classExample = new CourseExample();
-        classExample.createCriteria().andIdNotEqualTo(courseParamsDTO.getId()).andCodeEqualTo(courseParamsDTO.getCode());
+        classExample.createCriteria().andIdNotEqualTo(courseSaveDTO.getId()).andCodeEqualTo(courseSaveDTO.getCode());
         Long size = courseMapper.countByExample(classExample);
         if (size > 0) {
             throw new ParamInvalidException("code重复");
         }
         Course course = new Course();
 
-        BeanUtils.copyProperties(courseParamsDTO, course);
+        BeanUtils.copyProperties(courseSaveDTO, course);
         course.setModifyTime(new Date());
         int i = courseMapper.updateByPrimaryKeySelective(course);
         if (SystemConstant.ZERO == i) {
             throw new OperationException("修改失败");
         }
-        ClassCourse classCourse = new ClassCourse();
-        classCourse.setClassId(courseParamsDTO.getClassId());
-        classCourse.setCourseId(course.getId());
-        classCourse.setModifyTime(new Date());
+
+        //删除班级与课程的对应关系
         ClassCourseExample classCourseExample = new ClassCourseExample();
-        classCourseExample.createCriteria().andClassIdEqualTo(courseParamsDTO.getClassId()).andCourseIdEqualTo(courseParamsDTO.getId()).andModifyTimeEqualTo(new Date());
-        i = classCourseMapper.updateByExampleSelective(classCourse, classCourseExample);
+        classCourseExample.createCriteria().andCourseIdEqualTo(courseSaveDTO.getId());
+        classCourseMapper.deleteByExample(classCourseExample);
+        //重新插入班级课程对应表
+        for (Integer classId : courseSaveDTO.getClassIdList()) {
+            ClassCourse classCourse = new ClassCourse();
+            classCourse.setClassId(classId);
+            classCourse.setCourseId(course.getId());
+            classCourse.setCreateTime(date);
+            classCourse.setModifyTime(date);
+            classCourse.setDelFlag(SystemConstant.NOUGHT);
+            i = classCourseMapper.insertSelective(classCourse);
+        }
         if (SystemConstant.ZERO == i) {
-            throw new ParamInvalidException("修改重复");
+            throw new ParamInvalidException("修改失败");
         }
 
         return i;

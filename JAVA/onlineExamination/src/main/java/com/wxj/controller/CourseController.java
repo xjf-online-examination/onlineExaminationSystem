@@ -6,6 +6,7 @@ import com.wxj.exception.ParamEmptyException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.CourseParamsDTO;
+import com.wxj.model.DTO.CourseSaveDTO;
 import com.wxj.model.VO.CourseVO;
 import com.wxj.service.CourseServiceI;
 import com.wxj.utils.ResponseUtils;
@@ -84,11 +85,11 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object save(HttpServletRequest request, @RequestBody RequestBean<CourseParamsDTO> requestBean) {
+    public Object save(HttpServletRequest request, @RequestBody RequestBean<CourseSaveDTO> requestBean) {
         try {
-            CourseParamsDTO courseParamsDTO = requestBean.getData();
-            new ValidateParamsUtil().vaildParams(courseParamsDTO, "code", "name", "classId");
-            courseService.save(courseParamsDTO);
+            CourseSaveDTO courseSaveDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(courseSaveDTO, "code", "name", "classIdList");
+            courseService.save(courseSaveDTO);
             return ResponseUtils.success("201");
         } catch (BusinessException e) {
             return ResponseUtils.error(e);
@@ -103,12 +104,15 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object modify(HttpServletRequest request, @RequestBody RequestBean<CourseParamsDTO> requestBean) {
+    public Object modify(HttpServletRequest request, @RequestBody RequestBean<CourseSaveDTO> requestBean) {
         try {
-            CourseParamsDTO courseParamsDTO = requestBean.getData();
-            courseService.modify(courseParamsDTO);
+            CourseSaveDTO courseSaveDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(courseSaveDTO, "id");
+            courseService.modify(courseSaveDTO);
             return ResponseUtils.success("201");
-        } catch (BusinessRuntimeException e) {
+        }  catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        }  catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }
     }

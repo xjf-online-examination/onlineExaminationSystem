@@ -1,6 +1,7 @@
 package com.wxj.service;
 
 import com.wxj.model.DTO.CourseParamsDTO;
+import com.wxj.model.DTO.CourseSaveDTO;
 import com.wxj.model.VO.ClassCourseSelectVO;
 import com.wxj.model.VO.CourseVO;
 
@@ -22,9 +23,9 @@ public interface CourseServiceI {
 
     Long countCourseByParams(CourseParamsDTO courseParamsDTO);
 
-    int save(CourseParamsDTO courseParamsDTO);
+    int save(CourseSaveDTO courseSaveDTO);
 
-    int modify(CourseParamsDTO courseParamsDTO);
+    int modify(CourseSaveDTO courseSaveDTO);
 
     int delete(Integer id);
 
