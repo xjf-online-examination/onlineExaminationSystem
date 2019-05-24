@@ -28,19 +28,7 @@ public class StudentAnswerSaveDTO implements Serializable {
      */
     private Integer examScheduleId;
     /**
-     * 题号
-     */
-    private Integer questionsNo;
-    /**
-     * 题目类型
-     */
-    private String questionsType;
-    /**
      * 答案
      */
-    private String answer;
-    /**
-     * 分录答案
-     */
-    private List<StudentEntryAnswerSaveDTO> studentEntryAnswerSaveDTOList;
+    private List<StudentAnswerSaveDetailsDTO> answerSaveDetailsDTOList;
 }

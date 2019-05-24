@@ -1,5 +1,6 @@
 package com.wxj.service;
 
+import com.wxj.model.DTO.StudentAnswerSaveDTO;
 import com.wxj.model.DTO.StudentParamsDTO;
 import com.wxj.model.VO.AchievementVO;
 import com.wxj.model.VO.StudentExamScheduleVO;
@@ -55,6 +56,13 @@ public interface StudentServiceI {
      * @return
      */
     List<AchievementVO> achievement(String sno);
+
+    /**
+     * 学生考试答案
+     * @param studentAnswerSaveDTO
+     * @return
+     */
+    int studentAnswer(StudentAnswerSaveDTO studentAnswerSaveDTO);
 
     /**
      * 重置密码

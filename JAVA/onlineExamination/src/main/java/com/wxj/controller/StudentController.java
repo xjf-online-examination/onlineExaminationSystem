@@ -6,6 +6,7 @@ import com.wxj.exception.ParamEmptyException;
 import com.wxj.exception.ParamInvalidException;
 import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
+import com.wxj.model.DTO.StudentAnswerSaveDTO;
 import com.wxj.model.DTO.StudentParamsDTO;
 import com.wxj.model.VO.AchievementVO;
 import com.wxj.model.VO.StudentVO;
@@ -177,7 +178,26 @@ public class StudentController {
         }
     }
 
-    //TODO:答题
+    /**
+     * 提交考试答案
+     * @param request
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/studentAnswer", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object studentAnswer(HttpServletRequest request, @RequestBody RequestBean<StudentAnswerSaveDTO> requestBean) {
+        try {
+            StudentAnswerSaveDTO studentAnswerSaveDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(studentAnswerSaveDTO,"sno", "examScheduleId", "answerSaveDetailsDTOList");
+
+            studentService.studentAnswer(studentAnswerSaveDTO);
+            return ResponseUtils.success("200");
+        } catch (BusinessException e) {
+            return ResponseUtils.error(e);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
 
     /**
      * 重置密码

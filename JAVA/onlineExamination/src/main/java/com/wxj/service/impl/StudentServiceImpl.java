@@ -4,11 +4,16 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.wxj.constant.ExamConstant;
 import com.wxj.constant.SystemConstant;
 import com.wxj.exception.OperationException;
 import com.wxj.exception.ParamInvalidException;
+import com.wxj.logic.ExamQuestionsLogic;
 import com.wxj.logic.StudentLogic;
 import com.wxj.mapper.*;
+import com.wxj.model.DTO.StudentAnswerSaveDTO;
+import com.wxj.model.DTO.StudentAnswerSaveDetailsDTO;
+import com.wxj.model.DTO.StudentEntryAnswerSaveDTO;
 import com.wxj.model.DTO.StudentParamsDTO;
 import com.wxj.model.PO.*;
 import com.wxj.model.PO.Class;
@@ -49,6 +54,8 @@ public class StudentServiceImpl implements StudentServiceI {
     EntryAnswerDetailsMapper entryAnswerDetailsMapper;
     @Autowired
     StudentAnswerMapper studentAnswerMapper;
+    @Autowired
+    ExamQuestionsLogic examQuestionsLogic;
 
 
     @Override
@@ -159,6 +166,52 @@ public class StudentServiceImpl implements StudentServiceI {
             }
         }
         return achievementVOList;
+    }
+
+    @Override
+    public int studentAnswer(StudentAnswerSaveDTO studentAnswerSaveDTO) {
+        int studentAnswerInsertSize = 0;
+        Date date = new Date();
+        StudentAnswer studentAnswer;
+        for (int i=0,size=studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().size(); i<size; i++) {
+            StudentAnswerSaveDetailsDTO studentAnswerSaveDetailsDTO = studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().get(i);
+
+            studentAnswer = new StudentAnswer();
+            BeanUtils.copyProperties(studentAnswerSaveDetailsDTO, studentAnswer);
+            studentAnswer.setQuestionsNo(studentAnswerSaveDetailsDTO.getQuestionsNo().byteValue());
+
+            float score = examQuestionsLogic.getScore(studentAnswerSaveDTO.getSno(), studentAnswerSaveDTO.getExamScheduleId(), studentAnswerSaveDetailsDTO);
+            studentAnswer.setScore(score);
+            studentAnswer.setFinishFlag("1");
+            studentAnswer.setFinishTime(date);
+            studentAnswer.setCreateTime(date);
+            studentAnswer.setModifyTime(date);
+            studentAnswer.setDelFlag(SystemConstant.NOUGHT);
+            studentAnswerInsertSize = studentAnswerMapper.insertSelective(studentAnswer);
+            if (SystemConstant.ZERO == studentAnswerInsertSize) {
+                throw new OperationException("删除失败");
+            }
+
+            if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(studentAnswerSaveDetailsDTO.getQuestionsType())) {
+                EntryAnswerDetails entryAnswerDetails;
+                int entryAnswerDetailsInsertSize = 0;
+                for (StudentEntryAnswerSaveDTO studentEntryAnswerSaveDTO : studentAnswerSaveDetailsDTO.getStudentEntryAnswerSaveDTOList()) {
+                    entryAnswerDetails = new EntryAnswerDetails();
+                    BeanUtils.copyProperties(studentEntryAnswerSaveDTO, entryAnswerDetails);
+                    entryAnswerDetails.setEntryAnswerId(studentAnswer.getId());
+                    entryAnswerDetails.setRow(studentEntryAnswerSaveDTO.getRow().byteValue());
+                    entryAnswerDetails.setSubject1(studentEntryAnswerSaveDTO.getSubject1().byteValue());
+                    entryAnswerDetails.setCreateTime(date);
+                    entryAnswerDetails.setModifyTime(date);
+                    entryAnswerDetails.setDelFlag(SystemConstant.NOUGHT);
+                    entryAnswerDetailsInsertSize = entryAnswerDetailsMapper.insertSelective(entryAnswerDetails);
+                }
+                if (SystemConstant.ZERO == entryAnswerDetailsInsertSize) {
+                    throw new OperationException("删除失败");
+                }
+            }
+        }
+        return studentAnswerInsertSize;
     }
 
     @Transactional

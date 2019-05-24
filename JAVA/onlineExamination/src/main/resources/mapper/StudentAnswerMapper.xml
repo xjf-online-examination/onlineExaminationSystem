@@ -120,7 +120,7 @@
       #{operator,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},
       #{delFlag,jdbcType=CHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wxj.model.PO.StudentAnswer">
+  <insert id="insertSelective" parameterType="com.wxj.model.PO.StudentAnswer" useGeneratedKeys="true" keyProperty="id">
     insert into student_answer
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
