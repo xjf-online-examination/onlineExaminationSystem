@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.wxj.constant.ExamConstant;
 import com.wxj.constant.SystemConstant;
+import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.exception.OperationException;
 import com.wxj.exception.ParamInvalidException;
 import com.wxj.logic.ExamQuestionsLogic;
@@ -169,7 +170,7 @@ public class StudentServiceImpl implements StudentServiceI {
     }
 
     @Override
-    public int studentAnswer(StudentAnswerSaveDTO studentAnswerSaveDTO) {
+    public int studentAnswer(StudentAnswerSaveDTO studentAnswerSaveDTO) throws BusinessRuntimeException {
         int studentAnswerInsertSize = 0;
         Date date = new Date();
         StudentAnswer studentAnswer;
@@ -180,7 +181,7 @@ public class StudentServiceImpl implements StudentServiceI {
             BeanUtils.copyProperties(studentAnswerSaveDetailsDTO, studentAnswer);
             studentAnswer.setQuestionsNo(studentAnswerSaveDetailsDTO.getQuestionsNo().byteValue());
 
-            float score = examQuestionsLogic.getScore(studentAnswerSaveDTO.getSno(), studentAnswerSaveDTO.getExamScheduleId(), studentAnswerSaveDetailsDTO);
+            float score = examQuestionsLogic.getScore(studentAnswerSaveDTO.getExamScheduleId(), studentAnswerSaveDetailsDTO);
             studentAnswer.setScore(score);
             studentAnswer.setFinishFlag("1");
             studentAnswer.setFinishTime(date);

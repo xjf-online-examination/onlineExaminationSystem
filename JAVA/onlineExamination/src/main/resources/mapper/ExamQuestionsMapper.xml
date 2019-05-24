@@ -476,4 +476,12 @@
     from exam_questions eq
     LEFT JOIN course c on eq.course_code = c.code
   </select>
+
+  <resultMap id="ExamPaperQuestionsMap" type="com.wxj.model.DO.ExamQuestionsDO">
+
+  </resultMap>
+
+  <select id="selectExamPaperQuestionsDetails" parameterType="java.util.Map" resultMap="ExamPaperQuestionsMap">
+
+  </select>
 </mapper>

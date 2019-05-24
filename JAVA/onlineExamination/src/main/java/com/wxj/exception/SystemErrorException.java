@@ -29,7 +29,7 @@ public class SystemErrorException extends BusinessRuntimeException{
 
 	@Override
 	public String getCode(){
-		return "E10_SYS_ERROR";
+		return "500";
 	}
 
 	@Override

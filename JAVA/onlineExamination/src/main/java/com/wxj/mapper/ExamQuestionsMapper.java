@@ -1,6 +1,7 @@
 package com.wxj.mapper;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.wxj.model.DO.ExamQuestionsDO;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.PO.ExamQuestionsExample;
@@ -9,6 +10,7 @@ import com.wxj.model.VO.ExamQuestionsVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ExamQuestionsMapper {
     /**
@@ -88,4 +90,6 @@ public interface ExamQuestionsMapper {
     List<ExamQuestionsDetailsVO> selectExamQuestions(PageBounds pageBounds);
 
     Long countExamQuestions();
+
+    List<ExamQuestionsDO> selectExamPaperQuestionsDetails(Map<String, Object> map);
 }
