@@ -148,7 +148,18 @@ export default [{
       title: '试卷管理',
     },
     component: () => import('@/views/teacherManagement/paper/paper'),
-  }],
+  },
+  {
+    path: 'question',
+    name: 'paperQuestions',
+    meta: {
+      icon: 'ios-paper',
+      title: '试卷试题',
+      hideInMenu: true,
+    },
+    component: () => import('@/views/teacherManagement/paper/question'),
+  },
+  ],
 },
 {
   path: '/question',

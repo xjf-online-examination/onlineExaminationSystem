@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-24 00:25:28
+ * @Last Modified time: 2019-05-24 01:37:18
  */
 import axios from '@/libs/api.request';
 
@@ -358,7 +358,7 @@ export const getPaperList = data => axios.request({
   method: 'POST',
 });
 export const automaticPaper = data => axios.request({
-  url: 'examSchedule/automatic',
+  url: 'examPaper/automatic',
   data: {
     data,
   },
@@ -410,6 +410,37 @@ export const deleteScheduler = id => axios.request({
   method: 'post',
 });
 /** ***********考试安排模块 end ************* */
+
+/** ***********试题模块模块 end ************* */
+export const getQuestionList = data => axios.request({
+  url: 'examQuestions/list',
+  data: {
+    data,
+  },
+  method: 'POST',
+});
+export const addQuestion = data => axios.request({
+  url: 'examQuestions/save',
+  data: {
+    data,
+  },
+  method: 'post',
+});
+export const editQuestion = data => axios.request({
+  url: 'examQuestions/modify',
+  data: {
+    data,
+  },
+  method: 'post',
+});
+export const deleteQuestion = id => axios.request({
+  url: 'examQuestions/delete',
+  data: {
+    data: id,
+  },
+  method: 'post',
+});
+/** ***********试题模块模块 end ************* */
 export const getDragList = () => axios.request({
   url: 'get_drag_list',
   method: 'get',

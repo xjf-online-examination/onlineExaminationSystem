@@ -1,9 +1,3 @@
-/*
- * @Author: xujiafei
- * @Date: 2019-05-18 02:31:58
- * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-23 18:18:16
- */
 <template>
   <div>
     <Form ref="classSearch" :model="searchData" inline>
@@ -32,13 +26,7 @@
       </FormItem>
     </Form>
     <Button type="primary" @click="onAdd()" class="m-b-s">添加</Button>
-    <tables
-      ref="tables"
-      search-place="top"
-      v-model="tableData"
-      :columns="columns"
-      @on-delete="handleDelete"
-    />
+    <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
     <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
         :total="100"
@@ -49,43 +37,40 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
-    <Journalizing></Journalizing>
+    <!-- <Journalizing></Journalizing> -->
     <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
-      <Form ref="classSearch" :model="question" :rules="rules">
+      <Form ref="questionForm" :model="question" :rules="rules">
         <FormItem prop="courseCode" label="课程编号">
-          <Input type="text" v-model="question.code" placeholder="请输入课程编号"/>
+          <Input type="text" v-model="question.courseCode" placeholder="请输入课程编号"/>
         </FormItem>
         <FormItem prop="type" label="题目类型">
           <Select v-model="question.type">
-            <Option value="1">单选题</Option>
-            <Option value="2">多选题</Option>
-            <Option value="3">不定向选择题</Option>
-            <Option value="4">判断题</Option>
-            <Option value="5">简答题</Option>
-            <Option value="6">分录</Option>
+            <Option :value="1">单选题</Option>
+            <Option :value="2">多选题</Option>
+            <Option :value="3">不定向选择题</Option>
+            <Option :value="4">判断题</Option>
+            <Option :value="5">简答题</Option>
+            <Option :value="6">分录</Option>
           </Select>
         </FormItem>
-        <FormItem prop="courseCode" label="题目">
-          <Input type="textarea" v-model="question.code" placeholder="请输入题目"/>
+        <FormItem prop="title" label="题目">
+          <Input type="textarea" v-model="question.title" placeholder="请输入题目"/>
         </FormItem>
         <FormItem
-          prop="courseCode"
           label-position="top"
           label="选项"
           v-if="question.type==='1'||question.type==='2'||question.type=='3'||question.type==='4'"
         >
           <Row>
             <Col span="24">
-              <FormItem
-                v-for="(item, index) in options.items"
-                :key="index"
-                :label="optionLabels[index]"
-                :prop="'items.' + index + '.value'"
-                :rules="{required: true, message: '选项' + optionLabels[index] +'不能为空', trigger: 'blur'}"
-              >
+              <FormItem v-for="(item, index) in options" :key="index" :label="optionLabels[index]">
                 <Row>
                   <Col span="16">
-                    <Input type="textarea" v-model="item.value" placeholder="请输入选项"></Input>
+                    <Input
+                      type="textarea"
+                      v-model="question['option'+optionLabels[index]]"
+                      placeholder="请输入选项"
+                    ></Input>
                   </Col>
                   <Col span="4" offset="1">
                     <Button @click="handleRemoveOption(index)">删除</Button>
@@ -103,30 +88,37 @@
             </Col>
           </Row>
         </FormItem>
-        <FormItem prop="type" label="答案">
-          <RadioGroup v-model="question.singleAnswer" v-if="question.type==='1'">
-            <Radio label="A"></Radio>
-            <Radio label="B"></Radio>
-            <Radio label="C"></Radio>
-            <Radio label="D"></Radio>
-            <Radio label="E"></Radio>
+        <FormItem label="答案">
+          <RadioGroup v-model="question.singleAnswer" v-if="question.type===1">
+            <Radio
+              :label="item"
+              v-for="(item,index) in optionLabels.slice(0,options.length)"
+              v-bind:key="index"
+            ></Radio>
           </RadioGroup>
           <CheckboxGroup
             v-model="question.multipleAnswer"
-            v-if="question.type==='2'||question.type==='3'"
+            v-if="question.type===2||question.type===3"
           >
-            <Checkbox label="A"></Checkbox>
-            <Checkbox label="B"></Checkbox>
-            <Checkbox label="C"></Checkbox>
-            <Checkbox label="D"></Checkbox>
-            <Checkbox label="E"></Checkbox>
+            <Checkbox
+              :label="item"
+              v-for="(item,index) in optionLabels.slice(0,options.length)"
+              v-bind:key="index"
+            ></Checkbox>
           </CheckboxGroup>
-          <RadioGroup v-model="question.singleAnswer" v-if="question.type==='4'">
+          <RadioGroup v-model="question.singleAnswer" v-if="question.type===4">
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
           </RadioGroup>
         </FormItem>
+        <FormItem label="分值">
+          <Input type="test" v-model="question.score" placeholder="请输入分值"/>
+        </FormItem>
       </Form>
+      <div slot="footer">
+        <Button type="text" @click="cancel('questionForm')">取消</Button>
+        <Button type="primary" @click="save('questionForm')">确定</Button>
+      </div>
     </Modal>
   </div>
 </template>
@@ -136,6 +128,9 @@
 import Tables from '@/components/tables';
 
 import Journalizing from '@/components/journalizing';
+import {
+  addQuestion, editQuestion, getQuestionList,
+} from '@/api/teacher';
 
 export default {
   name: 'classes',
@@ -223,11 +218,7 @@ export default {
             ]),
           ],
         }],
-      tableData: [
-        {
-          no: 1, classCode: '191816', className: '19级财经1班', count: 35,
-        },
-      ],
+      tableData: { list: [], count: 0 },
       searchData: {
         code: '',
         title: '',
@@ -235,7 +226,7 @@ export default {
         type: '',
       },
       question: {
-        code: '',
+        courseCode: '',
         type: 1,
         title: '',
         optionA: '',
@@ -251,76 +242,104 @@ export default {
       modalTitle: '',
       isAdd: true,
       optionLabels: ['A', 'B', 'C', 'D', 'E'],
-      options: {
-        items: [{
-          value: '',
-        }],
-      },
+      options: [1],
       errMsg: '',
+      rules: {
+        courseCode: [
+          { required: true, message: '课程编号不能为空', trigger: 'blur' },
+        ],
+      },
     };
   },
   methods: {
-    handleDelete(params) {
-      console.log(params);
-    },
-    exportExcel() {
-      this.$refs.tables.exportCsv({
-        filename: `table-${(new Date()).valueOf()}.csv`,
-      });
-    },
     handleSearch() {
       console.log(this.searchData);
+      this.getQuestionList(this.searchData);
     },
     handleReset(name) {
       this.$refs[name].resetFields();
-      console.log(this.searchData);
+      this.getQuestionList(this.searchData);
     },
     onEdit(index) {
-      console.log(index);
-      /* todo */
+      this.modalVisible = true;
+      this.modalTitle = '修改';
+      this.isAdd = false;
+      this.question = Object.assign({}, this.tableData.list[index]);
     },
     onDelete(index) {
-      console.log(index);
-      /* TODO */
+      this.showDeleteModal = true;
+      this.selectIndex = index;
     },
     onPageChange(params) {
-      console.log(params);
-      /* todo */
+      this.searchData.currentPage = params;
+      this.getQuestionList(this.searchData);
     },
     onPageSizeChange(params) {
-      console.log(params);
-      /* todo */
+      this.searchData.pageSize = params;
+      this.getQuestionList(this.searchData);
     },
     onAdd() {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
     },
+    save(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          if (this.isAdd) {
+            addQuestion(this.question).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getQustionList();
+                this.$Notice.success({ title: '添加成功' });
+              } else {
+                this.$Notice.success({ title: '添加失败' });
+              }
+              this.modalVisible = false;
+            });
+          } else {
+            editQuestion(this.question).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getQustionList();
+                this.$Notice.success({ title: '修改成功' });
+              } else {
+                this.$Notice.success({ title: '修改失败' });
+              }
+              this.modalVisible = false;
+            });
+          }
+        }
+      });
+    },
+    cancel(name) {
+      this.modalVisible = false;
+      this.$refs[name].resetFields();
+    },
     handleAddOption() {
-      if (this.options.items.length === 5) {
+      if (this.options.length === 5) {
         this.errMsg = '选项不能大于5个';
       } else {
         this.errMsg = '';
-        this.options.items.push({
-          value: '',
-        });
+        this.options.push(this.options.length + 1);
       }
     },
     handleRemoveOption(index) {
       // TODO:
-      this.options.items.splice(index, 1);
+      this.options.splice(index, 1);
+    },
+    getQuestionList() {
+      getQuestionList(this.searchData).then((res) => {
+        if (res.responseCode === '200') {
+          this.tableData = res.data;
+        } else {
+          this.tableData = { list: [], count: 0 };
+        }
+      });
     },
   },
   mounted() {
-    // this.getTeacherList();
-  },
-  computed: {
-    rules() {
-      return {
-        courseCode: this.courseCodeRules,
-        type: this.typeRules,
-      };
-    },
+    this.getQuestionList();
   },
 };
 </script>

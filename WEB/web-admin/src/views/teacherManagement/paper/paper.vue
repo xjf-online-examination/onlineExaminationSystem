@@ -1,37 +1,31 @@
 <template>
   <div>
-    <Form ref="classSearch" :model="searchData" inline>
-      <FormItem prop="classCode" label="试卷编号" label-position="left" class="search-flex">
+    <Form ref="paperSearch" :model="searchData" inline>
+      <FormItem prop="code" label="试卷编号" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.code" placeholder="试卷编号"/>
       </FormItem>
-      <FormItem prop="className" label="试卷名称" label-position="left" class="search-flex">
+      <FormItem prop="name" label="试卷名称" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.name" placeholder="试卷名称"/>
       </FormItem>
-      <FormItem prop="classId" label="课程编号" label-position="left" class="search-flex">
+      <FormItem prop="courseCode" label="课程编号" label-position="left" class="search-flex">
         <Select v-model="searchData.courseCode" filterable placeholder="课程编号">
           <Option
             v-for="item in courseList"
-            :value="item.id"
+            :value="item.courseCode"
             :key="item.id"
-          >{{ item.className +":"+ item.courseName }}</Option>
+          >{{ item.className +" : "+ item.courseName }}</Option>
         </Select>
       </FormItem>
-      <FormItem prop="className" label="出卷人" label-position="left" class="search-flex">
+      <FormItem prop="teacherName" label="出卷人" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.teacherName" placeholder="出卷人"/>
       </FormItem>
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
-        <Button type="default" @click="handleReset('classSearch')" class="m-l-s">重置</Button>
+        <Button type="default" @click="handleReset('paperSearch')" class="m-l-s">重置</Button>
       </FormItem>
     </Form>
     <Button type="primary" @click="onAdd()" class="m-b-s">添加</Button>
-    <tables
-      ref="tables"
-      search-place="top"
-      v-model="tableData.list"
-      :columns="columns"
-      @on-delete="handleDelete"
-    />
+    <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
     <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
         :total="tableData.count"
@@ -43,29 +37,29 @@
       />
     </div>
     <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
-      <Form ref="classSearch" :model="course" :rules="rules">
-        <FormItem prop="jobNoRules" label="试卷编号">
+      <Form ref="paperForm" :model="paper" :rules="rules">
+        <FormItem prop="code" label="试卷编号">
           <Input type="text" v-model="paper.code" placeholder="请输入试卷编号"/>
         </FormItem>
         <FormItem prop="name" label="试卷名称">
           <Input type="text" v-model="paper.name" placeholder="请输入试卷名称"/>
         </FormItem>
-        <FormItem prop="name" label="所属课程">
-          <Select v-model="paper.courseCode" filterable placeholder="请选择所属课程">
-            <Option
-              v-for="item in courseList"
-              :value="item.id"
-              :key="item.id"
-            >{{ item.className +":"+ item.courseName }}</Option>
+        <FormItem prop="courseCode" label="所属课程">
+          <Select v-model="paper.course" filterable placeholder="请选择所属课程">
+            <Option v-for="item in courseList" :value="item" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="创建方式">
+        <FormItem label="创建方式" prop="type">
           <RadioGroup v-model="paper.type">
-            <Radio label="1">自动</Radio>
-            <Radio label="2">手动</Radio>
+            <Radio :label="1">自动</Radio>
+            <Radio :label="2">手动</Radio>
           </RadioGroup>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button type="text" @click="cancel('paperForm')">取消</Button>
+        <Button type="primary" @click="save('paperForm')">确定</Button>
+      </div>
     </Modal>
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deletePaper">
       <p>是否删除该试卷，删除后无法恢复？</p>
@@ -77,7 +71,7 @@
 <script>
 import Tables from '@/components/tables';
 import {
-  getPaperList, addPaper, automaticPaper, editPaper, deletePaper, getAllCourses,
+  getPaperList, automaticPaper, editPaper, deletePaper, getAllCourseList,
 } from '@/api/teacher';
 
 export default {
@@ -156,8 +150,8 @@ export default {
         name: '',
         code: '',
         courseCode: '',
-        operator: '',
         type: 1,
+        course: {},
       },
       modalVisible: false,
       modalTitle: '',
@@ -165,6 +159,17 @@ export default {
       showDeleteModal: false,
       selectIndex: 0,
       courseList: [],
+      rules: {
+        code: [
+          { required: true, message: '试卷编号不能为空', trigger: 'blur' },
+        ],
+        name: [
+          { required: true, message: '试卷姓名不能为空', trigger: 'blur' },
+        ],
+        course: [
+
+        ],
+      },
     };
   },
   methods: {
@@ -172,22 +177,14 @@ export default {
       this.getPaperList(this.searchData);
     },
     handleReset(name) {
-      // this.$refs[name].resetFields();
-      this.searchData = {
-        code: '',
-        name: '',
-        courseCode: '',
-        teacherName: '',
-        currentPage: 1,
-        pageSize: 10,
-      };
+      this.$refs[name].resetFields();
       this.getPaperList(this.searchData);
     },
     onEdit(index) {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
-      this.paper = this.tableData.list[index];
+      this.paper = Object.assign({}, this.tableData.list[index]);
     },
     onDelete(index) {
       this.showDeleteModal = true;
@@ -206,48 +203,67 @@ export default {
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save() {
-      if (this.isAdd) {
-        if (this.paper.type === 1) {
-          automaticPaper(this.paper).then((res) => {
-            console.log(res);
-            if (res.responseCode === '201') {
-              this.getPaperList();
-              this.$Message.success('添加成功');
+    save(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.paper.courseCode = this.paper.course.code;
+          if (this.isAdd) {
+            if (this.paper.type === '1') {
+              automaticPaper(this.paper).then((res) => {
+                console.log(res);
+                if (res.responseCode === '201') {
+                  this.getPaperList();
+                  this.$Notice.success({ title: '添加成功' });
+                } else {
+                  this.$Notice.success({ title: '添加失败' });
+                }
+                this.modalVisible = false;
+              });
             } else {
-              this.$Message.success('添加失败');
+              this.$router.push({
+                name: 'paperQuestions',
+                path: 'paper/questions',
+                params: {
+                  paper: this.paper,
+                },
+              });
+              this.modalVisible = false;
+              // addPaper(this.paper).then((res) => {
+              //   console.log(res);
+              //   if (res.responseCode === '201') {
+              //     this.getPaperList();
+              //     this.$Message.success('添加成功');
+              //   } else {
+              //     this.$Message.success('添加失败');
+              //   }
+              // });
             }
-          });
-        } else {
-          addPaper(this.paper).then((res) => {
-            console.log(res);
-            if (res.responseCode === '201') {
-              this.getPaperList();
-              this.$Message.success('添加成功');
-            } else {
-              this.$Message.success('添加失败');
-            }
-          });
-        }
-      } else {
-        editPaper(this.course).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getPaperList();
-            this.$Message.success('修改成功');
           } else {
-            this.$Message.success('修改失败');
+            editPaper(this.course).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getPaperList();
+                this.$Notice.success({ title: '修改成功' });
+              } else {
+                this.$Notice.success({ title: '修改失败' });
+              }
+              this.modalVisible = false;
+            });
           }
-        });
-      }
+        }
+      });
+    },
+    cancel(name) {
+      this.modalVisible = false;
+      this.$refs[name].resetFields();
     },
     deletePaper() {
       deletePaper(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
-          this.$Message.success('删除成功');
+          this.$Notice.success({ title: '删除成功' });
           this.getCourseList();
         } else {
-          this.$Message.error('删除失败');
+          this.$Notice.error({ title: '删除失败' });
         }
       });
     },
@@ -260,18 +276,19 @@ export default {
         }
       });
     },
-    getAllCourses() {
-      getAllCourses().then((res) => {
-        console.info('课程', res.data);
+    getAllCourseList() {
+      getAllCourseList().then((res) => {
         if (res.responseCode === '200') {
           this.courseList = res.data;
+        } else {
+          this.courseList = [];
         }
       });
     },
   },
   mounted() {
     this.getPaperList();
-    this.getAllCourses();
+    this.getAllCourseList();
   },
 };
 </script>
