@@ -443,8 +443,9 @@
   </select>
 
   <select id="getExamQuestionsDetailsById" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.ExamQuestionsDetailsVO">
-    select id, code, course_code courseCode, type, title, optionA, optionB, optionC, optionD, optionE, single_answer singleAnswer, multiple_answer multipleAnswer, yes_no_answer yesNoAnswer, score
-    from exam_questions
+    select eq.id, eq.code, c.course_name courseName, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE, eq.single_answer singleAnswer, eq.multiple_answer multipleAnswer, eq.yes_no_answer yesNoAnswer, eq.score
+    from exam_questions eq
+    LEFT JOIN course c on eq.course_code = c.code
     where id = #{id,jdbcType=INTEGER}
   </select>
 
@@ -463,4 +464,16 @@
       #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP}, #{item.delFlag,jdbcType=CHAR})
     </foreach>
   </insert>
+
+  <select id="selectExamQuestions" resultType="com.wxj.model.VO.ExamQuestionsDetailsVO">
+    select eq.id, eq.code, c.name courseName, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE, eq.single_answer singleAnswer, eq.multiple_answer multipleAnswer, eq.yes_no_answer yesNoAnswer, eq.score
+    from exam_questions eq
+    LEFT JOIN course c on eq.course_code = c.code
+  </select>
+
+  <select id="countExamQuestions" resultType="java.lang.Long">
+    select count(1)
+    from exam_questions eq
+    LEFT JOIN course c on eq.course_code = c.code
+  </select>
 </mapper>

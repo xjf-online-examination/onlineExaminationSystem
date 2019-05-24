@@ -10,6 +10,7 @@ import com.wxj.mapper.ExamQuestionsMapper;
 import com.wxj.model.DTO.EntryStandardAnswerDetailsDTO;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
+import com.wxj.model.DTO.PageDTO;
 import com.wxj.model.PO.EntryStandardAnswerDetails;
 import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.VO.EntryStandardAnswerDetailsVO;
@@ -162,5 +163,16 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
             throw new OperationException("导入试题失败");
         }
         return i;
+    }
+
+    @Override
+    public List<ExamQuestionsDetailsVO> listExamQuestions(PageDTO pageDTO) {
+        PageBounds pageBounds = new PageBounds(pageDTO.getCurrentPage(), pageDTO.getPageSize());
+        return examQuestionsMapper.selectExamQuestions(pageBounds);
+    }
+
+    @Override
+    public Long countExamQuestions() {
+        return examQuestionsMapper.countExamQuestions();
     }
 }

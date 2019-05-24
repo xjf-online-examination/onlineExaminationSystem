@@ -18,11 +18,11 @@ public class ExamQuestionsDetailsVO implements Serializable {
     /**
      * 试题编号
      */
-    private int code;
+    private String code;
     /**
-     * 课程编号
+     * 课程名称
      */
-    private String courseCode;
+    private String courseName;
     /**
      * 试题类型
      */

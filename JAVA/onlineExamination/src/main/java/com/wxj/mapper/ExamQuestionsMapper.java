@@ -84,4 +84,8 @@ public interface ExamQuestionsMapper {
     ExamQuestionsDetailsVO getExamQuestionsDetailsById(Integer id);
 
     int batchInsert(List<ExamQuestions> examQuestionsList);
+
+    List<ExamQuestionsDetailsVO> selectExamQuestions(PageBounds pageBounds);
+
+    Long countExamQuestions();
 }

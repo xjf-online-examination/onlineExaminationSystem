@@ -2,6 +2,7 @@ package com.wxj.service;
 
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
+import com.wxj.model.DTO.PageDTO;
 import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
@@ -33,4 +34,8 @@ public interface ExamQuestionsServiceI {
     int delete(Integer id);
 
     int examQuestionsImport(List<ExamQuestions> examQuestionsList);
+
+    List<ExamQuestionsDetailsVO> listExamQuestions(PageDTO pageDTO);
+
+    Long countExamQuestions();
 }
