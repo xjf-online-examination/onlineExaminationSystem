@@ -399,7 +399,7 @@
   </update>
 
   <select id="selectExamQuestionsByParams" parameterType="com.wxj.model.DTO.ExamQuestionsParamsDTO" resultType="com.wxj.model.VO.ExamQuestionsVO">
-    select eq.id id, eq.code code, eq.title title, eq.course_name courseName, eq.type type
+    select eq.id id, eq.code code, eq.title title, c.name courseName, eq.type type
     from exam_questions eq
     LEFT JOIN course c on eq.course_code = c.code
     where 1=1
@@ -421,7 +421,7 @@
   </select>
 
   <select id="countExamQuestionsByParams" parameterType="com.wxj.model.DTO.ExamQuestionsParamsDTO" resultType="java.lang.Long">
-    select cuont(1)
+    select count(1)
     from exam_questions eq
     LEFT JOIN course c on eq.course_code = c.code
     where 1=1

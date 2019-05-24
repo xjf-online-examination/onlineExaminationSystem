@@ -19,6 +19,10 @@ import java.io.Serializable;
 @Setter
 public class EntryStandardAnswerDetailsVO implements Serializable {
     /**
+     * id
+     */
+    private Integer id;
+    /**
      * 分录答案ID
      */
     private Integer entryAnswerId;

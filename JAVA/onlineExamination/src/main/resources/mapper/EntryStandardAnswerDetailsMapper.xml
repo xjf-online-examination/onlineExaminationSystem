@@ -502,6 +502,7 @@
   </insert>
 
   <resultMap id="BaseVOResultMap" type="com.wxj.model.VO.EntryStandardAnswerDetailsVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
     <result column="entry_answer_id" jdbcType="INTEGER" property="entryAnswerId" />
     <result column="row" jdbcType="TINYINT" property="row" />
     <result column="summary" jdbcType="CHAR" property="summary" />

@@ -85,6 +85,9 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
         examQuestions.setModifyTime(date);
         examQuestions.setDelFlag(SystemConstant.NOUGHT);
         examQuestionsInsertSize = examQuestionsMapper.insertSelective(examQuestions);
+        if (SystemConstant.ZERO == examQuestionsInsertSize) {
+            throw new OperationException("examQuestions插入失败");
+        }
 
         if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestions.getType())) {
             List<EntryStandardAnswerDetails> list = Lists.newArrayList();
@@ -103,9 +106,9 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                 list.add(entryStandardAnswerDetails);
             }
             entryStandardAnswerDetailsInsertSize = entryStandardAnswerDetailsMapper.batchInsert(list);
-        }
-        if (SystemConstant.ZERO == examQuestionsInsertSize || SystemConstant.ZERO == entryStandardAnswerDetailsInsertSize) {
-            throw new OperationException("插入失败");
+            if (SystemConstant.ZERO == entryStandardAnswerDetailsInsertSize) {
+                throw new OperationException("entryStandardAnswerDetails插入失败");
+            }
         }
         return examQuestionsInsertSize;
     }
@@ -123,7 +126,10 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
         examQuestions.setOptione(examQuestionsSaveDTO.getOptionE());
         examQuestions.setModifyTime(date);
 
-        examQuestionsMapper.updateByPrimaryKeySelective(examQuestions);
+        int examQuestionsUpdateSize = examQuestionsMapper.updateByPrimaryKeySelective(examQuestions);
+        if (SystemConstant.ZERO == examQuestionsUpdateSize) {
+            throw new OperationException("examQuestions更新失败");
+        }
 
         if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestions.getType())) {
             EntryStandardAnswerDetails entryStandardAnswerDetails;
