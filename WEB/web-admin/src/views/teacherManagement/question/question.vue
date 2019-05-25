@@ -116,10 +116,15 @@
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
           </RadioGroup>
-          <Journalizing v-if="question.type===6" type="answer" :data="tableData"></Journalizing>
+          <Journalizing
+            v-if="question.type===6"
+            type="answer"
+            :data="journalizingData"
+            :subject-list="subjectList"
+          ></Journalizing>
         </FormItem>
         <FormItem label="分值">
-          <Journalizing v-if="question.type===6" type="score" :data="tableData"></Journalizing>
+          <Journalizing v-if="question.type===6" type="score" :data="journalizingData"></Journalizing>
           <Input
             type="text"
             v-if="question.type===1||question.type===2||question.type==3||question.type===4"
@@ -142,7 +147,7 @@ import Tables from '@/components/tables';
 
 import Journalizing from '@/components/journalizing/table';
 import {
-  addQuestion, editQuestion, getQuestionList,
+  addQuestion, editQuestion, getQuestionList, listSubjectOne,
 } from '@/api/teacher';
 
 export default {
@@ -264,7 +269,8 @@ export default {
           { required: true, message: '课程编号不能为空', trigger: 'blur' },
         ],
       },
-      tableData: [],
+      journalizingData: [],
+      subjectList: [],
     };
   },
   methods: {
@@ -319,7 +325,7 @@ export default {
           creditTotal: '',
           creditTotalScore: '',
         });
-        this.tableData = data;
+        this.journalizingData = data;
       }
     },
     save(name) {
@@ -376,9 +382,19 @@ export default {
         }
       });
     },
+    listSubjectOne() {
+      listSubjectOne().then((res) => {
+        if (res.responseCode === '200') {
+          this.subjectList = res.data;
+        } else {
+          this.subjectList = [];
+        }
+      });
+    },
   },
   mounted() {
     this.getQuestionList();
+    this.listSubjectOne();
   },
 };
 </script>

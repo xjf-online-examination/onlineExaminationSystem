@@ -32,6 +32,9 @@ export default {
     data: {
       type: Array,
     },
+    subjectList: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -46,10 +49,10 @@ export default {
             isFrozen: true,
           },
           {
-            field: 'subject1', width: 100, columnAlign: 'center', isFrozen: true, isEdit: true,
+            field: 'subject1', width: 120, columnAlign: 'center', isFrozen: true,
           },
           {
-            field: 'subject2', width: 100, columnAlign: 'center', isFrozen: true, isEdit: true,
+            field: 'subject2', width: 100, columnAlign: 'center', isFrozen: true,
           },
           {
             field: 'yi1', width: 20, columnAlign: 'center', isFrozen: false,
@@ -185,6 +188,7 @@ export default {
             componentName: this.type === 'answer' ? 'tabletotal' : 'tablescore',
           };
         }
+        rowData.rows = this.tableData.length - 1;
         return {
           colSpan: 1,
           rowSpan: this.tableData.length - 1,
@@ -192,7 +196,8 @@ export default {
           componentName: this.type === 'answer' ? 'tabletext' : 'tablescore',
         };
       }
-      if (field === 'subject2') {
+      if (field === 'subject1') {
+        rowData.list = this.subjectList;
         return {
           colSpan: 1,
           rowSpan: 1,

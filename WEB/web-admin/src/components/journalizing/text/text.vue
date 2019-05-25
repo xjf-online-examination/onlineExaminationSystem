@@ -1,6 +1,6 @@
 <template>
   <div class="total">
-    <input type="textarea" class="total-cell" v-model="total" v-on:blur="handleEdit">
+    <Input type="text" class="text-cell" v-model="total" @on-blur="handleEdit"/>
   </div>
 </template>
 
@@ -33,9 +33,18 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="less">
 .total {
   font-weight: bold;
   color: #333;
+  .text-cell {
+    width: 100%;
+    border: none;
+    .ivu-input {
+      border: none;
+      height: 40px;
+      border-radius: 0;
+    }
+  }
 }
 </style>

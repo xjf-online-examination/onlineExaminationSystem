@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-24 01:37:18
+ * @Last Modified time: 2019-05-25 23:54:00
  */
 import axios from '@/libs/api.request';
 
@@ -439,6 +439,10 @@ export const deleteQuestion = id => axios.request({
     data: id,
   },
   method: 'post',
+});
+export const listSubjectOne = () => axios.request({
+  url: 'examQuestions/listSubjectOne',
+  method: 'get',
 });
 /** ***********试题模块模块 end ************* */
 export const getDragList = () => axios.request({

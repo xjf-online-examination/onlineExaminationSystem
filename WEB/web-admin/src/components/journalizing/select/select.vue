@@ -1,7 +1,11 @@
 <template>
-  <div class="total">
+  <div class="my-table">
     <Select v-model="value" @on-change="handleEdit">
-      <Option v-for="item in objects" :value="item.value" :key="item.value">{{ item.name }}</Option>
+      <Option
+        v-for="item in rowData.list"
+        :value="item.code"
+        :key="item.code"
+      >{{ item.code+' : '+item.name }}</Option>
     </Select>
   </div>
 </template>
@@ -35,9 +39,12 @@ export default {
   },
 };
 </script>
-<style>
-.total {
-  font-weight: bold;
-  color: #333;
+<style lang="less">
+.my-table {
+  .ivu-select-single .ivu-select-selection {
+    height: 40px;
+    border: none;
+    border-radius: 0;
+  }
 }
 </style>
