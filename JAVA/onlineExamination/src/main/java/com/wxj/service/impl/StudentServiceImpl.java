@@ -174,8 +174,9 @@ public class StudentServiceImpl implements StudentServiceI {
         int studentAnswerInsertSize = 0;
         Date date = new Date();
         StudentAnswer studentAnswer;
-
+        //判卷
         Map<Integer, Float> scoreMap = examQuestionsLogic.getScore(studentAnswerSaveDTO);
+        //保存数据
         for (int i=0,size=studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().size(); i<size; i++) {
             StudentAnswerSaveDetailsDTO studentAnswerSaveDetailsDTO = studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().get(i);
 
@@ -206,7 +207,7 @@ public class StudentServiceImpl implements StudentServiceI {
                     BeanUtils.copyProperties(studentEntryAnswerSaveDTO, entryAnswerDetails);
                     entryAnswerDetails.setEntryAnswerId(studentAnswer.getId());
                     entryAnswerDetails.setRow(studentEntryAnswerSaveDTO.getRow().byteValue());
-                    entryAnswerDetails.setSubject1(studentEntryAnswerSaveDTO.getSubject1().byteValue());
+                    entryAnswerDetails.setSubject1(studentEntryAnswerSaveDTO.getSubject1());
                     entryAnswerDetails.setCreateTime(date);
                     entryAnswerDetails.setModifyTime(date);
                     entryAnswerDetails.setDelFlag(SystemConstant.NOUGHT);

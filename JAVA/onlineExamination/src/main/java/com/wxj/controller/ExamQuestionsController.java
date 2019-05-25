@@ -13,8 +13,10 @@ import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
 import com.wxj.model.DTO.PageDTO;
 import com.wxj.model.PO.ExamQuestions;
+import com.wxj.model.PO.SubjectOne;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
+import com.wxj.model.VO.SubjectOneVO;
 import com.wxj.service.ExamQuestionsServiceI;
 import com.wxj.utils.ResponseUtils;
 import com.wxj.utils.StringUtil;
@@ -322,6 +324,21 @@ public class ExamQuestionsController {
             return ResponseUtils.success("200",pageBean);
         } catch (BusinessException e) {
             return ResponseUtils.error(e);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 查询一级科目列表(供新增试题使用)
+     * @return
+     */
+    @RequestMapping(value = "/listPage", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object listSubjectOne() {
+        try {
+            List<SubjectOneVO> subjectOneVOList = examQuestionsService.listSubjectOne();
+
+            return ResponseUtils.success("200",subjectOneVOList);
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }

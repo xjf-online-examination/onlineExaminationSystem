@@ -255,4 +255,9 @@
       del_flag = #{delFlag,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectSubjectOne" resultType="com.wxj.model.VO.SubjectOneVO">
+    select code, name
+    from subject_one
+  </select>
 </mapper>

@@ -7,6 +7,7 @@ import com.wxj.constant.SystemConstant;
 import com.wxj.exception.OperationException;
 import com.wxj.mapper.EntryStandardAnswerDetailsMapper;
 import com.wxj.mapper.ExamQuestionsMapper;
+import com.wxj.mapper.SubjectOneMapper;
 import com.wxj.model.DTO.EntryStandardAnswerDetailsDTO;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
@@ -16,6 +17,7 @@ import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.VO.EntryStandardAnswerDetailsVO;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
+import com.wxj.model.VO.SubjectOneVO;
 import com.wxj.service.ExamQuestionsServiceI;
 import com.wxj.utils.StringUtil;
 import org.slf4j.Logger;
@@ -45,6 +47,8 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     ExamQuestionsMapper examQuestionsMapper;
     @Autowired
     EntryStandardAnswerDetailsMapper entryStandardAnswerDetailsMapper;
+    @Autowired
+    SubjectOneMapper subjectOneMapper;
 
     @Override
     public List<ExamQuestionsVO> listExamQuestionsByParams(ExamQuestionsParamsDTO examQuestionsParamsDTO) {
@@ -100,7 +104,7 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                 BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
                 entryStandardAnswerDetails.setEntryAnswerId(examQuestions.getId());
                 entryStandardAnswerDetails.setRow(entryStandardAnswerDetailsDTO.getRow().byteValue());
-                entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1().byteValue());
+                entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1());
                 entryStandardAnswerDetails.setCreateTime(date);
                 entryStandardAnswerDetails.setModifyTime(date);
                 entryStandardAnswerDetails.setDelFlag(SystemConstant.NOUGHT);
@@ -139,7 +143,7 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                 EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
                 BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
                 entryStandardAnswerDetails.setRow(entryStandardAnswerDetailsDTO.getRow().byteValue());
-                entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1().byteValue());
+                entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1());
                 entryStandardAnswerDetails.setModifyTime(date);
                 entryStandardAnswerDetailsMapper.updateByPrimaryKeySelective(entryStandardAnswerDetails);
             }
@@ -174,5 +178,10 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     @Override
     public Long countExamQuestions() {
         return examQuestionsMapper.countExamQuestions();
+    }
+
+    @Override
+    public List<SubjectOneVO> listSubjectOne() {
+        return subjectOneMapper.selectSubjectOne();
     }
 }

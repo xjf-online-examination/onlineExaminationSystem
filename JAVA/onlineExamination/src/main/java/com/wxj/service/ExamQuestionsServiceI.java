@@ -6,6 +6,7 @@ import com.wxj.model.DTO.PageDTO;
 import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
+import com.wxj.model.VO.SubjectOneVO;
 
 import java.util.List;
 
@@ -38,4 +39,10 @@ public interface ExamQuestionsServiceI {
     List<ExamQuestionsDetailsVO> listExamQuestions(PageDTO pageDTO);
 
     Long countExamQuestions();
+
+    /**
+     * 查询一级科目列表(供新增试题使用)
+     * @return
+     */
+    List<SubjectOneVO> listSubjectOne();
 }
