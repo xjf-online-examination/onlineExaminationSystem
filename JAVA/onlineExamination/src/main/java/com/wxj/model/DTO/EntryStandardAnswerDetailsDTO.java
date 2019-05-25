@@ -46,7 +46,7 @@ public class EntryStandardAnswerDetailsDTO implements Serializable {
     /**
      * 一级科目
      */
-    private Integer subject1;
+    private String subject1;
 
     /**
      * 一级科目分数

@@ -29,7 +29,7 @@ public class StudentEntryAnswerSaveDTO implements Serializable {
     /**
      * 一级科目
      */
-    private Integer subject1;
+    private String subject1;
     /**
      * 二级科目
      */
