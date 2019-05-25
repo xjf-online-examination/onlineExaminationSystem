@@ -469,52 +469,62 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andSubject1EqualTo(Byte value) {
+        public Criteria andSubject1EqualTo(String value) {
             addCriterion("subject1 =", value, "subject1");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1NotEqualTo(Byte value) {
+        public Criteria andSubject1NotEqualTo(String value) {
             addCriterion("subject1 <>", value, "subject1");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1GreaterThan(Byte value) {
+        public Criteria andSubject1GreaterThan(String value) {
             addCriterion("subject1 >", value, "subject1");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1GreaterThanOrEqualTo(Byte value) {
+        public Criteria andSubject1GreaterThanOrEqualTo(String value) {
             addCriterion("subject1 >=", value, "subject1");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1LessThan(Byte value) {
+        public Criteria andSubject1LessThan(String value) {
             addCriterion("subject1 <", value, "subject1");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1LessThanOrEqualTo(Byte value) {
+        public Criteria andSubject1LessThanOrEqualTo(String value) {
             addCriterion("subject1 <=", value, "subject1");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1In(List<Byte> values) {
+        public Criteria andSubject1Like(String value) {
+            addCriterion("subject1 like", value, "subject1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubject1NotLike(String value) {
+            addCriterion("subject1 not like", value, "subject1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubject1In(List<String> values) {
             addCriterion("subject1 in", values, "subject1");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1NotIn(List<Byte> values) {
+        public Criteria andSubject1NotIn(List<String> values) {
             addCriterion("subject1 not in", values, "subject1");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1Between(Byte value1, Byte value2) {
+        public Criteria andSubject1Between(String value1, String value2) {
             addCriterion("subject1 between", value1, value2, "subject1");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1NotBetween(Byte value1, Byte value2) {
+        public Criteria andSubject1NotBetween(String value1, String value2) {
             addCriterion("subject1 not between", value1, value2, "subject1");
             return (Criteria) this;
         }

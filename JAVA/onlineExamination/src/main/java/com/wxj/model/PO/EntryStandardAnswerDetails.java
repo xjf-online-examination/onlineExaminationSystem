@@ -9,7 +9,7 @@ import java.util.Date;
  * <p>Copyright: Copyright (c) 2019</p>
  * <p>Company: www.hanshow.com</p>
  * @author wangxiaojun
- * @date 2019-05-21 23:51:55
+ * @date 2019-05-25 11:14:08
  * @version 1.0
  */
 public class EntryStandardAnswerDetails implements Serializable {
@@ -46,7 +46,7 @@ public class EntryStandardAnswerDetails implements Serializable {
     /**
      * 一级科目
      */
-    private Byte subject1;
+    private String subject1;
 
     /**
      * 一级科目分数
@@ -170,12 +170,12 @@ public class EntryStandardAnswerDetails implements Serializable {
         this.summaryScore = summaryScore;
     }
 
-    public Byte getSubject1() {
+    public String getSubject1() {
         return subject1;
     }
 
-    public void setSubject1(Byte subject1) {
-        this.subject1 = subject1;
+    public void setSubject1(String subject1) {
+        this.subject1 = subject1 == null ? null : subject1.trim();
     }
 
     public Float getSubject1Score() {

@@ -6,7 +6,7 @@
     <result column="entry_answer_id" jdbcType="INTEGER" property="entryAnswerId" />
     <result column="row" jdbcType="TINYINT" property="row" />
     <result column="summary" jdbcType="CHAR" property="summary" />
-    <result column="subject1" jdbcType="TINYINT" property="subject1" />
+    <result column="subject1" jdbcType="CHAR" property="subject1" />
     <result column="subject2" jdbcType="CHAR" property="subject2" />
     <result column="debit_amount" jdbcType="INTEGER" property="debitAmount" />
     <result column="credit_amount" jdbcType="INTEGER" property="creditAmount" />
@@ -116,7 +116,7 @@
       debit_total, credit_total, create_time,
       modify_time, del_flag)
     values (#{id,jdbcType=INTEGER}, #{entryAnswerId,jdbcType=INTEGER}, #{row,jdbcType=TINYINT},
-      #{summary,jdbcType=CHAR}, #{subject1,jdbcType=TINYINT}, #{subject2,jdbcType=CHAR},
+      #{summary,jdbcType=CHAR}, #{subject1,jdbcType=CHAR}, #{subject2,jdbcType=CHAR},
       #{debitAmount,jdbcType=INTEGER}, #{creditAmount,jdbcType=INTEGER}, #{total,jdbcType=CHAR},
       #{debitTotal,jdbcType=INTEGER}, #{creditTotal,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
       #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR})
@@ -181,7 +181,7 @@
         #{summary,jdbcType=CHAR},
       </if>
       <if test="subject1 != null">
-        #{subject1,jdbcType=TINYINT},
+        #{subject1,jdbcType=CHAR},
       </if>
       <if test="subject2 != null">
         #{subject2,jdbcType=CHAR},
@@ -234,7 +234,7 @@
         summary = #{record.summary,jdbcType=CHAR},
       </if>
       <if test="record.subject1 != null">
-        subject1 = #{record.subject1,jdbcType=TINYINT},
+        subject1 = #{record.subject1,jdbcType=CHAR},
       </if>
       <if test="record.subject2 != null">
         subject2 = #{record.subject2,jdbcType=CHAR},
@@ -274,7 +274,7 @@
     entry_answer_id = #{record.entryAnswerId,jdbcType=INTEGER},
     row = #{record.row,jdbcType=TINYINT},
     summary = #{record.summary,jdbcType=CHAR},
-    subject1 = #{record.subject1,jdbcType=TINYINT},
+    subject1 = #{record.subject1,jdbcType=CHAR},
     subject2 = #{record.subject2,jdbcType=CHAR},
     debit_amount = #{record.debitAmount,jdbcType=INTEGER},
     credit_amount = #{record.creditAmount,jdbcType=INTEGER},
@@ -301,7 +301,7 @@
         summary = #{summary,jdbcType=CHAR},
       </if>
       <if test="subject1 != null">
-        subject1 = #{subject1,jdbcType=TINYINT},
+        subject1 = #{subject1,jdbcType=CHAR},
       </if>
       <if test="subject2 != null">
         subject2 = #{subject2,jdbcType=CHAR},
@@ -338,7 +338,7 @@
     set entry_answer_id = #{entryAnswerId,jdbcType=INTEGER},
       row = #{row,jdbcType=TINYINT},
       summary = #{summary,jdbcType=CHAR},
-      subject1 = #{subject1,jdbcType=TINYINT},
+      subject1 = #{subject1,jdbcType=CHAR},
       subject2 = #{subject2,jdbcType=CHAR},
       debit_amount = #{debitAmount,jdbcType=INTEGER},
       credit_amount = #{creditAmount,jdbcType=INTEGER},
