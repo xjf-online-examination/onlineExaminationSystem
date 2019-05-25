@@ -10,7 +10,6 @@ import com.wxj.model.VO.ExamQuestionsVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ExamQuestionsMapper {
     /**
@@ -91,5 +90,5 @@ public interface ExamQuestionsMapper {
 
     Long countExamQuestions();
 
-    List<ExamQuestionsDO> selectExamPaperQuestionsDetails(Map<String, Object> map);
+    List<ExamQuestionsDO> selectExamPaperQuestionsDetails(Integer examPaperId);
 }

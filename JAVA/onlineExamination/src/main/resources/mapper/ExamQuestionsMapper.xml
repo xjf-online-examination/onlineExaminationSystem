@@ -481,7 +481,7 @@
 
   </resultMap>
 
-  <select id="selectExamPaperQuestionsDetails" parameterType="java.util.Map" resultMap="ExamPaperQuestionsMap">
+  <select id="selectExamPaperQuestionsDetails" parameterType="java.lang.Integer" resultMap="ExamPaperQuestionsMap">
 
   </select>
 </mapper>

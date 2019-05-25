@@ -5,6 +5,7 @@ import com.wxj.mapper.ExamQuestionsMapper;
 import com.wxj.mapper.ExamScheduleMapper;
 import com.wxj.model.DO.ExamQuestionsDO;
 import com.wxj.model.DO.ExamQuestionsEntryAnswerDO;
+import com.wxj.model.DTO.StudentAnswerSaveDTO;
 import com.wxj.model.DTO.StudentAnswerSaveDetailsDTO;
 import com.wxj.model.DTO.StudentEntryAnswerSaveDTO;
 import com.wxj.model.PO.ExamSchedule;
@@ -34,25 +35,27 @@ public class ExamQuestionsLogic {
     @Autowired
     ExamQuestionsMapper examQuestionsMapper;
 
-    public Float getScore(Integer examScheduleId, StudentAnswerSaveDetailsDTO studentAnswerSaveDetailsDTO) {
-        ExamSchedule examSchedule = examScheduleMapper.selectByPrimaryKey(examScheduleId);
+    public Map<Integer, Float> getScore(StudentAnswerSaveDTO studentAnswerSaveDTO) {
+        Map<Integer, Float> scoreMap = new HashMap<>();
+        ExamSchedule examSchedule = examScheduleMapper.selectByPrimaryKey(studentAnswerSaveDTO.getExamScheduleId());
         if (null == examSchedule) {
             throw new SystemErrorException("考试安排不存在");
         }
         //获取标准答案
-        Map<String, Object> paramsMap = new HashMap<>(2);
-        paramsMap.put("examPaperId", examScheduleId);
-        paramsMap.put("questionsNo", studentAnswerSaveDetailsDTO.getQuestionsNo());
-        List<ExamQuestionsDO> examQuestionsDOList = examQuestionsMapper.selectExamPaperQuestionsDetails(paramsMap);
+        List<ExamQuestionsDO> examQuestionsDOList = examQuestionsMapper.selectExamPaperQuestionsDetails(studentAnswerSaveDTO.getExamScheduleId());
         if (null == examQuestionsDOList && examQuestionsDOList.size() == 0) {
             throw new SystemErrorException("试卷不存在");
         }
-        ExamQuestionsDO examQuestionsDO = examQuestionsDOList.get(0);
-        //如果题型不同直接返回0分
-        if (!studentAnswerSaveDetailsDTO.getQuestionsType().equals(examQuestionsDO.getType())) {
-            return 0f;
+        Map<Integer, ExamQuestionsDO> examQuestionsDOMap = examQuestionsDOList.stream().collect(Collectors.toMap(ExamQuestionsDO::getQuestionsNo, obj->obj));
+        for (StudentAnswerSaveDetailsDTO studentAnswerSaveDetailsDTO : studentAnswerSaveDTO.getAnswerSaveDetailsDTOList()) {
+            if (examQuestionsDOMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo()) != null) {
+                Float score = this.computeScore(studentAnswerSaveDetailsDTO, examQuestionsDOMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo()));
+                scoreMap.put(studentAnswerSaveDetailsDTO.getQuestionsNo(), score);
+            } else {
+                scoreMap.put(studentAnswerSaveDetailsDTO.getQuestionsNo(), 0f);
+            }
         }
-        return this.computeScore(studentAnswerSaveDetailsDTO, examQuestionsDO);
+        return scoreMap;
     }
 
     private Float computeScore(StudentAnswerSaveDetailsDTO studentAnswe, ExamQuestionsDO standardAnswer) {

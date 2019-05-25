@@ -174,6 +174,8 @@ public class StudentServiceImpl implements StudentServiceI {
         int studentAnswerInsertSize = 0;
         Date date = new Date();
         StudentAnswer studentAnswer;
+
+        Map<Integer, Float> scoreMap = examQuestionsLogic.getScore(studentAnswerSaveDTO);
         for (int i=0,size=studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().size(); i<size; i++) {
             StudentAnswerSaveDetailsDTO studentAnswerSaveDetailsDTO = studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().get(i);
 
@@ -181,7 +183,10 @@ public class StudentServiceImpl implements StudentServiceI {
             BeanUtils.copyProperties(studentAnswerSaveDetailsDTO, studentAnswer);
             studentAnswer.setQuestionsNo(studentAnswerSaveDetailsDTO.getQuestionsNo().byteValue());
 
-            float score = examQuestionsLogic.getScore(studentAnswerSaveDTO.getExamScheduleId(), studentAnswerSaveDetailsDTO);
+            float score = 0f;
+            if (null != scoreMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo())) {
+                score = scoreMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo());
+            }
             studentAnswer.setScore(score);
             studentAnswer.setFinishFlag("1");
             studentAnswer.setFinishTime(date);

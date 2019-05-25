@@ -30,7 +30,7 @@ public class ExamQuestionsDO implements Serializable {
     /**
      * 题号
      */
-    private Byte questionsNo;
+    private Integer questionsNo;
     /**
      * 试题类型1:单选题 2:多选题 3:不定项选择 4:判断题 5:简答题 6:分录
      */
