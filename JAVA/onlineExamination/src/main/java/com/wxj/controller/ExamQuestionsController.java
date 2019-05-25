@@ -333,7 +333,7 @@ public class ExamQuestionsController {
      * 查询一级科目列表(供新增试题使用)
      * @return
      */
-    @RequestMapping(value = "/listPage", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    @RequestMapping(value = "/listSubjectOne", method = RequestMethod.GET)
     public Object listSubjectOne() {
         try {
             List<SubjectOneVO> subjectOneVOList = examQuestionsService.listSubjectOne();
