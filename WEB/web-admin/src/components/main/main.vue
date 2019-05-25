@@ -27,13 +27,7 @@
     <Layout>
       <Header class="header-con">
         <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
-          <user :message-unread-count="unreadCount" :user-avatar="userAvatar"/>
-          <language
-            v-if="$config.useI18n"
-            @on-lang-change="setLocal"
-            style="margin-right: 10px;"
-            :lang="local"
-          />
+          <user/>
           <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
         </header-bar>
       </Header>
@@ -69,7 +63,7 @@ import Language from './components/language';
 import ErrorStore from './components/error-store';
 import { mapMutations, mapActions, mapGetters } from 'vuex';
 import { getNewTagList, routeEqual } from '@/libs/util';
-import routers from '@/router';
+import routers from '@/router/routers';
 import minLogo from '@/assets/images/logo-min.jpg';
 import maxLogo from '@/assets/images/logo.jpg';
 import './main.less';

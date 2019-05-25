@@ -32,6 +32,7 @@
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "lint-staged": "^8.1.5",
+    "vue-easytable": "^1.7.2",
     "vue-template-compiler": "^2.5.21"
   },
   "gitHooks": {

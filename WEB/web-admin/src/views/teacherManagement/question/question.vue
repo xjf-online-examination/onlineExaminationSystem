@@ -1,35 +1,35 @@
 <template>
   <div>
-    <Form ref="classSearch" :model="searchData" inline>
-      <FormItem prop="classCode" label="试题编号" label-position="left" class="search-flex">
+    <Form ref="questionSearch" :model="searchData" inline>
+      <FormItem prop="code" label="试题编号" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.code" placeholder="试题编号"/>
       </FormItem>
-      <FormItem prop="className" label="题目" label-position="left" class="search-flex">
+      <FormItem prop="title" label="题目" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.title" placeholder="题目"/>
       </FormItem>
-      <FormItem prop="classCode" label="课程编号" label-position="left" class="search-flex">
+      <FormItem prop="courseCode" label="课程编号" label-position="left" class="search-flex">
         <Input type="text" v-model="searchData.courseCode" placeholder="课程编号"/>
       </FormItem>
-      <FormItem label="类型" label-position="left" class="search-flex">
+      <FormItem prop="type" label="类型" label-position="left" class="search-flex">
         <Select v-model="searchData.type" style="width:150px">
-          <Option value="1">单选题</Option>
-          <Option value="2">多选题</Option>
-          <Option value="3">不定向选择题</Option>
-          <Option value="4">判断题</Option>
-          <Option value="5">简答题</Option>
-          <Option value="6">分录</Option>
+          <Option :value="1">单选题</Option>
+          <Option :value="2">多选题</Option>
+          <Option :value="3">不定向选择题</Option>
+          <Option :value="4">判断题</Option>
+          <!-- <Option :value="5">简答题</Option> -->
+          <Option :value="6">分录</Option>
         </Select>
       </FormItem>
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
-        <Button type="default" @click="handleReset('classSearch')" class="m-l-s">重置</Button>
+        <Button type="default" @click="handleReset('questionSearch')" class="m-l-s">重置</Button>
       </FormItem>
     </Form>
     <Button type="primary" @click="onAdd()" class="m-b-s">添加</Button>
     <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
     <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
-        :total="100"
+        :total="tableData.count"
         show-elevator
         show-total
         show-sizer
@@ -37,8 +37,14 @@
         @on-page-size-change="onPageSizeChange"
       />
     </div>
-    <!-- <Journalizing></Journalizing> -->
-    <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
+
+    <Modal
+      v-model="modalVisible"
+      :title="modalTitle"
+      :closable="false"
+      :mask-closable="false"
+      width="800"
+    >
       <Form ref="questionForm" :model="question" :rules="rules">
         <FormItem prop="courseCode" label="课程编号">
           <Input type="text" v-model="question.courseCode" placeholder="请输入课程编号"/>
@@ -49,7 +55,7 @@
             <Option :value="2">多选题</Option>
             <Option :value="3">不定向选择题</Option>
             <Option :value="4">判断题</Option>
-            <Option :value="5">简答题</Option>
+            <!-- <Option :value="5">简答题</Option> -->
             <Option :value="6">分录</Option>
           </Select>
         </FormItem>
@@ -59,7 +65,7 @@
         <FormItem
           label-position="top"
           label="选项"
-          v-if="question.type==='1'||question.type==='2'||question.type=='3'||question.type==='4'"
+          v-if="question.type===1||question.type===2||question.type==3||question.type===4"
         >
           <Row>
             <Col span="24">
@@ -70,7 +76,7 @@
                       type="textarea"
                       v-model="question['option'+optionLabels[index]]"
                       placeholder="请输入选项"
-                    ></Input>
+                    />
                   </Col>
                   <Col span="4" offset="1">
                     <Button @click="handleRemoveOption(index)">删除</Button>
@@ -79,7 +85,7 @@
               </FormItem>
               <FormItem>
                 <Row>
-                  <Col span="6">
+                  <Col span="6" offset="1" style="margin-top:5px;">
                     <Button type="dashed" long @click="handleAddOption" icon="md-add">添加选项</Button>
                     <label class="err-info">{{errMsg}}</label>
                   </Col>
@@ -110,9 +116,16 @@
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
           </RadioGroup>
+          <Journalizing v-if="question.type===6" type="answer" :data="tableData"></Journalizing>
         </FormItem>
         <FormItem label="分值">
-          <Input type="test" v-model="question.score" placeholder="请输入分值"/>
+          <Journalizing v-if="question.type===6" type="score" :data="tableData"></Journalizing>
+          <Input
+            type="text"
+            v-if="question.type===1||question.type===2||question.type==3||question.type===4"
+            v-model="question.score"
+            placeholder="请输入分值"
+          />
         </FormItem>
       </Form>
       <div slot="footer">
@@ -127,7 +140,7 @@
 <script>
 import Tables from '@/components/tables';
 
-import Journalizing from '@/components/journalizing';
+import Journalizing from '@/components/journalizing/table';
 import {
   addQuestion, editQuestion, getQuestionList,
 } from '@/api/teacher';
@@ -224,6 +237,8 @@ export default {
         title: '',
         courseCode: '',
         type: '',
+        currentPage: 1,
+        pageSize: 10,
       },
       question: {
         courseCode: '',
@@ -249,6 +264,7 @@ export default {
           { required: true, message: '课程编号不能为空', trigger: 'blur' },
         ],
       },
+      tableData: [],
     };
   },
   methods: {
@@ -282,6 +298,29 @@ export default {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
+      const data = [];
+      for (let i = 0; i < 4; i++) {
+        data.push({
+          row: i + 1,
+          summary: '',
+          summaryScore: '',
+          subject1: '',
+          subject1Score: '',
+          subject2: '',
+          subject2Score: '',
+          debitAmount: '',
+          debitAmountScore: '',
+          creditAmount: '',
+          creditAmountScore: '',
+          total: '',
+          totalScore: '',
+          debitTotal: '',
+          debitTotalScore: '',
+          creditTotal: '',
+          creditTotalScore: '',
+        });
+        this.tableData = data;
+      }
     },
     save(name) {
       this.$refs[name].validate((valid) => {
@@ -290,7 +329,7 @@ export default {
             addQuestion(this.question).then((res) => {
               console.log(res);
               if (res.responseCode === '201') {
-                this.getQustionList();
+                this.getQuestionList();
                 this.$Notice.success({ title: '添加成功' });
               } else {
                 this.$Notice.success({ title: '添加失败' });
@@ -301,7 +340,7 @@ export default {
             editQuestion(this.question).then((res) => {
               console.log(res);
               if (res.responseCode === '201') {
-                this.getQustionList();
+                this.getQuestionList();
                 this.$Notice.success({ title: '修改成功' });
               } else {
                 this.$Notice.success({ title: '修改失败' });
