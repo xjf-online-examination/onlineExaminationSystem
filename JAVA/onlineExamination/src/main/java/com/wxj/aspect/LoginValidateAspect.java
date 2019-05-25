@@ -75,15 +75,18 @@ public class LoginValidateAspect {
     private void validateParamter(RequestBean<?> baseQUERY) {
         if (baseQUERY == null) {
             logger.info("统一aop拦截,请求参数为空");
-            throw new ParamEmptyException("请求参数不能为空");
+            ResponseBean responseBean = new ResponseBean("422", "请求参数不能为空");
+            throw new ParamEmptyException(JSONObject.fromObject(responseBean).toString());
         }
         if (StringUtils.isEmpty(baseQUERY.getSecurityKey())) {
             logger.warn("统一aop拦截,请求参数securityKey不能为空");
-            throw new ParamEmptyException("请求参数securityKey不能为空");
+            ResponseBean responseBean = new ResponseBean("422", "请求参数securityKey不能为空");
+            throw new ParamEmptyException(JSONObject.fromObject(responseBean).toString());
         }
         if (StringUtils.isEmpty(baseQUERY.getUserCode())) {
             logger.warn("统一aop拦截,请求参数userCode不能为空");
-            throw new ParamEmptyException("请求参数userCode不能为空");
+            ResponseBean responseBean = new ResponseBean("422", "请求参数userCode不能为空");
+            throw new ParamEmptyException(JSONObject.fromObject(responseBean).toString());
         }
     }
 

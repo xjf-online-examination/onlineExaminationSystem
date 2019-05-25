@@ -30,7 +30,7 @@ public class ParamEmptyException extends BusinessRuntimeException{
 
 	@Override
 	public String getCode(){
-		return "400";
+		return "422";
 	}
 
 	@Override

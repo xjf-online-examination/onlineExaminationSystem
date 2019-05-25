@@ -13,7 +13,6 @@ import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
 import com.wxj.model.DTO.PageDTO;
 import com.wxj.model.PO.ExamQuestions;
-import com.wxj.model.PO.SubjectOne;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
 import com.wxj.model.VO.SubjectOneVO;
@@ -301,6 +300,7 @@ public class ExamQuestionsController {
                     sos.flush();
                     sos.close();
                 } catch (Exception e2) {
+                    logger.error("com.wxj.controller.ExamQuestionsController.download", e2);
                 }
             }
         }
