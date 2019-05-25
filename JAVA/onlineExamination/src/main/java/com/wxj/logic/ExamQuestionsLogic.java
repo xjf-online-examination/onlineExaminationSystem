@@ -12,10 +12,7 @@ import com.wxj.model.PO.ExamSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -60,18 +57,19 @@ public class ExamQuestionsLogic {
 
     private Float computeScore(StudentAnswerSaveDetailsDTO studentAnswe, ExamQuestionsDO standardAnswer) {
         float score = 0f;
+        //1:单选题 2:多选题 3:不定项选择 4:判断题 5:简答题 6:分录
         switch (studentAnswe.getQuestionsType()) {
             case "1":
                 score = this.radio(studentAnswe.getAnswer(), standardAnswer.getSingleAnswer(), standardAnswer.getScore());
                 break;
             case "2":
-                //TODO:
+                score = this.multiSelect(studentAnswe.getAnswer(), standardAnswer.getMultipleAnswer(), standardAnswer.getScore());
                 break;
             case "3":
-                //TODO:
+                score = this.nonDirectional(studentAnswe.getAnswer(), standardAnswer.getMultipleAnswer(), standardAnswer.getScore());
                 break;
             case "4":
-                score = this.judge(studentAnswe.getAnswer(), standardAnswer.getSingleAnswer(), standardAnswer.getScore());
+                score = this.judge(studentAnswe.getAnswer(), standardAnswer.getYesNoAnswer(), standardAnswer.getScore());
                 break;
             case "5":
                 break;
@@ -90,6 +88,36 @@ public class ExamQuestionsLogic {
         }
     }
 
+    private Float multiSelect(String studentAnswer, String standardAnswer, Integer score) {
+        char[] studentAnswers = studentAnswer.toUpperCase().toCharArray();
+        Arrays.sort(studentAnswers);
+        char[] standardAnswers = standardAnswer.toUpperCase().toCharArray();
+        Arrays.sort(standardAnswers);
+
+        String stuAnswer = String.valueOf(studentAnswers);
+        String standAnswer = String.valueOf(standardAnswers);
+        if (stuAnswer.equals(standAnswer)) {
+            return (float) score;
+        } else {
+            return 0f;
+        }
+    }
+
+    private Float nonDirectional(String studentAnswer, String standardAnswer, Integer score) {
+        char[] studentAnswers = studentAnswer.toUpperCase().toCharArray();
+        Arrays.sort(studentAnswers);
+        char[] standardAnswers = standardAnswer.toUpperCase().toCharArray();
+        Arrays.sort(standardAnswers);
+
+        for (char standA : standardAnswers) {
+            for (char studentA : studentAnswers) {
+                if (standA == studentA) {
+
+                }
+            }
+        }
+        return (float) score;
+    }
 
     private Float judge(String studentAnswer, String standardAnswer, Integer score) {
         if (standardAnswer.equals(studentAnswer)) {
@@ -106,7 +134,6 @@ public class ExamQuestionsLogic {
         int maxRow = studentAnswer.stream().max(Comparator.comparingInt(StudentEntryAnswerSaveDTO::getRow)).get().getRow();
         for (StudentEntryAnswerSaveDTO studentEntryAnswer : studentAnswer) {
             ExamQuestionsEntryAnswerDO standardEntryAnswer = standardAnswerMap.get(studentEntryAnswer.getRow());
-            //TODO:
             //行数最大的是合计
             if (studentEntryAnswer.getRow() == maxRow) {
                 if (standardEntryAnswer.getTotal().equals(studentEntryAnswer.getTotal())) {
@@ -117,6 +144,22 @@ public class ExamQuestionsLogic {
                 }
                 if (standardEntryAnswer.getCreditTotal().equals(studentEntryAnswer.getCreditTotal())) {
                     score += standardEntryAnswer.getDebitAmountScore();
+                }
+            } else {
+                if (standardEntryAnswer.getSummary().equals(studentEntryAnswer.getSummary())) {
+                    score += standardEntryAnswer.getSummaryScore();
+                }
+                if (standardEntryAnswer.getSubject1().equals(studentEntryAnswer.getSubject1())) {
+                    score += standardEntryAnswer.getSubject1Score();
+                }
+                if (standardEntryAnswer.getSubject2().equals(studentEntryAnswer.getSubject2())) {
+                    score += standardEntryAnswer.getSubject2Score();
+                }
+                if (standardEntryAnswer.getDebitAmount().equals(studentEntryAnswer.getDebitAmount())) {
+                    score += standardEntryAnswer.getDebitAmountScore();
+                }
+                if (standardEntryAnswer.getCreditAmount().equals(studentEntryAnswer.getCreditAmount())) {
+                    score += standardEntryAnswer.getCreditAmountScore();
                 }
             }
         }
