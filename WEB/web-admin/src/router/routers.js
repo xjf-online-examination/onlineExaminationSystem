@@ -65,6 +65,7 @@ export default [{
       icon: 'ios-people',
       title: '所授课程',
       hideInMenu: true,
+      notCache: true,
     },
     component: () => import('@/views/teacherManagement/teachers/course'),
   }],
@@ -92,6 +93,7 @@ export default [{
       icon: 'ios-school',
       title: '学生成绩',
       hideInMenu: true,
+      notCache: true,
     },
     component: () => import('@/views/teacherManagement/students/score'),
   }],
@@ -156,6 +158,7 @@ export default [{
       icon: 'ios-paper',
       title: '试卷试题',
       hideInMenu: true,
+      notCache: true,
     },
     component: () => import('@/views/teacherManagement/paper/question'),
   },
@@ -165,7 +168,7 @@ export default [{
   path: '/question',
   name: 'questionManagement',
   meta: {
-    hideInBread: false,
+    hideInBread: true,
     access: ['teacher'],
   },
   component: Main,
@@ -183,7 +186,7 @@ export default [{
   path: '/scheduler',
   name: 'schedulerManagement',
   meta: {
-    hideInBread: false,
+    hideInBread: true,
     access: ['teacher'],
   },
   component: Main,
@@ -197,42 +200,42 @@ export default [{
     component: () => import('@/views/teacherManagement/scheduler/scheduler'),
   }],
 },
-{
-  path: '/mark',
-  name: 'markManagement',
-  meta: {
-    hideInBread: false,
-    access: ['teacher'],
-  },
-  component: Main,
-  children: [{
-    path: 'mark',
-    name: 'mark',
-    meta: {
-      icon: 'md-checkbox-outline',
-      title: '阅卷',
-    },
-    component: () => import('@/views/teacherManagement/mark/mark'),
-  }],
-},
-{
-  path: '/report',
-  name: 'reportManagement',
-  meta: {
-    hideInBread: false,
-    access: ['teacher'],
-  },
-  component: Main,
-  children: [{
-    path: 'report',
-    name: 'report',
-    meta: {
-      icon: 'ios-stats-outline',
-      title: '报表',
-    },
-    component: () => import('@/views/teacherManagement/report/report'),
-  }],
-},
+// {
+//   path: '/mark',
+//   name: 'markManagement',
+//   meta: {
+//     hideInBread: false,
+//     access: ['teacher'],
+//   },
+//   component: Main,
+//   children: [{
+//     path: 'mark',
+//     name: 'mark',
+//     meta: {
+//       icon: 'md-checkbox-outline',
+//       title: '阅卷',
+//     },
+//     component: () => import('@/views/teacherManagement/mark/mark'),
+//   }],
+// },
+// {
+//   path: '/report',
+//   name: 'reportManagement',
+//   meta: {
+//     hideInBread: false,
+//     access: ['teacher'],
+//   },
+//   component: Main,
+//   children: [{
+//     path: 'report',
+//     name: 'report',
+//     meta: {
+//       icon: 'ios-stats-outline',
+//       title: '报表',
+//     },
+//     component: () => import('@/views/teacherManagement/report/report'),
+//   }],
+// },
 {
   path: '/achievement',
   name: 'achievementManagement',

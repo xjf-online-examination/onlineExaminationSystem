@@ -18,7 +18,7 @@
               <Option :value="2">多选题</Option>
               <Option :value="3">不定向选择题</Option>
               <Option :value="4">判断题</Option>
-              <Option :value="5">简答题</Option>
+              <!-- <Option :value="5">简答题</Option> -->
               <Option :value="6">分录</Option>
             </Select>
           </FormItem>
@@ -46,16 +46,27 @@
         </div>
       </div>
       <div slot="right" class="demo-split-pane">
-        <h3>{{paper.course.name}}</h3>
-        <div v-for="(question,index) in paper.examPaperQuestionsDTOList" v-bind:key="index">
-          <div>
-            <label>{{index}}.</label>
-            <div>
-              <div>{{question.title}}({{paper.score}})</div>
-              <div
-                v-for="(answer,index) in options"
-                v-bind:key="index"
-              >{{optionLables[index]}}.{{options[index]}}</div>
+        <div class="paper-preview">
+          <h1 class="paper-title">{{paper.course.name}}</h1>
+          <div v-for="(question,index) in paper.examPaperQuestionsDTO" v-bind:key="index">
+            <div class="question-block">
+              <label>{{index+1}}.</label>
+              <div class="main-block">
+                <div>{{question.title}}({{paper.type}}:{{paper.score}}分)</div>
+                <div class="answer-block">
+                  <div class="option-block">
+                    <CheckboxGroup>
+                      <Checkbox
+                        label="answer"
+                        v-for="(answer,idx) in question.options"
+                        v-bind:key="idx"
+                        class="option-block"
+                      ></Checkbox>
+                    </CheckboxGroup>
+                    <div>{{optionLabels[index]}}.{{answer}}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -68,7 +79,7 @@
 <script>
 import Tables from '@/components/tables';
 
-import Journalizing from '@/components/journalizing';
+import Journalizing from '@/components/journalizing/table';
 import {
   addPaper, editPaper, getQuestionList,
 } from '@/api/teacher';
@@ -81,7 +92,9 @@ export default {
   },
   data() {
     return {
-      paper: {},
+      paper: {
+        examPaperQuestionsDTO: [],
+      },
       split1: 0.5,
       columns: [
         {
@@ -116,6 +129,8 @@ export default {
         currentPage: 1,
         pageSize: 50,
       },
+      optionLabels: ['A', 'B', 'C', 'D', 'E'],
+      options: [],
     };
   },
   methods: {
@@ -134,9 +149,21 @@ export default {
       this.searchData.pageSize = params;
       this.getQuestionList();
     },
-    handleSelect(selection, row) {
+    handleSelect(selection) {
       console.info('selection', selection);
-      console.info('row', row);
+      this.paper.examPaperQuestionsDTO = selection;
+      this.options = [];
+      if (this.paper.examPaperQuestionsDTO) {
+        this.paper.examPaperQuestionsDTO.map((question) => {
+          question.options = [];
+          if (question.optionA) question.options.push(question.optionA);
+          if (question.optionB) question.options.push(question.optionB);
+          if (question.optionC) question.options.push(question.optionC);
+          if (question.optionD) question.options.push(question.optionD);
+          if (question.optionE) question.options.push(question.optionE);
+          return question;
+        });
+      }
     },
     getQuestionList() {
       getQuestionList(this.searchData).then((res) => {
@@ -149,7 +176,7 @@ export default {
     },
     getParams() {
       // 取到路由带过来的参数
-      this.paper = this.$route.params.paper;
+      this.paper = { ...this.paper, ...this.$route.params.paper };
     },
   },
   mounted() {
@@ -176,5 +203,26 @@ export default {
 }
 .demo-split-pane {
   padding: 10px;
+}
+.paper-preview {
+  padding: 0 10px;
+  .paper-title {
+    text-align: center;
+  }
+  .question-block {
+    display: flex;
+    .main-block {
+      display: flex;
+      flex-direction: column;
+      .answer-block {
+        display: flex;
+        align-items: center;
+        .option-block {
+          display: flex;
+          flex: 1;
+        }
+      }
+    }
+  }
 }
 </style>

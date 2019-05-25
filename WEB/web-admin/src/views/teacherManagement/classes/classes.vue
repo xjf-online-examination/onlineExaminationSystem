@@ -13,13 +13,7 @@
       </FormItem>
     </Form>
     <Button type="primary" @click="onAdd()" class="m-b-s">添加</Button>
-    <tables
-      ref="tables"
-      search-place="top"
-      v-model="tableData.list"
-      :columns="columns"
-      @on-delete="handleDelete"
-    />
+    <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
     <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
         :total="tableData.count"

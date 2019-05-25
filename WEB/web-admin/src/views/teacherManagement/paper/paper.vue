@@ -11,9 +11,9 @@
         <Select v-model="searchData.courseCode" filterable placeholder="课程编号">
           <Option
             v-for="item in courseList"
-            :value="item.courseCode"
+            :value="item.code"
             :key="item.id"
-          >{{ item.className +" : "+ item.courseName }}</Option>
+          >{{ item.name +" : "+ item.code }}</Option>
         </Select>
       </FormItem>
       <FormItem prop="teacherName" label="出卷人" label-position="left" class="search-flex">
@@ -25,7 +25,7 @@
       </FormItem>
     </Form>
     <Button type="primary" @click="onAdd()" class="m-b-s">添加</Button>
-    <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
+    <tables ref="tables" v-model="tableData.list" :columns="columns"/>
     <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
         :total="tableData.count"
@@ -45,8 +45,8 @@
           <Input type="text" v-model="paper.name" placeholder="请输入试卷名称"/>
         </FormItem>
         <FormItem prop="courseCode" label="所属课程">
-          <Select v-model="paper.course" filterable placeholder="请选择所属课程">
-            <Option v-for="item in courseList" :value="item" :key="item.id">{{ item.name }}</Option>
+          <Select v-model="paper.courseCode" filterable placeholder="请选择所属课程">
+            <Option v-for="item in courseList" :value="item.code" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
         <FormItem label="创建方式" prop="type">
@@ -79,7 +79,7 @@ export default {
   components: {
     Tables,
   },
-  data() {
+  data () {
     return {
       columns: [
         {
@@ -166,44 +166,44 @@ export default {
         name: [
           { required: true, message: '试卷姓名不能为空', trigger: 'blur' },
         ],
-        course: [
-
+        courseCode: [
+          { required: true, message: '课程不能为空', trigger: 'change' },
         ],
       },
     };
   },
   methods: {
-    handleSearch() {
+    handleSearch () {
       this.getPaperList(this.searchData);
     },
-    handleReset(name) {
+    handleReset (name) {
       this.$refs[name].resetFields();
       this.getPaperList(this.searchData);
     },
-    onEdit(index) {
+    onEdit (index) {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
       this.paper = Object.assign({}, this.tableData.list[index]);
     },
-    onDelete(index) {
+    onDelete (index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange(params) {
+    onPageChange (params) {
       this.searchData.currentPage = params;
       this.getPaperList(this.searchData);
     },
-    onPageSizeChange(params) {
+    onPageSizeChange (params) {
       this.searchData.pageSize = params;
       this.getPaperList(this.searchData);
     },
-    onAdd() {
+    onAdd () {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save(name) {
+    save (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.paper.courseCode = this.paper.course.code;
@@ -222,7 +222,6 @@ export default {
             } else {
               this.$router.push({
                 name: 'paperQuestions',
-                path: 'paper/questions',
                 params: {
                   paper: this.paper,
                 },
@@ -253,11 +252,11 @@ export default {
         }
       });
     },
-    cancel(name) {
+    cancel (name) {
       this.modalVisible = false;
       this.$refs[name].resetFields();
     },
-    deletePaper() {
+    deletePaper () {
       deletePaper(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
           this.$Notice.success({ title: '删除成功' });
@@ -267,7 +266,7 @@ export default {
         }
       });
     },
-    getPaperList() {
+    getPaperList () {
       getPaperList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -276,7 +275,7 @@ export default {
         }
       });
     },
-    getAllCourseList() {
+    getAllCourseList () {
       getAllCourseList().then((res) => {
         if (res.responseCode === '200') {
           this.courseList = res.data;
@@ -286,7 +285,7 @@ export default {
       });
     },
   },
-  mounted() {
+  mounted () {
     this.getPaperList();
     this.getAllCourseList();
   },
