@@ -252,7 +252,7 @@ export default {
     customCompFunc(params) {
       if (params.type === 'total') { // 合计
         this.tableData[params.index].total = params.value;
-      } else if (params.type === 'summary') { // 合计
+      } else if (params.type === 'summary') { // 摘要
         this.tableData[params.index].summary = params.value;
       } else if (params.type === 'money') {
         if (params.field === 'yi1') {
