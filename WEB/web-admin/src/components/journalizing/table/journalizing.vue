@@ -286,6 +286,9 @@ export default {
       }
     },
   },
+  mounted() {
+    this.tableData = this.data;
+  },
 };
 </script>
 
