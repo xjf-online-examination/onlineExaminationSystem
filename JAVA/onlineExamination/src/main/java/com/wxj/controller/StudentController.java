@@ -11,6 +11,7 @@ import com.wxj.model.DTO.StudentParamsDTO;
 import com.wxj.model.VO.AchievementVO;
 import com.wxj.model.VO.StudentVO;
 import com.wxj.service.StudentServiceI;
+import com.wxj.utils.ExcelUtil;
 import com.wxj.utils.ResponseUtils;
 import com.wxj.utils.StringUtil;
 import com.wxj.utils.ValidateParamsUtil;
@@ -217,6 +218,12 @@ public class StudentController {
         }
     }
 
+    /**
+     * 导入
+     * @param request
+     * @param file
+     * @return
+     */
     @RequestMapping(value = "/import", method = RequestMethod.POST)
     public Object studentImport(MultipartHttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) {
         try {
@@ -243,13 +250,13 @@ public class StudentController {
                 for (int i = 1; i <= sum; i++) {
                     StudentParamsDTO studentParamsDTO = new StudentParamsDTO();
                     Row row = rs.getRow(i);
+                    if (ExcelUtil.isRowEmpty(row)) {
+                        continue;
+                    }
                     //读区数据
-                    if(row.getCell(map.get("学号")) !=null){
+                    String sno = row.getCell(map.get("学号")).toString();
+                    if(row.getCell(map.get("学号")) !=null && !"".equals(sno) && !"null".equals(sno)){
                         row.getCell(map.get("学号")).setCellType(CellType.STRING);
-                        String sno = row.getCell(map.get("学号")).toString();
-                        if (sno == null || "".equals(sno) || "null".equals(sno)) {
-                            throw new ParamInvalidException("学号不能为空");
-                        }
                         sno = sno.trim();
                         match=character.matcher(sno);
                         if(match.matches()==false){

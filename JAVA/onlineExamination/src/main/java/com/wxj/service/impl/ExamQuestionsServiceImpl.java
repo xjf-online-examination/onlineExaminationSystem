@@ -102,15 +102,20 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                 EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
 
                 BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
+                entryStandardAnswerDetails.setSummary(entryStandardAnswerDetailsDTO.getSummary());
                 entryStandardAnswerDetails.setEntryAnswerId(examQuestions.getId());
-                entryStandardAnswerDetails.setRow(entryStandardAnswerDetailsDTO.getRow().byteValue());
+                entryStandardAnswerDetails.setRow(new Integer(i).byteValue());
                 entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1());
                 entryStandardAnswerDetails.setCreateTime(date);
                 entryStandardAnswerDetails.setModifyTime(date);
                 entryStandardAnswerDetails.setDelFlag(SystemConstant.NOUGHT);
                 list.add(entryStandardAnswerDetails);
             }
-            entryStandardAnswerDetailsInsertSize = entryStandardAnswerDetailsMapper.batchInsert(list);
+            try {
+                entryStandardAnswerDetailsInsertSize = entryStandardAnswerDetailsMapper.batchInsert(list);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if (SystemConstant.ZERO == entryStandardAnswerDetailsInsertSize) {
                 throw new OperationException("entryStandardAnswerDetails插入失败");
             }
@@ -142,7 +147,7 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                 entryStandardAnswerDetails = new EntryStandardAnswerDetails();
                 EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
                 BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
-                entryStandardAnswerDetails.setRow(entryStandardAnswerDetailsDTO.getRow().byteValue());
+                entryStandardAnswerDetails.setRow(new Integer(i).byteValue());
                 entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1());
                 entryStandardAnswerDetails.setModifyTime(date);
                 entryStandardAnswerDetailsMapper.updateByPrimaryKeySelective(entryStandardAnswerDetails);

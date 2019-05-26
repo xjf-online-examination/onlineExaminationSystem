@@ -17,6 +17,7 @@ import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
 import com.wxj.model.VO.SubjectOneVO;
 import com.wxj.service.ExamQuestionsServiceI;
+import com.wxj.utils.ExcelUtil;
 import com.wxj.utils.ResponseUtils;
 import com.wxj.utils.StringUtil;
 import com.wxj.utils.ValidateParamsUtil;
@@ -183,6 +184,9 @@ public class ExamQuestionsController {
                 for (int i = 1; i <= sum; i++) {
                     ExamQuestions examQuestions = new ExamQuestions();
                     Row row = rs.getRow(i);
+                    if (ExcelUtil.isRowEmpty(row)) {
+                        continue;
+                    }
                     //读区数据
                     if(row.getCell(map.get("课程编号")) !=null){
                         row.getCell(map.get("课程编号")).setCellType(CellType.STRING);

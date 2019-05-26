@@ -43,7 +43,7 @@ public class ExamQuestionsLogic {
         if (null == examQuestionsDOList && examQuestionsDOList.size() == 0) {
             throw new SystemErrorException("试卷不存在");
         }
-        Map<Integer, ExamQuestionsDO> examQuestionsDOMap = examQuestionsDOList.stream().collect(Collectors.toMap(ExamQuestionsDO::getQuestionsNo, obj->obj));
+        Map<Integer, ExamQuestionsDO> examQuestionsDOMap = examQuestionsDOList.stream().collect(Collectors.toMap(ExamQuestionsDO::getQuestionsNo, obj -> obj));
         for (StudentAnswerSaveDetailsDTO studentAnswerSaveDetailsDTO : studentAnswerSaveDTO.getAnswerSaveDetailsDTOList()) {
             if (examQuestionsDOMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo()) != null) {
                 Float score = this.computeScore(studentAnswerSaveDetailsDTO, examQuestionsDOMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo()));
@@ -96,8 +96,14 @@ public class ExamQuestionsLogic {
 
         String stuAnswer = String.valueOf(studentAnswers);
         String standAnswer = String.valueOf(standardAnswers);
-        if (stuAnswer.equals(standAnswer)) {
-            return (float) score;
+        if (stuAnswer.length() > standAnswer.length()) {
+            if (stuAnswer.equals(standAnswer)) {
+                return (float) score;
+            } else if (this.find(standAnswer, stuAnswer)) {
+                return (float) score/2;
+            } else {
+                return 0f;
+            }
         } else {
             return 0f;
         }
@@ -129,7 +135,7 @@ public class ExamQuestionsLogic {
 
     private Float entry(List<StudentEntryAnswerSaveDTO> studentAnswer, List<ExamQuestionsEntryAnswerDO> standardAnswer) {
         float score = 0f;
-        Map<Integer, ExamQuestionsEntryAnswerDO> standardAnswerMap = standardAnswer.stream().collect(Collectors.toMap(ExamQuestionsEntryAnswerDO::getRow, obj->obj));
+        Map<Integer, ExamQuestionsEntryAnswerDO> standardAnswerMap = standardAnswer.stream().collect(Collectors.toMap(ExamQuestionsEntryAnswerDO::getRow, obj -> obj));
         //找到合计的row
         int maxRow = studentAnswer.stream().max(Comparator.comparingInt(StudentEntryAnswerSaveDTO::getRow)).get().getRow();
         for (StudentEntryAnswerSaveDTO studentEntryAnswer : studentAnswer) {
@@ -164,6 +170,26 @@ public class ExamQuestionsLogic {
             }
         }
         return score;
+    }
+
+    private boolean find(String source, String target) {
+        char[] c1 = source.toCharArray();
+        char[] c2 = target.toCharArray();
+        int i = 0;
+        int j;
+        while (i < source.length() - 1) {
+            j = 0;
+            while (c1[i] == c2[j] && j < target.length() - 1) {
+                i++;
+                j++;
+            }
+            if (j == target.length() - 1) {
+                return true;
+            }
+            i = i - j + 1;
+
+        }
+        return false;
     }
 
 }
