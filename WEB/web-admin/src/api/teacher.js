@@ -2,10 +2,10 @@
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-25 23:54:00
+ * @Last Modified time: 2019-05-26 20:50:05
  */
 import axios from '@/libs/api.request';
-
+import qs from 'querystring';
 /** ***********教师管理模块 begin ************* */
 export const getTeacherList = ({
   name,
@@ -419,12 +419,29 @@ export const getQuestionList = data => axios.request({
   },
   method: 'POST',
 });
+export const listPage = data => axios.request({
+  url: 'examQuestions/listPage',
+  data: {
+    data,
+  },
+  method: 'POST',
+});
+export const getQuestionById = id => axios.request({
+  url: 'examQuestions/get',
+  data: {
+    data: id,
+  },
+  method: 'POST',
+});
 export const addQuestion = data => axios.request({
   url: 'examQuestions/save',
   data: {
     data,
   },
   method: 'post',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
 });
 export const editQuestion = data => axios.request({
   url: 'examQuestions/modify',

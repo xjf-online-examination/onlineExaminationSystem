@@ -145,7 +145,9 @@ export default {
           { required: true, message: '课程姓名不能为空', trigger: 'blur' },
         ],
         classId: [
-
+          {
+            required: true, message: '班级不能为空', trigger: 'change', type: 'number',
+          },
         ],
       },
     };

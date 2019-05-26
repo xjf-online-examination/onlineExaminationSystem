@@ -96,7 +96,7 @@ export default {
         }],
       tableData: [],
       course: {
-        teacherId: this.id,
+        teacherId: this.$route.query.id,
         classCourseIdList: [],
       },
       modalVisible: false,

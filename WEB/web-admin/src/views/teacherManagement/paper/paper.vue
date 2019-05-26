@@ -49,12 +49,12 @@
             <Option v-for="item in courseList" :value="item.code" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="创建方式" prop="type">
+        <!-- <FormItem label="创建方式" prop="type">
           <RadioGroup v-model="paper.type">
             <Radio :label="1">自动</Radio>
             <Radio :label="2">手动</Radio>
           </RadioGroup>
-        </FormItem>
+        </FormItem>-->
       </Form>
       <div slot="footer">
         <Button type="text" @click="cancel('paperForm')">取消</Button>
@@ -79,7 +79,7 @@ export default {
   components: {
     Tables,
   },
-  data () {
+  data() {
     return {
       columns: [
         {
@@ -150,7 +150,7 @@ export default {
         name: '',
         code: '',
         courseCode: '',
-        type: 1,
+        type: 2,
         course: {},
       },
       modalVisible: false,
@@ -173,37 +173,37 @@ export default {
     };
   },
   methods: {
-    handleSearch () {
+    handleSearch() {
       this.getPaperList(this.searchData);
     },
-    handleReset (name) {
+    handleReset(name) {
       this.$refs[name].resetFields();
       this.getPaperList(this.searchData);
     },
-    onEdit (index) {
+    onEdit(index) {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
       this.paper = Object.assign({}, this.tableData.list[index]);
     },
-    onDelete (index) {
+    onDelete(index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange (params) {
+    onPageChange(params) {
       this.searchData.currentPage = params;
       this.getPaperList(this.searchData);
     },
-    onPageSizeChange (params) {
+    onPageSizeChange(params) {
       this.searchData.pageSize = params;
       this.getPaperList(this.searchData);
     },
-    onAdd () {
+    onAdd() {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save (name) {
+    save(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.paper.courseCode = this.paper.course.code;
@@ -222,9 +222,7 @@ export default {
             } else {
               this.$router.push({
                 name: 'paperQuestions',
-                params: {
-                  paper: this.paper,
-                },
+                query: { ...this.paper },
               });
               this.modalVisible = false;
               // addPaper(this.paper).then((res) => {
@@ -252,11 +250,11 @@ export default {
         }
       });
     },
-    cancel (name) {
+    cancel(name) {
       this.modalVisible = false;
       this.$refs[name].resetFields();
     },
-    deletePaper () {
+    deletePaper() {
       deletePaper(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
           this.$Notice.success({ title: '删除成功' });
@@ -266,7 +264,7 @@ export default {
         }
       });
     },
-    getPaperList () {
+    getPaperList() {
       getPaperList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -275,7 +273,7 @@ export default {
         }
       });
     },
-    getAllCourseList () {
+    getAllCourseList() {
       getAllCourseList().then((res) => {
         if (res.responseCode === '200') {
           this.courseList = res.data;
@@ -285,7 +283,7 @@ export default {
       });
     },
   },
-  mounted () {
+  mounted() {
     this.getPaperList();
     this.getAllCourseList();
   },

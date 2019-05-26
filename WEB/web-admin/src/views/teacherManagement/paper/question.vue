@@ -81,7 +81,7 @@ import Tables from '@/components/tables';
 
 import Journalizing from '@/components/journalizing/table';
 import {
-  addPaper, editPaper, getQuestionList,
+  addPaper, editPaper, listPage,
 } from '@/api/teacher';
 
 export default {
@@ -93,6 +93,7 @@ export default {
   data() {
     return {
       paper: {
+        ...this.$route.query,
         examPaperQuestionsDTO: [],
       },
       split1: 0.5,
@@ -165,8 +166,8 @@ export default {
         });
       }
     },
-    getQuestionList() {
-      getQuestionList(this.searchData).then((res) => {
+    listPage() {
+      listPage(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
         } else {
@@ -180,12 +181,12 @@ export default {
     },
   },
   mounted() {
-    this.getQuestionList();
+    this.listPage();
   },
-  watch: {
-    // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可
-    $route: 'getParams',
-  },
+  // watch: {
+  //   // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可
+  //   $route: 'getParams',
+  // },
 };
 </script>
 

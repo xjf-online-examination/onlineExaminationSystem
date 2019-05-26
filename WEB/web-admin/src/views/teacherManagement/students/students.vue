@@ -217,7 +217,9 @@ export default {
           { required: true, message: '学生姓名不能为空', trigger: 'blur' },
         ],
         classId: [
-          { required: true, message: '所属班级不能为空', trigger: 'blur' },
+          {
+            required: true, message: '所属班级不能为空', trigger: 'change', type: 'number',
+          },
         ],
       },
     };

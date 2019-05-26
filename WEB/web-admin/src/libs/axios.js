@@ -1,5 +1,6 @@
 import axios from 'axios';
 import store from '@/store';
+import qs from 'querystring';
 import {
   getToken,
   getUserCode,

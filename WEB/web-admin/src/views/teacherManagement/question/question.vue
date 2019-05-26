@@ -43,7 +43,7 @@
       :title="modalTitle"
       :closable="false"
       :mask-closable="false"
-      width="800"
+      width="1000"
     >
       <Form ref="questionForm" :model="question" :rules="rules">
         <FormItem prop="courseCode" label="课程编号">
@@ -151,8 +151,9 @@ import Tables from '@/components/tables';
 
 import Journalizing from '@/components/journalizing/table';
 import {
-  addQuestion, editQuestion, getQuestionList, listSubjectOne,
+  addQuestion, editQuestion, getQuestionList, listSubjectOne, getQuestionById,
 } from '@/api/teacher';
+import { Promise, promised } from 'q';
 
 export default {
   name: 'classes',
@@ -160,21 +161,7 @@ export default {
     Tables,
     Journalizing,
   },
-  props: {
-    courseCodeRules: {
-      type: Array,
-      default: () => [
-        { required: true, message: '工号不能为空', trigger: 'blur' },
-      ],
-    },
-    typeRules: {
-      type: Array,
-      default: () => [
-        { required: true, message: '教师姓名不能为空', trigger: 'blur' },
-      ],
-    },
-  },
-  data () {
+  data() {
     return {
       columns: [
         {
@@ -273,6 +260,14 @@ export default {
         courseCode: [
           { required: true, message: '课程编号不能为空', trigger: 'blur' },
         ],
+        type: [
+          {
+            required: true, message: '课程类型不能为空', trigger: 'change', type: 'number',
+          },
+        ],
+        title: [
+          { required: true, message: '题目不能为空', trigger: 'change' },
+        ],
       },
       journalizingData: [],
       subjectList: [],
@@ -298,33 +293,39 @@ export default {
     };
   },
   methods: {
-    handleSearch () {
+    handleSearch() {
       console.log(this.searchData);
       this.getQuestionList(this.searchData);
     },
-    handleReset (name) {
+    handleReset(name) {
       this.$refs[name].resetFields();
       this.getQuestionList(this.searchData);
     },
-    onEdit (index) {
-      this.modalVisible = true;
+    onEdit(index) {
       this.modalTitle = '修改';
       this.isAdd = false;
-      this.question = Object.assign({}, this.tableData.list[index]);
+      this.getQuestionById(this.tableData.list[index].id).then((res) => {
+        if (res.responseCode === '200') {
+          this.question = res.data;
+        } else {
+          this.question = {};
+        }
+        this.modalVisible = true;
+      });
     },
-    onDelete (index) {
+    onDelete(index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange (params) {
+    onPageChange(params) {
       this.searchData.currentPage = params;
       this.getQuestionList(this.searchData);
     },
-    onPageSizeChange (params) {
+    onPageSizeChange(params) {
       this.searchData.pageSize = params;
       this.getQuestionList(this.searchData);
     },
-    onAdd () {
+    onAdd() {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
@@ -351,7 +352,7 @@ export default {
         this.journalizingData = data;
       }
     },
-    save (name) {
+    save(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isAdd) {
@@ -383,11 +384,11 @@ export default {
         }
       });
     },
-    cancel (name) {
+    cancel(name) {
       this.modalVisible = false;
       this.$refs[name].resetFields();
     },
-    handleAddOption () {
+    handleAddOption() {
       if (this.options.length === 5) {
         this.errMsg = '选项不能大于5个';
       } else {
@@ -395,11 +396,11 @@ export default {
         this.options.push(this.options.length + 1);
       }
     },
-    handleRemoveOption (index) {
+    handleRemoveOption(index) {
       // TODO:
       this.options.splice(index, 1);
     },
-    getQuestionList () {
+    getQuestionList() {
       getQuestionList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -408,7 +409,7 @@ export default {
         }
       });
     },
-    listSubjectOne () {
+    listSubjectOne() {
       listSubjectOne().then((res) => {
         if (res.responseCode === '200') {
           this.subjectList = res.data;
@@ -417,7 +418,7 @@ export default {
         }
       });
     },
-    cusEditFunc (params) {
+    cusEditFunc(params) {
       if (params.type === 'total') { // 合计
         this.journalizingData[params.index].total = params.value;
       } else if (params.type === 'text') {
@@ -468,7 +469,7 @@ export default {
         }
       }
     },
-    handleRowEdit (params) {
+    handleRowEdit(params) {
       if (params.type === 'add') {
         this.journalizingData.splice(params.index, 0, JournalizingObj);
       } else if (this.journalizingData.length === 1) {
@@ -478,8 +479,15 @@ export default {
         this.journalizingData.splice(params.index, 1);
       }
     },
+    getQuestionById(id) {
+      return new Promise((resolve, reject) => {
+        getQuestionById(id).then((res) => {
+          resolve(res);
+        });
+      });
+    },
   },
-  mounted () {
+  mounted() {
     this.getQuestionList();
     this.listSubjectOne();
   },
