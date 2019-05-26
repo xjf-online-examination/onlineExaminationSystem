@@ -9,8 +9,8 @@
       :columns="tableConfig.columns"
       :table-data="tableData"
       :cell-merge="cellMerge"
-      :cell-edit-done="cellEditDone"
       @on-custom-comp="customCompFunc"
+      @on-custom-operation="rowEdit"
     ></v-table>
   </div>
 </template>
@@ -229,70 +229,37 @@ export default {
           componentName: this.type === 'answer' ? 'tablemoney' : 'tablescore',
         };
       }
-    },
-    // 单元格编辑回调
-    cellEditDone(newValue, oldValue, rowIndex, rowData, field) {
-      const { length } = this.tableData;
-      if (field === 'summary') {
-        if (rowIndex === length - 1) {
-          this.tableData[rowIndex].total = newValue;
-        } else {
-          this.tableData[rowIndex].summary = newValue;
-        }
-      }
-      if (field === 'yi1') {
-        this.tableData[rowIndex][field] = newValue;
-        this.tableData[rowIndex].debitAmount = newValue;
-      }
-      if (field === 'yi2') {
-        this.tableData[rowIndex].debitAmount = newValue;
-        this.tableData[rowIndex][field] = newValue;
+      if (this.type === 'answer' && field === 'operation' && rowIndex === this.tableData.length - 1) {
+        return {
+          colSpan: 1,
+          rowSpan: 1,
+          content: '',
+          componentName: '',
+        };
       }
     },
     customCompFunc(params) {
-      if (params.type === 'total') { // 合计
-        this.tableData[params.index].total = params.value;
-      } else if (params.type === 'summary') { // 摘要
-        this.tableData[params.index].summary = params.value;
-      } else if (params.type === 'money') {
-        if (params.field === 'yi1') {
-          if (params.index === (this.tableData.length - 1)) {
-            this.tableData[params.index].debitTotal = params.value;
-          } else {
-            this.tableData[params.index].debitAmount = params.value;
-          }
-        } else if (params.field === 'yi2') {
-          if (params.index === (this.tableData.length - 1)) {
-            this.tableData[params.index].creditTotal = params.value;
-          } else {
-            this.tableData[params.index].creditAmount = params.value;
-          }
-        }
-      } else if (params.type === 'score') {
-        if (params.field === 'summary') {
-          if (params.index === (this.tableData.length - 1)) {
-            this.tableData[params.index].totalScore = params.value;
-          } else {
-            this.tableData[params.index].summaryScore = params.value;
-          }
-        } else if (params.field === 'yi1') {
-          if (params.index === (this.tableData.length - 1)) {
-            this.tableData[params.index].debitTotalScore = params.value;
-          } else {
-            this.tableData[params.index].debitAmountScore = params.value;
-          }
-        } else if (params.field === 'yi2') {
-          if (params.index === (this.tableData.length - 1)) {
-            this.tableData[params.index].creditTotalScore = params.value;
-          } else {
-            this.tableData[params.index].creditAmountScore = params.value;
-          }
-        }
-      }
+      this.$emit('tablechange', params);
+    },
+    rowEdit(params) {
+      this.$emit('rowedit', params);
     },
   },
   mounted() {
     this.tableData = this.data;
+    if (this.type === 'answer') {
+      this.tableConfig.columns.push({
+        field: 'operation',
+        title: '操作',
+        width: 200,
+        titleAlign: 'center',
+        columnAlign: 'center',
+        componentName: 'tableoperation',
+      });
+      this.tableConfig.titleRows[0].push({
+        fields: ['operation'], title: '操作', titleAlign: 'center', rowspan: 2,
+      });
+    }
   },
 };
 </script>

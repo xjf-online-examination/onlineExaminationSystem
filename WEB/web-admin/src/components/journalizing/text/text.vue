@@ -26,7 +26,7 @@ export default {
   methods: {
     handleEdit() {
       const params = {
-        index: this.index, rowData: this.rowData, field: this.field, value: this.total,
+        type: 'text', index: this.index, rowData: this.rowData, field: this.field, value: this.total,
       };
       this.$emit('on-custom-comp', params);
     },

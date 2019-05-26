@@ -12,6 +12,7 @@ import tablemoney from './components/journalizing/money/index';
 import tabletext from './components/journalizing/text/index';
 import tableselect from './components/journalizing/select/index';
 import tablescore from './components/journalizing/score/index';
+import tableoperation from './components/journalizing/operation/index';
 
 axios.defaults.withCredentials = true;
 Vue.use(iView);
@@ -22,6 +23,7 @@ Vue.component('tabletext', tabletext);
 Vue.component('tableselect', tableselect);
 Vue.component('tablemoney', tablemoney);
 Vue.component('tablescore', tablescore);
+Vue.component('tableoperation', tableoperation);
 new Vue({
   router,
   store,
