@@ -112,7 +112,7 @@
               v-bind:key="index"
             ></Checkbox>
           </CheckboxGroup>
-          <RadioGroup v-model="question.singleAnswer" v-if="question.type===4">
+          <RadioGroup v-model="question.yesNoAnswer" v-if="question.type===4">
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
           </RadioGroup>
@@ -121,16 +121,20 @@
             type="answer"
             :data="journalizingData"
             :subject-list="subjectList"
+            v-on:tablechange="cusEditFunc"
+            v-on:rowedit="handleRowEdit"
           ></Journalizing>
+          <label class="err-info">{{operateError}}</label>
         </FormItem>
         <FormItem label="分值">
-          <Journalizing v-if="question.type===6" type="score" :data="journalizingData"></Journalizing>
-          <Input
-            type="text"
-            v-if="question.type===1||question.type===2||question.type==3||question.type===4"
-            v-model="question.score"
-            placeholder="请输入分值"
-          />
+          <Input type="text" v-model="question.score" placeholder="请输入分值"/>
+          <Journalizing
+            class="m-t-s"
+            v-if="question.type===6"
+            type="score"
+            :data="journalizingData"
+            v-on:tablechange="cusEditFunc"
+          ></Journalizing>
         </FormItem>
       </Form>
       <div slot="footer">
@@ -170,7 +174,7 @@ export default {
       ],
     },
   },
-  data() {
+  data () {
     return {
       columns: [
         {
@@ -255,8 +259,9 @@ export default {
         optionD: '',
         optionE: '',
         singleAnswer: '',
-        multipleAnswer: '',
+        multipleAnswer: [],
         yesNoAnswer: '',
+        EntryStandardAnswerDetailsDTO: [],
       },
       modalVisible: false,
       modalTitle: '',
@@ -271,43 +276,61 @@ export default {
       },
       journalizingData: [],
       subjectList: [],
+      JournalizingObj: {
+        summary: '',
+        summaryScore: '',
+        subject1: '',
+        subject1Score: '',
+        subject2: '',
+        subject2Score: '',
+        debitAmount: '',
+        debitAmountScore: '',
+        creditAmount: '',
+        creditAmountScore: '',
+        total: '',
+        totalScore: '',
+        debitTotal: '',
+        debitTotalScore: '',
+        creditTotal: '',
+        creditTotalScore: '',
+      },
+      operateError: '',
     };
   },
   methods: {
-    handleSearch() {
+    handleSearch () {
       console.log(this.searchData);
       this.getQuestionList(this.searchData);
     },
-    handleReset(name) {
+    handleReset (name) {
       this.$refs[name].resetFields();
       this.getQuestionList(this.searchData);
     },
-    onEdit(index) {
+    onEdit (index) {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
       this.question = Object.assign({}, this.tableData.list[index]);
     },
-    onDelete(index) {
+    onDelete (index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange(params) {
+    onPageChange (params) {
       this.searchData.currentPage = params;
       this.getQuestionList(this.searchData);
     },
-    onPageSizeChange(params) {
+    onPageSizeChange (params) {
       this.searchData.pageSize = params;
       this.getQuestionList(this.searchData);
     },
-    onAdd() {
+    onAdd () {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
       const data = [];
       for (let i = 0; i < 4; i++) {
         data.push({
-          row: i + 1,
           summary: '',
           summaryScore: '',
           subject1: '',
@@ -328,10 +351,13 @@ export default {
         this.journalizingData = data;
       }
     },
-    save(name) {
+    save (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isAdd) {
+            if (this.question.type === 6) {
+              this.question.entryStandardAnswerDetailsDTOList = this.journalizingData;
+            }
             addQuestion(this.question).then((res) => {
               console.log(res);
               if (res.responseCode === '201') {
@@ -357,11 +383,11 @@ export default {
         }
       });
     },
-    cancel(name) {
+    cancel (name) {
       this.modalVisible = false;
       this.$refs[name].resetFields();
     },
-    handleAddOption() {
+    handleAddOption () {
       if (this.options.length === 5) {
         this.errMsg = '选项不能大于5个';
       } else {
@@ -369,11 +395,11 @@ export default {
         this.options.push(this.options.length + 1);
       }
     },
-    handleRemoveOption(index) {
+    handleRemoveOption (index) {
       // TODO:
       this.options.splice(index, 1);
     },
-    getQuestionList() {
+    getQuestionList () {
       getQuestionList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -382,7 +408,7 @@ export default {
         }
       });
     },
-    listSubjectOne() {
+    listSubjectOne () {
       listSubjectOne().then((res) => {
         if (res.responseCode === '200') {
           this.subjectList = res.data;
@@ -391,8 +417,69 @@ export default {
         }
       });
     },
+    cusEditFunc (params) {
+      if (params.type === 'total') { // 合计
+        this.journalizingData[params.index].total = params.value;
+      } else if (params.type === 'text') {
+        if (params.field === 'summary') { // 摘要
+          this.journalizingData[params.index].summary = params.value;
+        } else if (params.field === 'subject2') { // 二级科目
+          this.journalizingData[params.index].subject2 = params.value;
+        }
+      } else if (params.type === 'subject1') {
+        this.journalizingData[params.index].subject1 = params.value;
+      } else if (params.type === 'money') {
+        if (params.field === 'yi1') {
+          if (params.index === (this.journalizingData.length - 1)) { // 借方总额
+            this.journalizingData[params.index].debitTotal = params.value;
+          } else { // 借方金额
+            this.journalizingData[params.index].debitAmount = params.value;
+          }
+        } else if (params.field === 'yi2') {
+          if (params.index === (this.journalizingData.length - 1)) { // 贷方总额
+            this.journalizingData[params.index].creditTotal = params.value;
+          } else { // 贷方金额
+            this.journalizingData[params.index].creditAmount = params.value;
+          }
+        }
+      } else if (params.type === 'score') {
+        if (params.field === 'summary') {
+          if (params.index === (this.journalizingData.length - 1)) {
+            this.journalizingData[params.index].totalScore = params.value;
+          } else {
+            this.journalizingData[params.index].summaryScore = params.value;
+          }
+        } else if (params.field === 'yi1') {
+          if (params.index === (this.journalizingData.length - 1)) {
+            this.journalizingData[params.index].debitTotalScore = params.value;
+          } else {
+            this.journalizingData[params.index].debitAmountScore = params.value;
+          }
+        } else if (params.field === 'yi2') {
+          if (params.index === (this.journalizingData.length - 1)) {
+            this.journalizingData[params.index].creditTotalScore = params.value;
+          } else {
+            this.journalizingData[params.index].creditAmountScore = params.value;
+          }
+        } else if (params.field === 'subject1') {
+          this.journalizingData[params.index].subject1Score = params.value;
+        } else if (params.field === 'subject2') {
+          this.journalizingData[params.index].subject2Score = params.value;
+        }
+      }
+    },
+    handleRowEdit (params) {
+      if (params.type === 'add') {
+        this.journalizingData.splice(params.index, 0, JournalizingObj);
+      } else if (this.journalizingData.length === 1) {
+        this.operateError = '不能再删除了!';
+      } else {
+        this.operateError = '';
+        this.journalizingData.splice(params.index, 1);
+      }
+    },
   },
-  mounted() {
+  mounted () {
     this.getQuestionList();
     this.listSubjectOne();
   },
