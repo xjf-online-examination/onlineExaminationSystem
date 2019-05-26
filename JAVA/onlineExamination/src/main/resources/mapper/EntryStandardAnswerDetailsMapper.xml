@@ -480,7 +480,7 @@
   </update>
 
   <insert id="batchInsert" parameterType="java.util.List">
-    insert into entry_standard_answer_details (id, entry_answer_id, row,
+    insert into entry_standard_answer_details (id, entry_answer_id, `row`,
     summary, summary_score, subject1,
     subject1_score, subject2, subject2_score,
     debit_amount, debit_amount_score, credit_amount,
