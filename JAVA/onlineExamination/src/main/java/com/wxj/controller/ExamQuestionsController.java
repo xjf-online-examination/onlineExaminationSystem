@@ -109,7 +109,7 @@ public class ExamQuestionsController {
     public Object save(HttpServletRequest request, @RequestBody RequestBean<ExamQuestionsSaveDTO> requestBean) {
         try {
             ExamQuestionsSaveDTO examQuestionsSaveDTO = requestBean.getData();
-            new ValidateParamsUtil().vaildParams(examQuestionsSaveDTO,"courseCode", "type", "title", "score");
+            new ValidateParamsUtil().vaildParams(examQuestionsSaveDTO,"courseCode", "type", "title");
             examQuestionsService.save(examQuestionsSaveDTO);
             return ResponseUtils.success("201");
         } catch (BusinessException e) {
