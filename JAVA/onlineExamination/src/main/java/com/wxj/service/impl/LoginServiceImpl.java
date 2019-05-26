@@ -39,7 +39,7 @@ public class LoginServiceImpl implements LoginServiceI {
     private TeacherMapper teacherMapper;
 
     @Override
-    public UserInfoVO login(HttpServletRequest request, LoginDTO loginDTO) throws BusinessException {
+    public UserInfoVO login(HttpServletRequest request, LoginDTO loginDTO) {
         List<UserInfo> userInfoList;
         UserInfoVO userInfoVO = new UserInfoVO();
         switch (loginDTO.getUserType()) {

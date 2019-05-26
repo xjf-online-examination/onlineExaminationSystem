@@ -4,7 +4,6 @@ import com.wxj.exception.BusinessException;
 import com.wxj.exception.ParamEmptyException;
 import com.wxj.exception.ParamInvalidException;
 import com.wxj.model.Bean.ResponseBean;
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,22 +32,19 @@ public class ValidateParamsUtil<T> {
                 if ("String".equals(type)) {
                     String str = (String) field.get(obj);
                     if(StringUtil.isEmptyTrim(str)) {
-                        ResponseBean responseBean = new ResponseBean("422", "请求参数不能为空" + field.getName());
-                        throw new ParamEmptyException(JSONObject.fromObject(responseBean).toString());
+                        throw new ParamEmptyException(field.getName());
                     }
                 }
                 if ("Integer".equals(type)) {
                     Integer integer = (Integer) field.get(obj);
                     if (null == integer) {
-                        ResponseBean responseBean = new ResponseBean("422", "请求参数不能为空" + field.getName());
-                        throw new ParamEmptyException(JSONObject.fromObject(responseBean).toString());
+                        throw new ParamEmptyException(field.getName());
                     }
                 }
                 if ("List".equals(type)) {
                 	List list = (List) field.get(obj);
                     if (null == list) {
-                        ResponseBean responseBean = new ResponseBean("422", "请求参数不能为空" + field.getName());
-                        throw new ParamEmptyException(JSONObject.fromObject(responseBean).toString());
+                        throw new ParamEmptyException(field.getName());
                     }
                 }
 

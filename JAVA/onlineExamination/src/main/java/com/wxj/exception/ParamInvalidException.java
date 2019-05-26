@@ -30,7 +30,7 @@ public class ParamInvalidException extends BusinessRuntimeException{
 
 	@Override
 	public String getCode(){
-		return "E11_ARG_IS_INVALID";
+		return "415";
 	}
 
 	@Override

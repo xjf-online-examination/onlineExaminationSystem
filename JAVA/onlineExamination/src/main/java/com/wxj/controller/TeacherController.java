@@ -171,7 +171,7 @@ public class TeacherController {
             return ResponseUtils.success("201");
         } catch (BusinessException e) {
             return ResponseUtils.error(e);
-        }  catch (BusinessRuntimeException e) {
+        } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }
     }

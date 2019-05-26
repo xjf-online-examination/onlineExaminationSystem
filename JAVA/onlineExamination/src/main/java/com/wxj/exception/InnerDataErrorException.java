@@ -5,7 +5,7 @@ package com.wxj.exception;
  * <p>FileName: InnerDataErrorException.java</p>
  * <p>Description: 内部数据错误</p>
  * <p>Copyright: Copyright (c) 2018</p>
- * <p>Company: www.hanshow.com</p>
+ * <p>Company: wxj</p>
  *
  * @author zhengzhibo
  * @date 2019年1月9日 上午10:54:56
