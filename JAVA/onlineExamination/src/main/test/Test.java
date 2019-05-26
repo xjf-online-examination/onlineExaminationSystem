@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * <p>Title: Test</p >
  * <p>Description: </p >
@@ -27,5 +29,54 @@ public class Test {
             str = intFlag + "" + System.currentTimeMillis();
         }
         System.out.println(str);
+    }
+
+    private Float multiSelect(String studentAnswer, String standardAnswer, Integer score) {
+        char[] studentAnswers = studentAnswer.toUpperCase().toCharArray();
+        Arrays.sort(studentAnswers);
+        char[] standardAnswers = standardAnswer.toUpperCase().toCharArray();
+        Arrays.sort(standardAnswers);
+
+        String stuAnswer = String.valueOf(studentAnswers);
+        String standAnswer = String.valueOf(standardAnswers);
+        if (stuAnswer.equals(standAnswer)) {
+            return (float) score;
+        } else if (this.find(standAnswer, stuAnswer)) {
+            return (float) score/2;
+        } else {
+            return 0f;
+        }
+    }
+
+    @org.junit.Test
+    public void test2() {
+        float ss = this.multiSelect("DB", "ABD", 2);
+        System.out.println(ss);
+    }
+
+    private boolean find(String source, String target) {
+        char[] c1 = source.toCharArray();
+        char[] c2 = target.toCharArray();
+        int i = 0;
+        int j;
+        while (i < source.length() - 1) {
+            j = 0;
+            while (c1[i] == c2[j] && j < target.length() - 1) {
+                i++;
+                j++;
+            }
+            if (j == target.length() - 1) {
+//                return i - target.length() + 1;
+                return true;
+            }
+            i = i - j + 1;
+
+        }
+        return false;
+    }
+
+    @org.junit.Test
+    public void test3() {
+        System.out.println(this.find("abd", "dc"));
     }
 }

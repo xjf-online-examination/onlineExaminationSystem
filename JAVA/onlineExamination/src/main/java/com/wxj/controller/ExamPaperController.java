@@ -75,7 +75,7 @@ public class ExamPaperController {
      * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/automatic", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object save(HttpServletRequest request, @RequestBody RequestBean<ExamPaperSaveModifyDTO> requestBean) {
         try {
             ExamPaperSaveModifyDTO examPaperSaveModifyDTO = requestBean.getData();

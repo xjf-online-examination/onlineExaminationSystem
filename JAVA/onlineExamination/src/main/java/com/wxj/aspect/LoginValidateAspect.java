@@ -34,7 +34,7 @@ public class LoginValidateAspect {
      * @param request
      * @param requestBean
      */
-    public void before(HttpServletRequest request, RequestBean<?> requestBean) throws BusinessRuntimeException {
+    public void before(HttpServletRequest request, RequestBean<?> requestBean) {
 //        logger.info("[#requestUrl#]:{}\t[#requestJson#]:{}", request.getRequestURI(), StringUtil.formatJson(JSONObject.fromObject(obj).toString()));
         String requestUri = request.getRequestURI();
         String contextPath = request.getContextPath();
@@ -63,8 +63,7 @@ public class LoginValidateAspect {
         if (null == securityKey || !securityKey.equals(baseQUERY.getSecurityKey())) {
             logger.info("securityKey校验失败,userId={}", baseQUERY.getUserCode());
             request.getSession().setAttribute(loginKey,"");
-            ResponseBean responseBean = new ResponseBean("401", "登陆过期");
-            throw new PermissionException(JSONObject.fromObject(responseBean).toString());
+            throw new PermissionException("登陆过期");
         }
     }
 

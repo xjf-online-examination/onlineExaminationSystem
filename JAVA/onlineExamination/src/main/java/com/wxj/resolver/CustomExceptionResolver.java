@@ -1,6 +1,10 @@
 package com.wxj.resolver;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wxj.exception.BusinessRuntimeException;
+import com.wxj.model.Bean.ResponseBean;
+import com.wxj.utils.ResponseUtils;
+import com.wxj.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
  * <p>Title: CustomExceptionResolver</p>
  * <p>Description: 全局异常处理类</p>
  * <p>Copyright: Copyright (c) 2018</p>
- * <p>Company: www.hanshow.com</p>
- * @author guolin
+ * <p>Company: wxj</p>
+ * @author wangxiaojun
  * @version 1.0
  * @date 2018-06-09 14:10
  */
@@ -35,8 +39,7 @@ public class CustomExceptionResolver implements HandlerExceptionResolver {
         response.setHeader("Cache-Control", "no-cache, must-revalidate");
         try {
             if (exception instanceof BusinessRuntimeException) {
-                BusinessRuntimeException wiseException = (BusinessRuntimeException) exception;
-                response.getWriter().write(wiseException.getMessage());
+                response.getWriter().write(JSONObject.toJSONString(ResponseUtils.error((BusinessRuntimeException)exception)));
                 logger.error("The-global-exception-handler-class-catches-exceptions-hand:", exception);
             }
         } catch (Exception e) {
