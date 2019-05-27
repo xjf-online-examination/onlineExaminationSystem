@@ -29,11 +29,6 @@ public class EntryStandardAnswerDetailsDTO implements Serializable {
     private Integer entryAnswerId;
 
     /**
-     * 行
-     */
-    private Integer row;
-
-    /**
      * 摘要key
      */
     private String summary;

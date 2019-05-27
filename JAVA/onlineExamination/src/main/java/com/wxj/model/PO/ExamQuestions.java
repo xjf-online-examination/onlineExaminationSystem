@@ -1,7 +1,9 @@
 package com.wxj.model.PO;
 
+import com.wxj.model.DTO.ExamQuestionsSaveDTO;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,13 +12,14 @@ import java.util.Date;
  * <p>Title: ExamQuestions</p>
  * <p>Description:试题 </p>
  * <p>Copyright: Copyright (c) 2019</p>
- * <p>Company: www.hanshow.com</p>
+ * <p>Company: wxj</p>
  * @author wangxiaojun
  * @date 2019-05-17 23:30:52
  * @version 1.0
  */
 @Getter
 @Setter
+@ToString
 public class ExamQuestions implements Serializable {
     /**
     * 分页查询条件
@@ -107,4 +110,12 @@ public class ExamQuestions implements Serializable {
      * 删除标志
      */
     private String delFlag;
+
+    public void setABCD(ExamQuestionsSaveDTO examQuestionsSaveDTO) {
+        this.optiona = examQuestionsSaveDTO.getOptionA();
+        this.optionb = examQuestionsSaveDTO.getOptionB();
+        this.optionc = examQuestionsSaveDTO.getOptionC();
+        this.optiond = examQuestionsSaveDTO.getOptionD();
+        this.optione = examQuestionsSaveDTO.getOptionE();
+    }
 }
