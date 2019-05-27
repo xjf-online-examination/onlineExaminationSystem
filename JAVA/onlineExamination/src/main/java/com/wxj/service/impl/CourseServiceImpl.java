@@ -3,16 +3,13 @@ package com.wxj.service.impl;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.google.common.collect.Lists;
 import com.wxj.constant.SystemConstant;
+import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.exception.OperationException;
 import com.wxj.exception.ParamInvalidException;
-import com.wxj.mapper.ClassCourseMapper;
-import com.wxj.mapper.CourseMapper;
+import com.wxj.mapper.*;
 import com.wxj.model.DTO.CourseParamsDTO;
 import com.wxj.model.DTO.CourseSaveDTO;
-import com.wxj.model.PO.ClassCourse;
-import com.wxj.model.PO.ClassCourseExample;
-import com.wxj.model.PO.Course;
-import com.wxj.model.PO.CourseExample;
+import com.wxj.model.PO.*;
 import com.wxj.model.VO.ClassCourseSelectVO;
 import com.wxj.model.VO.CourseVO;
 import com.wxj.service.CourseServiceI;
@@ -24,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>Title: CourseServiceImpl</p >
@@ -41,6 +39,18 @@ public class CourseServiceImpl implements CourseServiceI {
     CourseMapper courseMapper;
     @Autowired
     ClassCourseMapper classCourseMapper;
+    @Autowired
+    ExamQuestionsMapper examQuestionsMapper;
+    @Autowired
+    ExamPaperQuestionsMapper examPaperQuestionsMapper;
+    @Autowired
+    ExamPaperMapper examPaperMapper;
+    @Autowired
+    ExamScheduleMapper examScheduleMapper;
+    @Autowired
+    StudentAnswerMapper studentAnswerMapper;
+    @Autowired
+    EntryAnswerDetailsMapper entryAnswerDetailsMapper;
 
     @Override
     public List<CourseVO> listCourseByParams(CourseParamsDTO courseParamsDTO) {
@@ -131,15 +141,58 @@ public class CourseServiceImpl implements CourseServiceI {
         return i;
     }
 
+    @Transactional
     @Override
-    public int delete(Integer id) {
-        //TODO:
-        //删除课程
-        //删除课程和班级对应表
-        //删除课程的试题
-        //删除这个课程的试卷
-        //删除这个试卷的考试安排
-        return 0;
+    public void delete(Integer id) {
+        //提示：删除课程会课程对应的试题，试卷，考试信息，考试成绩。确认删除？
+        try {
+            //删除课程
+            Course course = courseMapper.selectByPrimaryKey(id);
+            if (null == course) {
+                throw new OperationException("删除失败,没有这门课程");
+            }
+            courseMapper.deleteByPrimaryKey(id);
+            //删除课程和班级对应表
+            ClassCourseExample classCourseExample = new ClassCourseExample();
+            classCourseExample.createCriteria().andCourseIdEqualTo(id);
+            classCourseMapper.deleteByExample(classCourseExample);
+            //删除课程的试题
+            ExamQuestionsExample examQuestionsExample = new ExamQuestionsExample();
+            examQuestionsExample.createCriteria().andCourseCodeEqualTo(course.getCode());
+            examQuestionsMapper.deleteByExample(examQuestionsExample);
+            //删除试卷与试题对应关系
+            ExamPaperExample examPaperExample = new ExamPaperExample();
+            examPaperExample.createCriteria().andCourseCodeEqualTo(course.getCode());
+            List<Integer> examPaperIdList = examPaperMapper.selectByExample(examPaperExample).stream().map(ExamPaper::getId).collect(Collectors.toList());
+            if (null == examPaperIdList && examPaperIdList.size() == 0) {
+                ExamPaperQuestionsExample examPaperQuestionsExample = new ExamPaperQuestionsExample();
+                examPaperQuestionsExample.createCriteria().andExamPaperIdIn(examPaperIdList);
+                examPaperQuestionsMapper.deleteByExample(examPaperQuestionsExample);
+                //删除这个课程的试卷
+                examPaperMapper.deleteByExample(examPaperExample);
+                //删除这个试卷的考试安排
+                ExamScheduleExample examScheduleExample = new ExamScheduleExample();
+                examScheduleExample.createCriteria().andExamPaperIdIn(examPaperIdList);
+                List<Integer> examScheduleIdList = examScheduleMapper.selectByExample(examScheduleExample).stream().map(ExamSchedule::getId).collect(Collectors.toList());
+                if (null != examScheduleIdList && examScheduleIdList.size() > 0) {
+                    examScheduleMapper.deleteByExample(examScheduleExample);
+                    //删除考生答案
+                    StudentAnswerExample studentAnswerExample = new StudentAnswerExample();
+                    studentAnswerExample.createCriteria().andExamScheduleIdIn(examScheduleIdList);
+                    List<Integer> studentAnswerIdList = studentAnswerMapper.selectByExample(studentAnswerExample).stream().map(StudentAnswer::getId).collect(Collectors.toList());
+                    studentAnswerMapper.deleteByExample(studentAnswerExample);
+                    if (null != studentAnswerIdList && studentAnswerIdList.size() > 0) {
+                        EntryAnswerDetailsExample entryAnswerDetailsExample = new EntryAnswerDetailsExample();
+                        entryAnswerDetailsExample.createCriteria().andEntryAnswerIdIn(studentAnswerIdList);
+                        entryAnswerDetailsMapper.deleteByExample(entryAnswerDetailsExample);
+                    }
+                }
+            }
+        } catch (BusinessRuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new OperationException("删除失败");
+        }
     }
 
     @Override

@@ -27,7 +27,7 @@ public interface CourseServiceI {
 
     int modify(CourseSaveDTO courseSaveDTO);
 
-    int delete(Integer id);
+    void delete(Integer id);
 
     /**
      * 所有课程ID，className, courseName供新增教师授课下拉菜单用
