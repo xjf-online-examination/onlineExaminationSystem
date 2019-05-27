@@ -25,8 +25,8 @@ public interface ExamPaperServiceI {
 
     ExamPaperDetailsVO getExamPaperDetailsById(Integer id);
 
-    int save(ExamPaperSaveModifyDTO examPaperSaveModifyDTO);
+    int save(ExamPaperSaveModifyDTO examPaperSaveModifyDTO, String userCode);
 
-    int modify(ExamPaperSaveModifyDTO examPaperSaveModifyDTO);
+    int modify(ExamPaperSaveModifyDTO examPaperSaveModifyDTO, String userCode);
 
 }

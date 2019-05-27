@@ -80,7 +80,7 @@ public class ExamPaperController {
         try {
             ExamPaperSaveModifyDTO examPaperSaveModifyDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(examPaperSaveModifyDTO, "jobNo", "name");
-            examPaperService.save(examPaperSaveModifyDTO);
+            examPaperService.save(examPaperSaveModifyDTO, requestBean.getUserCode());
             return ResponseUtils.success("201");
         } catch (BusinessException e) {
             return ResponseUtils.error(e);
@@ -98,7 +98,7 @@ public class ExamPaperController {
     public Object modify(HttpServletRequest request, @RequestBody RequestBean<ExamPaperSaveModifyDTO> requestBean) {
         try {
             ExamPaperSaveModifyDTO examPaperSaveModifyDTO = requestBean.getData();
-            examPaperService.modify(examPaperSaveModifyDTO);
+            examPaperService.modify(examPaperSaveModifyDTO, requestBean.getUserCode());
             return ResponseUtils.success("201");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
