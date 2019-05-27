@@ -110,7 +110,7 @@ public class ExamPaperController {
      * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
     public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             if (null == requestBean.getData()) {
