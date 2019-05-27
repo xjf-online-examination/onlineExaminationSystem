@@ -30,7 +30,7 @@ public interface ExamScheduleServiceI {
 
     int modify(ExamScheduleSaveDTO examScheduleSaveDTO);
 
-    int delete(Integer id);
+    void delete(Integer id);
 
     /**
      * 根据sno查询考试安排

@@ -15,6 +15,8 @@ import com.wxj.model.PO.TeacherExample;
 import com.wxj.model.VO.TeacherTaughtVO;
 import com.wxj.model.VO.TeacherVO;
 import com.wxj.service.TeacherServiceI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -36,6 +38,7 @@ import java.util.List;
  */
 @Service
 public class TeacherServiceImpl implements TeacherServiceI {
+    private Logger logger = LoggerFactory.getLogger(TeacherServiceImpl.class);
     @Autowired
     TeacherMapper teacherMapper;
     @Autowired
@@ -100,10 +103,20 @@ public class TeacherServiceImpl implements TeacherServiceI {
     }
 
     @Override
-    public int delete(Integer id) {
-        //TODO:删除教师
-        //TODO:删除教师课程对应表
-        return 0;
+    public void delete(Integer id) {
+        //删除教师
+        try {
+            int teacherDelteSize = teacherMapper.deleteByPrimaryKey(id);
+            if (teacherDelteSize > 0) {
+                //删除教师课程对应表
+                TeacherClassCourseExample teacherClassCourseExample = new TeacherClassCourseExample();
+                teacherClassCourseExample.createCriteria().andTeacherIdEqualTo(id);
+                teacherClassCourseMapper.deleteByExample(teacherClassCourseExample);
+            }
+        } catch (Exception e) {
+            logger.error("com.wxj.service.impl.TeacherServiceImpl.delete", e);
+            throw new OperationException(" 修改失败");
+        }
     }
 
     @Override

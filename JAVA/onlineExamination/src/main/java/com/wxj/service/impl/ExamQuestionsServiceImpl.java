@@ -6,14 +6,14 @@ import com.wxj.constant.ExamConstant;
 import com.wxj.constant.SystemConstant;
 import com.wxj.exception.OperationException;
 import com.wxj.mapper.EntryStandardAnswerDetailsMapper;
+import com.wxj.mapper.ExamPaperQuestionsMapper;
 import com.wxj.mapper.ExamQuestionsMapper;
 import com.wxj.mapper.SubjectOneMapper;
 import com.wxj.model.DTO.EntryStandardAnswerDetailsDTO;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
 import com.wxj.model.DTO.PageDTO;
-import com.wxj.model.PO.EntryStandardAnswerDetails;
-import com.wxj.model.PO.ExamQuestions;
+import com.wxj.model.PO.*;
 import com.wxj.model.VO.EntryStandardAnswerDetailsVO;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>Title: ExamQuestionsServiceImpl</p >
@@ -49,6 +50,8 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     EntryStandardAnswerDetailsMapper entryStandardAnswerDetailsMapper;
     @Autowired
     SubjectOneMapper subjectOneMapper;
+    @Autowired
+    ExamPaperQuestionsMapper examPaperQuestionsMapper;
 
     @Override
     public List<ExamQuestionsVO> listExamQuestionsByParams(ExamQuestionsParamsDTO examQuestionsParamsDTO) {
@@ -75,17 +78,13 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     @Transactional
     @Override
     public int save(ExamQuestionsSaveDTO examQuestionsSaveDTO) {
-        int examQuestionsInsertSize = 0;
+        int examQuestionsInsertSize;
         int entryStandardAnswerDetailsInsertSize = 0;
         Date date = new Date();
         ExamQuestions examQuestions = new ExamQuestions();
         BeanUtils.copyProperties(examQuestionsSaveDTO, examQuestions);
         examQuestions.setCode(StringUtil.getRandom());
-        examQuestions.setOptiona(examQuestionsSaveDTO.getOptionA());
-        examQuestions.setOptionb(examQuestionsSaveDTO.getOptionB());
-        examQuestions.setOptionc(examQuestionsSaveDTO.getOptionC());
-        examQuestions.setOptiond(examQuestionsSaveDTO.getOptionD());
-        examQuestions.setOptione(examQuestionsSaveDTO.getOptionE());
+        examQuestions.setABCD(examQuestionsSaveDTO);
         examQuestions.setCreateTime(date);
         examQuestions.setModifyTime(date);
         examQuestions.setDelFlag(SystemConstant.NOUGHT);
@@ -129,11 +128,7 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
         ExamQuestions examQuestions = new ExamQuestions();
         BeanUtils.copyProperties(examQuestionsSaveDTO, examQuestions);
 
-        examQuestions.setOptiona(examQuestionsSaveDTO.getOptionA());
-        examQuestions.setOptionb(examQuestionsSaveDTO.getOptionB());
-        examQuestions.setOptionc(examQuestionsSaveDTO.getOptionC());
-        examQuestions.setOptiond(examQuestionsSaveDTO.getOptionD());
-        examQuestions.setOptione(examQuestionsSaveDTO.getOptionE());
+        examQuestions.setABCD(examQuestionsSaveDTO);
         examQuestions.setModifyTime(date);
 
         int examQuestionsUpdateSize = examQuestionsMapper.updateByPrimaryKeySelective(examQuestions);
@@ -157,14 +152,22 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     }
 
     @Override
-    public int delete(Integer id) {
-        //TODO:
-        return 0;
+    public void delete(Integer id) {
+        try {
+            examQuestionsMapper.deleteByPrimaryKey(id);
+
+            ExamPaperQuestionsExample examPaperQuestionsExample = new ExamPaperQuestionsExample();
+            examPaperQuestionsExample.createCriteria().andExamQuestionsIdEqualTo(id);
+            examPaperQuestionsMapper.deleteByExample(examPaperQuestionsExample);
+        } catch (Exception e) {
+            logger.error("com.wxj.service.impl.ExamQuestionsServiceImpl.delete", e);
+            throw new OperationException("删除失败");
+        }
     }
 
     @Override
     public int examQuestionsImport(List<ExamQuestions> examQuestionsList) {
-        int i = 0;
+        int i;
         try {
             i = examQuestionsMapper.batchInsert(examQuestionsList);
         } catch (Exception e) {

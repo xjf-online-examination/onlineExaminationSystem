@@ -4,13 +4,13 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.wxj.constant.SystemConstant;
 import com.wxj.exception.InnerDataErrorException;
 import com.wxj.exception.OperationException;
+import com.wxj.mapper.EntryAnswerDetailsMapper;
 import com.wxj.mapper.ExamPaperMapper;
 import com.wxj.mapper.ExamScheduleMapper;
+import com.wxj.mapper.StudentAnswerMapper;
 import com.wxj.model.DTO.ExamScheduleParamsDTO;
 import com.wxj.model.DTO.ExamScheduleSaveDTO;
-import com.wxj.model.PO.ExamPaper;
-import com.wxj.model.PO.ExamPaperExample;
-import com.wxj.model.PO.ExamSchedule;
+import com.wxj.model.PO.*;
 import com.wxj.model.VO.ExamScheduleDetailsVO;
 import com.wxj.model.VO.ExamScheduleVO;
 import com.wxj.model.VO.StudentExamScheduleVO;
@@ -25,6 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>Title: ExamScheduleServiceImpl</p >
@@ -44,6 +45,10 @@ public class ExamScheduleServiceImpl implements ExamScheduleServiceI {
 
     @Autowired
     ExamPaperMapper examPaperMapper;
+    @Autowired
+    StudentAnswerMapper studentAnswerMapper;
+    @Autowired
+    EntryAnswerDetailsMapper entryAnswerDetailsMapper;
 
     @Override
     public List<ExamScheduleVO> listExamScheduleByParams(ExamScheduleParamsDTO examScheduleParamsDTO) {
@@ -140,9 +145,26 @@ public class ExamScheduleServiceImpl implements ExamScheduleServiceI {
     }
 
     @Override
-    public int delete(Integer id) {
-        //TODO:
-        return 0;
+    public void delete(Integer id) {
+        //删除这个试卷的考试安排
+        try {
+            int examScheduleDeleteSize = examScheduleMapper.deleteByPrimaryKey(id);
+            if (examScheduleDeleteSize > 0) {
+                //删除考生答案
+                StudentAnswerExample studentAnswerExample = new StudentAnswerExample();
+                studentAnswerExample.createCriteria().andExamScheduleIdEqualTo(id);
+                List<Integer> studentAnswerIdList = studentAnswerMapper.selectByExample(studentAnswerExample).stream().map(StudentAnswer::getId).collect(Collectors.toList());
+                studentAnswerMapper.deleteByExample(studentAnswerExample);
+                if (null != studentAnswerIdList && studentAnswerIdList.size() > 0) {
+                    EntryAnswerDetailsExample entryAnswerDetailsExample = new EntryAnswerDetailsExample();
+                    entryAnswerDetailsExample.createCriteria().andEntryAnswerIdIn(studentAnswerIdList);
+                    entryAnswerDetailsMapper.deleteByExample(entryAnswerDetailsExample);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("com.wxj.service.impl.ExamScheduleServiceImpl.delete", e);
+            throw new OperationException(" 删除失败");
+        }
     }
 
     @Override

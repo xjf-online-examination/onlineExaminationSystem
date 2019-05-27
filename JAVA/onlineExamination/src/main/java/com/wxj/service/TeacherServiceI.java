@@ -52,7 +52,7 @@ public interface TeacherServiceI {
      * @param id
      * @return
      */
-    int delete(Integer id);
+    void delete(Integer id);
 
     /**
      * 所授课程

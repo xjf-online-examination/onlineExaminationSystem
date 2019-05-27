@@ -29,4 +29,6 @@ public interface ExamPaperServiceI {
 
     int modify(ExamPaperSaveModifyDTO examPaperSaveModifyDTO, String userCode);
 
+    void delete(Integer examPaperId);
+
 }

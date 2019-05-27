@@ -104,4 +104,22 @@ public class ExamPaperController {
             return ResponseUtils.error(e);
         }
     }
+
+    /**
+     * 删除
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object delete(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
+        try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
+            examPaperService.delete(requestBean.getData());
+            return ResponseUtils.success("204");
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
 }

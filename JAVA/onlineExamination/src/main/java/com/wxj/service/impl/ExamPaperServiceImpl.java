@@ -1,16 +1,11 @@
 package com.wxj.service.impl;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.google.common.collect.Lists;
-import com.wxj.constant.SystemConstant;
 import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.exception.OperationException;
 import com.wxj.logic.ExamPaperLogic;
-import com.wxj.mapper.ExamPaperMapper;
-import com.wxj.mapper.ExamPaperQuestionsMapper;
-import com.wxj.mapper.TeacherMapper;
+import com.wxj.mapper.*;
 import com.wxj.model.DTO.ExamPaperParamsDTO;
-import com.wxj.model.DTO.ExamPaperQuestionsDTO;
 import com.wxj.model.DTO.ExamPaperSaveModifyDTO;
 import com.wxj.model.PO.*;
 import com.wxj.model.VO.ExamPaperDetailsVO;
@@ -19,13 +14,13 @@ import com.wxj.service.ExamPaperServiceI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>Title: ExamPaperServiceImpl</p >
@@ -39,7 +34,7 @@ import java.util.List;
  */
 @Service
 public class ExamPaperServiceImpl implements ExamPaperServiceI {
-    Logger logger = LoggerFactory.getLogger(ExamPaperServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(ExamPaperServiceImpl.class);
     @Autowired
     ExamPaperMapper examPaperMapper;
     @Autowired
@@ -48,6 +43,12 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
     TeacherMapper teacherMapper;
     @Autowired
     ExamPaperQuestionsMapper examPaperQuestionsMapper;
+    @Autowired
+    ExamScheduleMapper examScheduleMapper;
+    @Autowired
+    StudentAnswerMapper studentAnswerMapper;
+    @Autowired
+    EntryAnswerDetailsMapper entryAnswerDetailsMapper;
 
     @Override
     public List<ExamPaperVO> listExamPaperByParams(ExamPaperParamsDTO examPaperParamsDTO) {
@@ -89,9 +90,9 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
         teacherExample.createCriteria().andJobNoEqualTo(userCode);
         List<Teacher> teacherList = teacherMapper.selectByExample(teacherExample);
         //修改试卷
-        int examPaperUpdateSize = 0;
-        int examPaperQuestionsDeleteSize = 0;
-        int examPaperQuestionsInsertSize = 0;
+        int examPaperUpdateSize;
+        int examPaperQuestionsDeleteSize;
+        int examPaperQuestionsInsertSize;
         try {
             ExamPaper examPaper = new ExamPaper();
             BeanUtils.copyProperties(examPaperSaveModifyDTO, examPaper);
@@ -109,9 +110,46 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
             logger.error("com.wxj.service.impl.ExamPaperServiceImpl.modify", e);
             throw new OperationException("修改试卷失败");
         }
-        if (examPaperUpdateSize == 0 || examPaperQuestionsDeleteSize != examPaperSaveModifyDTO.getExamPaperQuestionsDTOList().size() || examPaperQuestionsInsertSize != examPaperQuestionsInsertSize) {
+        if (examPaperUpdateSize == 0 || examPaperQuestionsDeleteSize != examPaperSaveModifyDTO.getExamPaperQuestionsDTOList().size() || examPaperQuestionsInsertSize != examPaperSaveModifyDTO.getExamPaperQuestionsDTOList().size()) {
             throw new OperationException("修改试卷失败");
         }
         return 0;
+    }
+
+    @Transactional
+    @Override
+    public void delete(Integer examPaperId) {
+        //删除试卷与试题对应关系
+        ExamPaper examPaper = examPaperMapper.selectByPrimaryKey(examPaperId);
+        if (null == examPaper) {
+            throw new OperationException("试卷不存在");
+        }
+        try {
+            ExamPaperQuestionsExample examPaperQuestionsExample = new ExamPaperQuestionsExample();
+            examPaperQuestionsExample.createCriteria().andExamPaperIdEqualTo(examPaperId);
+            examPaperQuestionsMapper.deleteByExample(examPaperQuestionsExample);
+            //删除这个课程的试卷
+            examPaperMapper.deleteByPrimaryKey(examPaperId);
+            //删除这个试卷的考试安排
+            ExamScheduleExample examScheduleExample = new ExamScheduleExample();
+            examScheduleExample.createCriteria().andExamPaperIdEqualTo(examPaperId);
+            List<Integer> examScheduleIdList = examScheduleMapper.selectByExample(examScheduleExample).stream().map(ExamSchedule::getId).collect(Collectors.toList());
+            if (null != examScheduleIdList && examScheduleIdList.size() > 0) {
+                examScheduleMapper.deleteByExample(examScheduleExample);
+                //删除考生答案
+                StudentAnswerExample studentAnswerExample = new StudentAnswerExample();
+                studentAnswerExample.createCriteria().andExamScheduleIdIn(examScheduleIdList);
+                List<Integer> studentAnswerIdList = studentAnswerMapper.selectByExample(studentAnswerExample).stream().map(StudentAnswer::getId).collect(Collectors.toList());
+                studentAnswerMapper.deleteByExample(studentAnswerExample);
+                if (null != studentAnswerIdList && studentAnswerIdList.size() > 0) {
+                    EntryAnswerDetailsExample entryAnswerDetailsExample = new EntryAnswerDetailsExample();
+                    entryAnswerDetailsExample.createCriteria().andEntryAnswerIdIn(studentAnswerIdList);
+                    entryAnswerDetailsMapper.deleteByExample(entryAnswerDetailsExample);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("com.wxj.service.impl.ExamPaperServiceImpl.delete", e);
+            throw new OperationException("删除失败");
+        }
     }
 }

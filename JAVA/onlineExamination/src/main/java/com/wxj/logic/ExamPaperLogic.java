@@ -67,8 +67,8 @@ public class ExamPaperLogic {
         examPaper.setModifyTime(date);
         examPaper.setDelFlag(SystemConstant.NOUGHT);
 
-        int i = 0;
-        int j = 0;
+        int i;
+        int j;
         try {
             i = examPaperMapper.insert(examPaper);
 

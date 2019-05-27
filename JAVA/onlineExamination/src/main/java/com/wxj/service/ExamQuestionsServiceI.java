@@ -32,7 +32,7 @@ public interface ExamQuestionsServiceI {
 
     int modify(ExamQuestionsSaveDTO examQuestionsSaveDTO);
 
-    int delete(Integer id);
+    void delete(Integer id);
 
     int examQuestionsImport(List<ExamQuestions> examQuestionsList);
 
