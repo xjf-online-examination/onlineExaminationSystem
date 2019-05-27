@@ -7,7 +7,7 @@ import java.util.Date;
  * <p>Title: ClassCourse</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2019</p>
- * <p>Company: www.hanshow.com</p>
+ * <p>Company: wxj</p>
  * @author wangxiaojun
  * @date 2019-05-08 11:51:15
  * @version 1.0

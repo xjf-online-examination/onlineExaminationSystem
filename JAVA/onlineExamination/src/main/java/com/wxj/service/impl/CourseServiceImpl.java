@@ -145,12 +145,12 @@ public class CourseServiceImpl implements CourseServiceI {
     @Override
     public void delete(Integer id) {
         //提示：删除课程会课程对应的试题，试卷，考试信息，考试成绩。确认删除？
+        //删除课程
+        Course course = courseMapper.selectByPrimaryKey(id);
+        if (null == course) {
+            throw new OperationException("删除失败,没有这门课程");
+        }
         try {
-            //删除课程
-            Course course = courseMapper.selectByPrimaryKey(id);
-            if (null == course) {
-                throw new OperationException("删除失败,没有这门课程");
-            }
             courseMapper.deleteByPrimaryKey(id);
             //删除课程和班级对应表
             ClassCourseExample classCourseExample = new ClassCourseExample();
