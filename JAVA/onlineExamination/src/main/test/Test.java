@@ -1,3 +1,6 @@
+import com.wxj.model.DTO.ExamQuestionsSaveDTO;
+import com.wxj.model.PO.ExamQuestions;
+
 import java.util.Arrays;
 
 /**
@@ -78,5 +81,20 @@ public class Test {
     @org.junit.Test
     public void test3() {
         System.out.println(this.find("abd", "dc"));
+    }
+
+    @org.junit.Test
+    public void test4() {
+        ExamQuestionsSaveDTO examQuestionsSaveDTO = new ExamQuestionsSaveDTO();
+        examQuestionsSaveDTO.setOptionA("A");
+        examQuestionsSaveDTO.setOptionB("B");
+        examQuestionsSaveDTO.setOptionC("C");
+        examQuestionsSaveDTO.setOptionD("D");
+        examQuestionsSaveDTO.setOptionE("E");
+
+        ExamQuestions examQuestions = new ExamQuestions();
+        examQuestions.setABCD(examQuestionsSaveDTO);
+
+        System.out.println(examQuestions.toString());
     }
 }
