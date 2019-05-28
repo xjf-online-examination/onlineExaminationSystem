@@ -147,7 +147,7 @@ public class CourseController {
     }
 
     /**
-     * 所有课程ID，className, courseName供教师模块下拉菜单用
+     * 所有课程ID，className, courseName供试卷、试题模块下拉菜单用
      * @param request
      * @param requestBean
      * @return

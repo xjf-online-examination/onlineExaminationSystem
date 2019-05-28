@@ -12,7 +12,7 @@ import com.wxj.mapper.SubjectOneMapper;
 import com.wxj.model.DTO.EntryStandardAnswerDetailsDTO;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
-import com.wxj.model.DTO.PageDTO;
+import com.wxj.model.DTO.QuestionsPageDTO;
 import com.wxj.model.PO.*;
 import com.wxj.model.VO.EntryStandardAnswerDetailsVO;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
@@ -177,14 +177,14 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     }
 
     @Override
-    public List<ExamQuestionsDetailsVO> listExamQuestions(PageDTO pageDTO) {
+    public List<ExamQuestionsDetailsVO> listExamQuestions(QuestionsPageDTO pageDTO) {
         PageBounds pageBounds = new PageBounds(pageDTO.getCurrentPage(), pageDTO.getPageSize());
-        return examQuestionsMapper.selectExamQuestions(pageBounds);
+        return examQuestionsMapper.selectExamQuestions(pageDTO, pageBounds);
     }
 
     @Override
-    public Long countExamQuestions() {
-        return examQuestionsMapper.countExamQuestions();
+    public Long countExamQuestions(QuestionsPageDTO pageDTO) {
+        return examQuestionsMapper.countExamQuestions(pageDTO);
     }
 
     @Override

@@ -465,16 +465,36 @@
     </foreach>
   </insert>
 
-  <select id="selectExamQuestions" resultType="com.wxj.model.VO.ExamQuestionsDetailsVO">
+  <select id="selectExamQuestions" parameterType="com.wxj.model.DTO.QuestionsPageDTO" resultType="com.wxj.model.VO.ExamQuestionsDetailsVO">
     select eq.id, eq.code, c.name courseName, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE, eq.single_answer singleAnswer, eq.multiple_answer multipleAnswer, eq.yes_no_answer yesNoAnswer, eq.score
     from exam_questions eq
     LEFT JOIN course c on eq.course_code = c.code
+    where eq.course_code = #{record.courseCode,jdbcType=CHAR}
+    <if test='record.questionsCode != null and record.questionsCode != ""'>
+      and eq.code = #{record.questionsCode,jdbcType=CHAR}
+    </if>
+    <if test='record.title != null and record.title != ""'>
+      and eq.title like concat('%', #{record.questionsTitle,jdbcType=CHAR}, '%')
+    </if>
+    <if test='record.type != null and record.type != ""'>
+      and eq.type = #{record.questionsType,jdbctype=CHAR}
+    </if>
   </select>
 
-  <select id="countExamQuestions" resultType="java.lang.Long">
+  <select id="countExamQuestions" parameterType="com.wxj.model.DTO.QuestionsPageDTO" resultType="java.lang.Long">
     select count(1)
     from exam_questions eq
     LEFT JOIN course c on eq.course_code = c.code
+    where eq.course_code = #{record.courseCode,jdbcType=CHAR}
+    <if test='record.questionsCode != null and record.questionsCode != ""'>
+      and eq.code = #{record.questionsCode,jdbcType=CHAR}
+    </if>
+    <if test='record.title != null and record.title != ""'>
+      and eq.title like concat('%', #{record.questionsTitle,jdbcType=CHAR}, '%')
+    </if>
+    <if test='record.type != null and record.type != ""'>
+      and eq.type = #{record.questionsType,jdbctype=CHAR}
+    </if>
   </select>
 
   <resultMap id="ExamPaperQuestionsMap" type="com.wxj.model.DO.ExamQuestionsDO">

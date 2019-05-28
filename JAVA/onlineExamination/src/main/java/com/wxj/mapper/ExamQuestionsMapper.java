@@ -3,6 +3,7 @@ package com.wxj.mapper;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.wxj.model.DO.ExamQuestionsDO;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
+import com.wxj.model.DTO.QuestionsPageDTO;
 import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.PO.ExamQuestionsExample;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
@@ -86,9 +87,20 @@ public interface ExamQuestionsMapper {
 
     int batchInsert(List<ExamQuestions> examQuestionsList);
 
-    List<ExamQuestionsDetailsVO> selectExamQuestions(PageBounds pageBounds);
+    /**
+     * 供新增试卷使用
+     * @param pageDTO
+     * @param pageBounds
+     * @return
+     */
+    List<ExamQuestionsDetailsVO> selectExamQuestions(@Param("record") QuestionsPageDTO pageDTO, PageBounds pageBounds);
 
-    Long countExamQuestions();
+    /**
+     * 供新增试卷使用
+     * @param pageDTO
+     * @return
+     */
+    Long countExamQuestions(@Param("record") QuestionsPageDTO pageDTO);
 
     List<ExamQuestionsDO> selectExamPaperQuestionsDetails(Integer examPaperId);
 }

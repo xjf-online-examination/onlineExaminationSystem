@@ -11,7 +11,7 @@ import com.wxj.model.Bean.PageBean;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
-import com.wxj.model.DTO.PageDTO;
+import com.wxj.model.DTO.QuestionsPageDTO;
 import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
@@ -311,20 +311,20 @@ public class ExamQuestionsController {
     }
 
     /**
-     * 查询分页列表(不带条件，供新增试卷时使用)
+     * 查询分页列表(供新增试卷时使用)
      * @param requestBean
      * @return
      */
     @RequestMapping(value = "/listPage", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object listExamQuestions(HttpServletRequest request, @RequestBody RequestBean<PageDTO> requestBean) {
+    public Object listExamQuestions(HttpServletRequest request, @RequestBody RequestBean<QuestionsPageDTO> requestBean) {
         try {
-            PageDTO pageDTO = requestBean.getData();
-            new ValidateParamsUtil().vaildParams(pageDTO,"currentPage", "pageSize");
+            QuestionsPageDTO pageDTO = requestBean.getData();
+            new ValidateParamsUtil().vaildParams(pageDTO,"courseCode", "currentPage", "pageSize");
             List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList = examQuestionsService.listExamQuestions(pageDTO);
 
-            Long count = examQuestionsService.countExamQuestions();
+            Long count = examQuestionsService.countExamQuestions(pageDTO);
 
-            PageBean<ExamQuestionsVO> pageBean = new PageBean(count, pageDTO.getCurrentPage(), pageDTO.getPageSize(), examQuestionsDetailsVOList);
+            PageBean<ExamQuestionsDetailsVO> pageBean = new PageBean(count, pageDTO.getCurrentPage(), pageDTO.getPageSize(), examQuestionsDetailsVOList);
             return ResponseUtils.success("200",pageBean);
         } catch (BusinessException e) {
             return ResponseUtils.error(e);

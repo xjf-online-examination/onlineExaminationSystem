@@ -2,7 +2,7 @@ package com.wxj.service;
 
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
-import com.wxj.model.DTO.PageDTO;
+import com.wxj.model.DTO.QuestionsPageDTO;
 import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
@@ -36,9 +36,19 @@ public interface ExamQuestionsServiceI {
 
     int examQuestionsImport(List<ExamQuestions> examQuestionsList);
 
-    List<ExamQuestionsDetailsVO> listExamQuestions(PageDTO pageDTO);
+    /**
+     * 供新增试卷使用
+     * @param questionsPageDTO
+     * @return
+     */
+    List<ExamQuestionsDetailsVO> listExamQuestions(QuestionsPageDTO questionsPageDTO);
 
-    Long countExamQuestions();
+    /**
+     * 供新增试卷使用
+     * @param questionsPageDTO
+     * @return
+     */
+    Long countExamQuestions(QuestionsPageDTO questionsPageDTO);
 
     /**
      * 查询一级科目列表(供新增试题使用)
