@@ -102,10 +102,7 @@
               v-bind:key="index"
             ></Radio>
           </RadioGroup>
-          <CheckboxGroup
-            v-model="question.multipleAnswer"
-            v-if="question.type===2||question.type===3"
-          >
+          <CheckboxGroup v-model="multipleAnswer" v-if="question.type===2||question.type===3">
             <Checkbox
               :label="item"
               v-for="(item,index) in optionLabels.slice(0,options.length)"
@@ -161,7 +158,7 @@ export default {
     Tables,
     Journalizing,
   },
-  data () {
+  data() {
     return {
       columns: [
         {
@@ -246,9 +243,10 @@ export default {
         optionD: '',
         optionE: '',
         singleAnswer: '',
-        multipleAnswer: [],
+        multipleAnswer: '',
         yesNoAnswer: '',
       },
+      multipleAnswer: [],
       modalVisible: false,
       modalTitle: '',
       isAdd: true,
@@ -292,15 +290,15 @@ export default {
     };
   },
   methods: {
-    handleSearch () {
+    handleSearch() {
       console.log(this.searchData);
       this.getQuestionList(this.searchData);
     },
-    handleReset (name) {
+    handleReset(name) {
       this.$refs[name].resetFields();
       this.getQuestionList(this.searchData);
     },
-    onEdit (index) {
+    onEdit(index) {
       this.modalTitle = '修改';
       this.isAdd = false;
       this.getQuestionById(this.tableData.list[index].id).then((res) => {
@@ -312,19 +310,19 @@ export default {
         this.modalVisible = true;
       });
     },
-    onDelete (index) {
+    onDelete(index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange (params) {
+    onPageChange(params) {
       this.searchData.currentPage = params;
       this.getQuestionList(this.searchData);
     },
-    onPageSizeChange (params) {
+    onPageSizeChange(params) {
       this.searchData.pageSize = params;
       this.getQuestionList(this.searchData);
     },
-    onAdd () {
+    onAdd() {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
@@ -351,14 +349,17 @@ export default {
         this.journalizingData = data;
       }
     },
-    save (name) {
+    save(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isAdd) {
             if (this.question.type === 6) {
               this.question.entryStandardAnswerDetailsDTOList = this.journalizingData;
             }
-            // this.question.multipleAnswer = JSON.stringify(this.question.multipleAnswer);
+            if (this.question.type === 2) {
+              this.question.multipleAnswer = this.multipleAnswer.toString();
+            }
+
             addQuestion(this.question).then((res) => {
               console.log(res);
               if (res.responseCode === '201') {
@@ -384,11 +385,11 @@ export default {
         }
       });
     },
-    cancel (name) {
+    cancel(name) {
       this.modalVisible = false;
       this.$refs[name].resetFields();
     },
-    handleAddOption () {
+    handleAddOption() {
       if (this.options.length === 5) {
         this.errMsg = '选项不能大于5个';
       } else {
@@ -396,11 +397,11 @@ export default {
         this.options.push(this.options.length + 1);
       }
     },
-    handleRemoveOption (index) {
+    handleRemoveOption(index) {
       // TODO:
       this.options.splice(index, 1);
     },
-    getQuestionList () {
+    getQuestionList() {
       getQuestionList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -409,7 +410,7 @@ export default {
         }
       });
     },
-    listSubjectOne () {
+    listSubjectOne() {
       listSubjectOne().then((res) => {
         if (res.responseCode === '200') {
           this.subjectList = res.data;
@@ -418,7 +419,7 @@ export default {
         }
       });
     },
-    cusEditFunc (params) {
+    cusEditFunc(params) {
       if (params.type === 'total') { // 合计
         this.journalizingData[params.index].total = params.value;
       } else if (params.type === 'text') {
@@ -469,7 +470,7 @@ export default {
         }
       }
     },
-    handleRowEdit (params) {
+    handleRowEdit(params) {
       if (params.type === 'add') {
         this.journalizingData.splice(params.index, 0, this.journalizingObj);
       } else if (this.journalizingData.length === 1) {
@@ -479,7 +480,7 @@ export default {
         this.journalizingData.splice(params.index, 1);
       }
     },
-    getQuestionById (id) {
+    getQuestionById(id) {
       return new Promise((resolve, reject) => {
         getQuestionById(id).then((res) => {
           resolve(res);
@@ -487,7 +488,7 @@ export default {
       });
     },
   },
-  mounted () {
+  mounted() {
     this.getQuestionList();
     this.listSubjectOne();
   },
