@@ -18,5 +18,5 @@ public class ExamQuestionsVO implements Serializable {
 
     private String courseName;
 
-    private Integer type;
+    private String type;
 }
