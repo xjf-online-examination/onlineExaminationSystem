@@ -119,6 +119,7 @@ public class ClassServiceImpl implements ClassServiceI {
 
     @Override
     public int delete(Integer id) {
+        //提示：删除班级会删除班级相关所有信息，包括课程、学生、
         //TODO:删除班级信息
 
         //删除班级和课程对应表信息
