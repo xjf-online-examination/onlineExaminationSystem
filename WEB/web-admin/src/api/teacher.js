@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-26 20:50:05
+ * @Last Modified time: 2019-05-28 23:38:23
  */
 import axios from '@/libs/api.request';
 import qs from 'querystring';
@@ -439,9 +439,36 @@ export const addQuestion = data => axios.request({
     data,
   },
   method: 'post',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  },
+  // transformRequest: [function (e) {
+  //   function setDate(e) {
+  //     let t;
+  //     let n;
+  //     let i;
+  //     let r;
+  //     let o;
+  //     let s;
+  //     let a;
+  //     let
+  //       c = '';
+  //     for (t in e) {
+  //       if (n = e[t], n instanceof Array) {
+  //         for (a = 0; a < n.length; ++a) {
+  //           o = n[a], i = `${t}[${a }]`, s = {}, s[i] = o, c += `${setDate(s) }&`;
+  //         }
+  //       } else if (n instanceof Object) {
+  //         for (r in n) {
+  //           o = n[r], i = `${t}[${r }]`, s = {}, s[i] = o, c += `${setDate(s)
+  //           }&`;
+  //         }
+  //       } else {
+  //         void 0 !== n && n !== null && (c += `${encodeURIComponent(t)}=${
+  //           encodeURIComponent(n)}&`);
+  //       }
+  //     }
+  //     return c.length ? c.substr(0, c.length - 1) : c;
+  //   }
+  //   return setDate(e);
+  // }],
 });
 export const editQuestion = data => axios.request({
   url: 'examQuestions/modify',

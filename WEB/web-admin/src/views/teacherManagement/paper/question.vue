@@ -32,7 +32,10 @@
           search-place="top"
           v-model="tableData.list"
           :columns="columns"
-          @on-selection-change="handleSelect"
+          @on-select="handleSelect"
+          @on-select-cancel="handleSelectCancel"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleCancelAll"
         />
         <div class="table-pagenation m-t-s" v-if="tableData.count>0">
           <Page
@@ -52,18 +55,20 @@
             <div class="question-block">
               <label>{{index+1}}.</label>
               <div class="main-block">
-                <div>{{question.title}}({{paper.type}}:{{paper.score}}分)</div>
+                <div>{{question.title}}({{paper.type|paperTypeFilter}}:{{paper.score}}分)</div>
                 <div class="answer-block">
-                  <div class="option-block">
+                  <div class="option-block" v-if="question.type!==6">
                     <CheckboxGroup>
                       <Checkbox
-                        label="answer"
+                        :label="optionLabels[idx]+'.'+answer"
                         v-for="(answer,idx) in question.options"
                         v-bind:key="idx"
                         class="option-block"
                       ></Checkbox>
                     </CheckboxGroup>
-                    <div>{{optionLabels[index]}}.{{answer}}</div>
+                  </div>
+                  <div class="option-block" v-if="question.type===6">
+                    <Journalizing type="test" :data="journalizingData" :subject-list="subjectList"></Journalizing>
                   </div>
                 </div>
               </div>
@@ -96,6 +101,7 @@ export default {
         ...this.$route.query,
         examPaperQuestionsDTO: [],
       },
+      studentAnswer: '',
       split1: 0.5,
       columns: [
         {
@@ -132,23 +138,43 @@ export default {
       },
       optionLabels: ['A', 'B', 'C', 'D', 'E'],
       options: [],
+      journalizingData: [],
+      subjectList: [],
+      JournalizingObj: {
+        summary: '',
+        summaryScore: '',
+        subject1: '',
+        subject1Score: '',
+        subject2: '',
+        subject2Score: '',
+        debitAmount: '',
+        debitAmountScore: '',
+        creditAmount: '',
+        creditAmountScore: '',
+        total: '',
+        totalScore: '',
+        debitTotal: '',
+        debitTotalScore: '',
+        creditTotal: '',
+        creditTotalScore: '',
+      },
     };
   },
   methods: {
     handleSearch() {
-      this.getQuestionList(this.searchData);
+      this.listPage(this.searchData);
     },
     handleReset(name) {
       this.$refs[name].resetFields();
-      this.getQuestionList();
+      this.listPage();
     },
     onPageChange(params) {
       this.searchData.currentPage = params;
-      this.getQuestionList();
+      this.listPage();
     },
     onPageSizeChange(params) {
       this.searchData.pageSize = params;
-      this.getQuestionList();
+      this.listPage();
     },
     handleSelect(selection) {
       console.info('selection', selection);
@@ -165,6 +191,15 @@ export default {
           return question;
         });
       }
+    },
+    handleSelectCancel(selection) {
+      console.info('取消选择', selection);
+    },
+    handleSelectAll(selection) {
+      console.info('全选', selection);
+    },
+    handleCancelAll(selection) {
+      console.info('取消全选', selection);
     },
     listPage() {
       listPage(this.searchData).then((res) => {

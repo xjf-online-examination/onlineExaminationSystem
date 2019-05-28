@@ -23,13 +23,13 @@ export default {
   },
   methods: {
     addRow() {
-      const params = { type: 'edit', index: this.index, rowData: this.rowData };
-      this.$emit('on-custom-operation', params);
+      const params = { type: 'add', index: this.index, rowData: this.rowData };
+      this.$emit('on-custom-comp', params);
     },
 
     deleteRow() {
       const params = { type: 'delete', index: this.index };
-      this.$emit('on-custom-operation', params);
+      this.$emit('on-custom-comp', params);
     },
   },
 };

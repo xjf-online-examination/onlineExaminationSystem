@@ -60,6 +60,7 @@ class HttpRequest {
         config.data.securityKey = getToken();
         config.data.userCode = getUserCode();
       }
+
       return config;
     }, error => Promise.reject(error));
     // 响应拦截

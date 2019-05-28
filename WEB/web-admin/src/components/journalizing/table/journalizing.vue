@@ -239,7 +239,11 @@ export default {
       }
     },
     customCompFunc(params) {
-      this.$emit('tablechange', params);
+      if (params.type === 'add' || params.type === 'delete') {
+        this.$emit('rowedit', params);
+      } else {
+        this.$emit('tablechange', params);
+      }
     },
     rowEdit(params) {
       this.$emit('rowedit', params);
