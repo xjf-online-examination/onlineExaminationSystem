@@ -84,7 +84,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, entry_answer_id, 'row', summary, summary_score, subject1, subject1_score, subject2,
+    id, entry_answer_id, `row`, summary, summary_score, subject1, subject1_score, subject2,
     subject2_score, debit_amount, debit_amount_score, credit_amount, credit_amount_score,
     total, total_score, debit_total, debit_total_score, credit_total, credit_total_score,
     create_time, modify_time, del_flag
