@@ -20,6 +20,10 @@ public class ExamQuestionsDetailsVO implements Serializable {
      */
     private String code;
     /**
+     * 课程编号
+     */
+    private String courseCode;
+    /**
      * 课程名称
      */
     private String courseName;

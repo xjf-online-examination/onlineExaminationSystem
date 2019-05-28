@@ -9,7 +9,7 @@
    -->
 	<context-param>
 		<param-name>webAppRootKey</param-name>
-		<param-value>wise-portal-center</param-value>
+		<param-value>onlineExamination</param-value>
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -78,4 +78,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
 </web-app>

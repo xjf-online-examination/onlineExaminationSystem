@@ -66,10 +66,14 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     @Override
     public ExamQuestionsDetailsVO getExamQuestionsDetailsById(Integer id) {
         ExamQuestionsDetailsVO examQuestionsDetailsVO = examQuestionsMapper.getExamQuestionsDetailsById(id);
-        if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestionsDetailsVO.getType())) {
-            List<EntryStandardAnswerDetailsVO> entryStandardAnswerDetailsVOList = entryStandardAnswerDetailsMapper.selectEntryStandardAnswerDetailsVOByEntryStandardAnswerId(examQuestionsDetailsVO.getId());
+        try {
+            if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestionsDetailsVO.getType())) {
+                List<EntryStandardAnswerDetailsVO> entryStandardAnswerDetailsVOList = entryStandardAnswerDetailsMapper.selectEntryStandardAnswerDetailsVOByEntryStandardAnswerId(examQuestionsDetailsVO.getId());
 
-            examQuestionsDetailsVO.setEntryStandardAnswerDetailsVOList(entryStandardAnswerDetailsVOList);
+                examQuestionsDetailsVO.setEntryStandardAnswerDetailsVOList(entryStandardAnswerDetailsVOList);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return examQuestionsDetailsVO;
     }

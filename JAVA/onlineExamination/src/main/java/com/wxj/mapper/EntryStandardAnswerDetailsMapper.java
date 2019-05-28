@@ -76,5 +76,5 @@ public interface EntryStandardAnswerDetailsMapper {
 
     int batchInsert(@Param("list") List<EntryStandardAnswerDetails> list);
 
-    List<EntryStandardAnswerDetailsVO> selectEntryStandardAnswerDetailsVOByEntryStandardAnswerId(Integer entryAnswerId);
+    List<EntryStandardAnswerDetailsVO> selectEntryStandardAnswerDetailsVOByEntryStandardAnswerId(@Param("entryAnswerId") Integer entryAnswerId);
 }
