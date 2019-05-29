@@ -5,10 +5,7 @@ import com.google.common.collect.Lists;
 import com.wxj.constant.ExamConstant;
 import com.wxj.constant.SystemConstant;
 import com.wxj.exception.OperationException;
-import com.wxj.mapper.EntryStandardAnswerDetailsMapper;
-import com.wxj.mapper.ExamPaperQuestionsMapper;
-import com.wxj.mapper.ExamQuestionsMapper;
-import com.wxj.mapper.SubjectOneMapper;
+import com.wxj.mapper.*;
 import com.wxj.model.DTO.EntryStandardAnswerDetailsDTO;
 import com.wxj.model.DTO.ExamQuestionsParamsDTO;
 import com.wxj.model.DTO.ExamQuestionsSaveDTO;
@@ -29,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>Title: ExamQuestionsServiceImpl</p >
@@ -51,6 +49,8 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     SubjectOneMapper subjectOneMapper;
     @Autowired
     ExamPaperQuestionsMapper examPaperQuestionsMapper;
+    @Autowired
+    CourseMapper courseMapper;
 
     @Override
     public List<ExamQuestionsVO> listExamQuestionsByParams(ExamQuestionsParamsDTO examQuestionsParamsDTO) {
@@ -169,6 +169,13 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
 
     @Override
     public int examQuestionsImport(List<ExamQuestions> examQuestionsList) {
+        CourseExample courseExample = new CourseExample();
+        List<String> courseList = courseMapper.selectByExample(courseExample).stream().map(Course::getCode).collect(Collectors.toList());
+        for (int j=0,size=examQuestionsList.size(); j<size; j++) {
+            if (!courseList.contains(examQuestionsList.get(j).getCode())) {
+                throw new OperationException("导入试题失败, " + examQuestionsList.get(j).getCode() + "不存在, 请先添加课程");
+            }
+        }
         int i;
         try {
             i = examQuestionsMapper.batchInsert(examQuestionsList);
