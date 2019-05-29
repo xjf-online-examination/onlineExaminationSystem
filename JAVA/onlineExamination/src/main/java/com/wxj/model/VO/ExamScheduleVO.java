@@ -15,6 +15,10 @@ public class ExamScheduleVO implements Serializable {
      */
     private String id;
     /**
+     * 考试名称
+     */
+    private String examScheduleName;
+    /**
      * 开始时间
      */
     private String startTime;

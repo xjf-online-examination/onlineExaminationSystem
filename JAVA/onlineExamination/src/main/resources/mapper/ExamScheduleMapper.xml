@@ -290,7 +290,7 @@
   </update>
 
   <select id="listExamScheduleByParams" parameterType="com.wxj.model.DTO.ExamScheduleParamsDTO" resultType="com.wxj.model.VO.ExamScheduleVO">
-    select es.id, es.start_time startTime, es.duration, es.exam_paper_code examPaperCode, es.exam_paper_name examPaperName, cla.`name` className
+    select es.id,es.name examScheduleName, es.start_time startTime, es.duration, es.exam_paper_code examPaperCode, es.exam_paper_name examPaperName, cla.`name` className
     from exam_schedule es
     LEFT JOIN exam_paper ep on es.exam_paper_id = ep.id
     LEFT JOIN course cou on ep.course_code = cou.code
