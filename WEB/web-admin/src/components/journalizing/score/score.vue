@@ -21,13 +21,13 @@ export default {
   },
   data() {
     return {
-      value: '',
+      value: null,
     };
   },
   methods: {
     handleEdit() {
       const params = {
-        type: 'score', index: this.index, rowData: this.rowData, field: this.field, value: this.total,
+        type: 'score', index: this.index, rowData: this.rowData, field: this.field, value: this.value,
       };
       this.$emit('on-custom-comp', params);
     },
