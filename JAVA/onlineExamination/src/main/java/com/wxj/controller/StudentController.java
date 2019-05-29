@@ -301,6 +301,8 @@ public class StudentController {
             return ResponseUtils.error(e.getMessage());
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
+        } catch (Exception e) {
+            return ResponseUtils.error(e.getMessage());
         }
     }
 

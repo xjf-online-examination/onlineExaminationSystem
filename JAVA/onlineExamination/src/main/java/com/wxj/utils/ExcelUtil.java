@@ -1,5 +1,6 @@
 package com.wxj.utils;
 
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
 /**
@@ -14,11 +15,18 @@ import org.apache.poi.ss.usermodel.Row;
  */
 public class ExcelUtil {
 
-    public static boolean isRowEmpty(Row row) {
+    public static boolean isRowEmpty(Row row) throws Exception {
         for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
-            String cell = row.getCell(c).getStringCellValue();
-            if (cell != null && !"".equals(cell) && !"null".equals(cell))
-                return false;
+            if (row.getCell(c).getCellTypeEnum() == CellType.STRING) {
+                String cell = row.getCell(c).getStringCellValue();
+                if (cell != null && !"".equals(cell) && !"null".equals(cell))
+                    return false;
+            }
+            if (row.getCell(c).getCellTypeEnum() == CellType.NUMERIC) {
+                Double cell = row.getCell(c).getNumericCellValue();
+                if (cell != null)
+                    return false;
+            }
         }
         return true;
     }
