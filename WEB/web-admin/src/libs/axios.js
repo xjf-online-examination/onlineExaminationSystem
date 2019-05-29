@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '@/store';
-import qs from 'querystring';
+import router from '@/router';
 import {
   getToken,
   getUserCode,
@@ -69,7 +69,17 @@ class HttpRequest {
       const {
         data,
       } = res;
-      return data;
+      if (data.responseCode === '401') { // 超时
+        // store.commit(types.LOGOUT);
+        router.push({
+          path: '/login',
+          query: {
+            redirect: router.currentRoute.fullPath,
+          },
+        });
+      } else {
+        return data;
+      }
     }, (error) => {
       this.destroy(url);
       let errorInfo = error.response;

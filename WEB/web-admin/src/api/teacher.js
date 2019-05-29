@@ -2,10 +2,9 @@
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-28 23:38:23
+ * @Last Modified time: 2019-05-29 02:23:16
  */
 import axios from '@/libs/api.request';
-import qs from 'querystring';
 /** ***********教师管理模块 begin ************* */
 export const getTeacherList = ({
   name,
@@ -378,6 +377,13 @@ export const deletePaper = id => axios.request({
   },
   method: 'post',
 });
+export const getPaperById = id => axios.request({
+  url: 'examPaper/get',
+  data: {
+    data: id,
+  },
+  method: 'post',
+});
 /** ***********试卷管理模块 end ************* */
 
 /** ***********考试安排模块 start *********** */
@@ -439,36 +445,6 @@ export const addQuestion = data => axios.request({
     data,
   },
   method: 'post',
-  // transformRequest: [function (e) {
-  //   function setDate(e) {
-  //     let t;
-  //     let n;
-  //     let i;
-  //     let r;
-  //     let o;
-  //     let s;
-  //     let a;
-  //     let
-  //       c = '';
-  //     for (t in e) {
-  //       if (n = e[t], n instanceof Array) {
-  //         for (a = 0; a < n.length; ++a) {
-  //           o = n[a], i = `${t}[${a }]`, s = {}, s[i] = o, c += `${setDate(s) }&`;
-  //         }
-  //       } else if (n instanceof Object) {
-  //         for (r in n) {
-  //           o = n[r], i = `${t}[${r }]`, s = {}, s[i] = o, c += `${setDate(s)
-  //           }&`;
-  //         }
-  //       } else {
-  //         void 0 !== n && n !== null && (c += `${encodeURIComponent(t)}=${
-  //           encodeURIComponent(n)}&`);
-  //       }
-  //     }
-  //     return c.length ? c.substr(0, c.length - 1) : c;
-  //   }
-  //   return setDate(e);
-  // }],
 });
 export const editQuestion = data => axios.request({
   url: 'examQuestions/modify',
@@ -488,34 +464,9 @@ export const listSubjectOne = () => axios.request({
   url: 'examQuestions/listSubjectOne',
   method: 'get',
 });
+export const downloadQuestionsTemplate = () => axios.request({
+  url: 'examQuestions/download',
+  method: 'get',
+  responseType: 'blob',
+});
 /** ***********试题模块模块 end ************* */
-export const getDragList = () => axios.request({
-  url: 'get_drag_list',
-  method: 'get',
-});
-
-export const errorReq = () => axios.request({
-  url: 'error_url',
-  method: 'post',
-});
-
-export const saveErrorLogger = info => axios.request({
-  url: 'save_error_logger',
-  data: info,
-  method: 'post',
-});
-
-export const uploadImg = formData => axios.request({
-  url: 'image/upload',
-  data: formData,
-});
-
-export const getOrgData = () => axios.request({
-  url: 'get_org_data',
-  method: 'get',
-});
-
-export const getTreeSelectData = () => axios.request({
-  url: 'get_tree_select_data',
-  method: 'get',
-});

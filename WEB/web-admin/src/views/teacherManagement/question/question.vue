@@ -25,8 +25,32 @@
         <Button type="default" @click="handleReset('questionSearch')" class="m-l-s">重置</Button>
       </FormItem>
     </Form>
-    <Button type="primary" @click="onAdd()" class="m-b-s">添加</Button>
-    <tables ref="tables" search-place="top" v-model="tableData.list" :columns="columns"/>
+    <div class="m-b-s flex-display">
+      <Button type="primary" @click="onAdd()">添加</Button>
+      <Upload
+        class="m-l-s"
+        :action="baseUrl+'/examQuestions/import'"
+        :data="uploadData"
+        accept=".xlsx, .xlx"
+        :show-upload-list="false"
+        @on-success="importSuccess()"
+        @on-error="importError()"
+      >
+        <Button type="primary">导入</Button>
+      </Upload>
+      <Button type="primary" @click="onDownload()" class="m-l-s">下载模板</Button>
+    </div>
+    <tables
+      ref="tables"
+      search-place="top"
+      v-model="tableData.list"
+      :columns="columns"
+      key="listTable"
+    >
+      <!-- <template slot-scope="scope">
+        <strong>{{ scope.row.type |questionType }}</strong>
+      </template>-->
+    </tables>
     <div class="table-pagenation m-t-s" v-if="tableData.count>0">
       <Page
         :total="tableData.count"
@@ -51,12 +75,12 @@
         </FormItem>
         <FormItem prop="type" label="题目类型">
           <Select v-model="question.type">
-            <Option :value="1">单选题</Option>
-            <Option :value="2">多选题</Option>
+            <Option value="1">单选题</Option>
+            <Option value="2">多选题</Option>
             <!-- <Option :value="3">不定向选择题</Option> -->
-            <Option :value="4">判断题</Option>
+            <Option value="4">判断题</Option>
             <!-- <Option :value="5">简答题</Option> -->
-            <Option :value="6">分录</Option>
+            <Option value="6">分录</Option>
           </Select>
         </FormItem>
         <FormItem prop="title" label="题目">
@@ -65,7 +89,7 @@
         <FormItem
           label-position="top"
           label="选项"
-          v-if="question.type===1||question.type===2||question.type==3||question.type===4"
+          v-if="question.type==='1'||question.type==='2'||question.type=='3'||question.type==='4'"
         >
           <Row>
             <Col span="24">
@@ -95,26 +119,26 @@
           </Row>
         </FormItem>
         <FormItem label="答案">
-          <RadioGroup v-model="question.singleAnswer" v-if="question.type===1">
+          <RadioGroup v-model="question.singleAnswer" v-if="question.type==='1'">
             <Radio
               :label="item"
               v-for="(item,index) in optionLabels.slice(0,options.length)"
               v-bind:key="index"
             ></Radio>
           </RadioGroup>
-          <CheckboxGroup v-model="multipleAnswer" v-if="question.type===2||question.type===3">
+          <CheckboxGroup v-model="multipleAnswer" v-if="question.type==='2'||question.type==='3'">
             <Checkbox
               :label="item"
               v-for="(item,index) in optionLabels.slice(0,options.length)"
               v-bind:key="index"
             ></Checkbox>
           </CheckboxGroup>
-          <RadioGroup v-model="question.yesNoAnswer" v-if="question.type===4">
+          <RadioGroup v-model="question.yesNoAnswer" v-if="question.type==='4'">
             <Radio label="是"></Radio>
             <Radio label="否"></Radio>
           </RadioGroup>
           <Journalizing
-            v-if="question.type===6"
+            v-if="question.type==='6'"
             type="answer"
             :data="journalizingData"
             :subject-list="subjectList"
@@ -127,7 +151,7 @@
           <Input type="text" v-model="question.score" placeholder="请输入分值"/>
           <Journalizing
             class="m-t-s"
-            v-if="question.type===6"
+            v-if="question.type==='6'"
             type="score"
             :data="journalizingData"
             v-on:tablechange="cusEditFunc"
@@ -144,21 +168,35 @@
 
 
 <script>
+import FileSaver from 'file-saver';
 import Tables from '@/components/tables';
-
+import config from '@/config';
 import Journalizing from '@/components/journalizing/table';
 import {
-  addQuestion, editQuestion, getQuestionList, listSubjectOne, getQuestionById,
+  addQuestion, editQuestion, getQuestionList, listSubjectOne, getQuestionById, downloadQuestionsTemplate,
 } from '@/api/teacher';
 import { Promise, promised } from 'q';
 
+const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro;
 export default {
   name: 'classes',
   components: {
     Tables,
     Journalizing,
   },
-  data() {
+  filters: {
+    /* 格式化时间戳 */
+    questionType (value) {
+      if (!value) return '';
+      let result = '';
+      if (value === '1') result = '单选题';
+      else if (value === '2') result = '多选题';
+      else if (value === '4') result = '判断题';
+      else result = '分录';
+      return result;
+    },
+  },
+  data () {
     return {
       columns: [
         {
@@ -174,7 +212,9 @@ export default {
           title: '试题课程', key: 'courseName', align: 'center',
         },
         {
-          title: '试题类型', key: 'type', align: 'center',
+          title: '试题类型',
+          align: 'center',
+          key: 'typeName',
         },
         {
           title: '操作',
@@ -235,7 +275,7 @@ export default {
       },
       question: {
         courseCode: '',
-        type: 1,
+        type: '1',
         title: '',
         optionA: '',
         optionB: '',
@@ -259,7 +299,7 @@ export default {
         ],
         type: [
           {
-            required: true, message: '课程类型不能为空', trigger: 'change', type: 'number',
+            required: true, message: '课程类型不能为空', trigger: 'change',
           },
         ],
         title: [
@@ -290,39 +330,48 @@ export default {
     };
   },
   methods: {
-    handleSearch() {
+    handleSearch () {
       console.log(this.searchData);
       this.getQuestionList(this.searchData);
     },
-    handleReset(name) {
+    handleReset (name) {
       this.$refs[name].resetFields();
       this.getQuestionList(this.searchData);
     },
-    onEdit(index) {
+    onEdit (index) {
       this.modalTitle = '修改';
       this.isAdd = false;
       this.getQuestionById(this.tableData.list[index].id).then((res) => {
         if (res.responseCode === '200') {
+          this.options = [];
           this.question = res.data;
+          if (res.data.type === '2') {
+            this.multipleAnswer = res.data.multipleAnswer.split(',');
+          }
+          if (res.data.optionA) this.options.push(1);
+          if (res.data.optionB) this.options.push(2);
+          if (res.data.optionC) this.options.push(3);
+          if (res.data.optionD) this.options.push(4);
+          if (res.data.optionE) this.options.push(5);
         } else {
           this.question = {};
         }
         this.modalVisible = true;
       });
     },
-    onDelete(index) {
+    onDelete (index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange(params) {
+    onPageChange (params) {
       this.searchData.currentPage = params;
       this.getQuestionList(this.searchData);
     },
-    onPageSizeChange(params) {
+    onPageSizeChange (params) {
       this.searchData.pageSize = params;
       this.getQuestionList(this.searchData);
     },
-    onAdd() {
+    onAdd () {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
@@ -349,14 +398,15 @@ export default {
         this.journalizingData = data;
       }
     },
-    save(name) {
+    save (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isAdd) {
-            if (this.question.type === 6) {
+            if (this.question.type === '6') {
               this.question.entryStandardAnswerDetailsDTOList = this.journalizingData;
+              console.log(this.journalizingData);
             }
-            if (this.question.type === 2) {
+            if (this.question.type === '2') {
               this.question.multipleAnswer = this.multipleAnswer.toString();
             }
 
@@ -371,6 +421,12 @@ export default {
               this.modalVisible = false;
             });
           } else {
+            if (this.question.type === '6') {
+              this.question.entryStandardAnswerDetailsDTOList = this.journalizingData;
+            }
+            if (this.question.type === '2') {
+              this.question.multipleAnswer = this.multipleAnswer.toString();
+            }
             editQuestion(this.question).then((res) => {
               console.log(res);
               if (res.responseCode === '201') {
@@ -385,11 +441,11 @@ export default {
         }
       });
     },
-    cancel(name) {
+    cancel (name) {
       this.modalVisible = false;
       this.$refs[name].resetFields();
     },
-    handleAddOption() {
+    handleAddOption () {
       if (this.options.length === 5) {
         this.errMsg = '选项不能大于5个';
       } else {
@@ -397,20 +453,30 @@ export default {
         this.options.push(this.options.length + 1);
       }
     },
-    handleRemoveOption(index) {
+    handleRemoveOption (index) {
       // TODO:
       this.options.splice(index, 1);
     },
-    getQuestionList() {
+    getQuestionList () {
       getQuestionList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
+          if (this.tableData.list.length > 0) {
+            this.tableData.list.map((row) => {
+              if (row.type === '1') row.typeName = '单选题';
+              else if (row.type === '2') row.typeName = '多选题';
+              else if (row.type === '4') row.typeName = '判断题';
+              else if (row.type === '6') row.typeName = '分录';
+              else row.typeName = '';
+              return row;
+            });
+          }
         } else {
           this.tableData = { list: [], count: 0 };
         }
       });
     },
-    listSubjectOne() {
+    listSubjectOne () {
       listSubjectOne().then((res) => {
         if (res.responseCode === '200') {
           this.subjectList = res.data;
@@ -419,7 +485,7 @@ export default {
         }
       });
     },
-    cusEditFunc(params) {
+    cusEditFunc (params) {
       if (params.type === 'total') { // 合计
         this.journalizingData[params.index].total = params.value;
       } else if (params.type === 'text') {
@@ -470,7 +536,7 @@ export default {
         }
       }
     },
-    handleRowEdit(params) {
+    handleRowEdit (params) {
       if (params.type === 'add') {
         this.journalizingData.splice(params.index, 0, this.journalizingObj);
       } else if (this.journalizingData.length === 1) {
@@ -480,15 +546,33 @@ export default {
         this.journalizingData.splice(params.index, 1);
       }
     },
-    getQuestionById(id) {
+    getQuestionById (id) {
       return new Promise((resolve, reject) => {
         getQuestionById(id).then((res) => {
           resolve(res);
         });
       });
     },
+    onDownload () {
+      downloadQuestionsTemplate().then((res) => {
+        const blob = new Blob([res], {
+          type: 'application/octet-stream',
+        });
+        // const header = headers('Content-Disposition');
+        const fileName = `questionsTemplate_${new Date().getTime()}.xlsx`;
+        FileSaver.saveAs(blob, fileName);
+      });
+    },
+    importSuccess (res) {
+      console.log(res);
+      // TODO:
+    },
+    importError (res) {
+      console.log(res);
+      // TODO:
+    },
   },
-  mounted() {
+  mounted () {
     this.getQuestionList();
     this.listSubjectOne();
   },
@@ -498,6 +582,9 @@ export default {
 <style lang="less" scoped>
 .search-flex {
   display: inline-flex;
+}
+.flex-display {
+  display: -webkit-box;
 }
 .table-pagenation {
   display: flex;

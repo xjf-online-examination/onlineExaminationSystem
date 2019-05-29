@@ -307,6 +307,7 @@ export default {
               this.modalVisible = false;
             });
           }
+          this.$refs[name].resetFields();
         }
       });
     },

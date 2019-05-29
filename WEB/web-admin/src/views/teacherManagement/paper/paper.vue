@@ -71,7 +71,7 @@
 <script>
 import Tables from '@/components/tables';
 import {
-  getPaperList, automaticPaper, editPaper, deletePaper, getAllCourseList,
+  getPaperList, automaticPaper, editPaper, deletePaper, getAllCourseList, getPaperById,
 } from '@/api/teacher';
 
 export default {
@@ -184,7 +184,14 @@ export default {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
-      this.paper = Object.assign({}, this.tableData.list[index]);
+      this.getPaperById(this.tableData.list[index].id).then((res) => {
+        if (res.responseCode === '200') {
+          this.paper = res.data;
+        } else {
+          this.paper = {};
+        }
+        this.modalVisible = true;
+      });
     },
     onDelete(index) {
       this.showDeleteModal = true;
@@ -280,6 +287,13 @@ export default {
         } else {
           this.courseList = [];
         }
+      });
+    },
+    getPaperById(id) {
+      return new Promise((resolve, reject) => {
+        getPaperById(id).then((res) => {
+          resolve(res);
+        });
       });
     },
   },
