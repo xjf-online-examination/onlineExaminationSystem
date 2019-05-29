@@ -121,20 +121,27 @@ public class StudentServiceImpl implements StudentServiceI {
         return i;
     }
 
+    @Transactional
     @Override
     public int delete(Integer id) {
         int i = 0;
         Student student = studentMapper.selectByPrimaryKey(id);
         i = studentMapper.deleteByPrimaryKey(id);
+
         StudentAnswerExample studentAnswerExample = new StudentAnswerExample();
         studentAnswerExample.createCriteria().andStudentSnoEqualTo(student.getSno());
-        List<Integer> studentAnswerIdList = studentAnswerMapper.selectByExample(studentAnswerExample).stream().map(StudentAnswer::getId).collect(Collectors.toList());
+        List<StudentAnswer> studentAnswerList = studentAnswerMapper.selectByExample(studentAnswerExample);
+        if (null != studentAnswerList && studentAnswerList.size() > 0) {
+            i = studentAnswerMapper.deleteByExample(studentAnswerExample);
 
-        i = studentAnswerMapper.deleteByExample(studentAnswerExample);
+            List<Integer> studentAnswerIdList = studentAnswerList.stream().filter(obj->obj.getQuestionsType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).map(StudentAnswer::getId).collect(Collectors.toList());
+            if (studentAnswerIdList != null && studentAnswerIdList.size() > 0) {
+                EntryAnswerDetailsExample entryAnswerDetailsExample = new EntryAnswerDetailsExample();
+                entryAnswerDetailsExample.createCriteria().andEntryAnswerIdIn(studentAnswerIdList);
+                i = entryAnswerDetailsMapper.deleteByExample(entryAnswerDetailsExample);
+            }
+        }
 
-        EntryAnswerDetailsExample entryAnswerDetailsExample = new EntryAnswerDetailsExample();
-        entryAnswerDetailsExample.createCriteria().andEntryAnswerIdIn(studentAnswerIdList);
-        i = entryAnswerDetailsMapper.deleteByExample(entryAnswerDetailsExample);
         if (SystemConstant.ZERO == i) {
             throw new OperationException("删除失败");
         }
@@ -236,6 +243,7 @@ public class StudentServiceImpl implements StudentServiceI {
         return i;
     }
 
+    @Transactional
     @Override
     public int studentImport(List<StudentParamsDTO> studentParamsDTOList) {
         Date date = new Date();
@@ -251,6 +259,9 @@ public class StudentServiceImpl implements StudentServiceI {
             student.setSno(studentParamsDTO.getSno());
             student.setName(studentParamsDTO.getName());
             student.setLoginPassword(SystemConstant.LOGIN_PASSWORD);
+            if (null == classMap.get(studentParamsDTO.getClassCode())) {
+                throw new OperationException(studentParamsDTO.getClassCode() + " 改班级不存在, 请先添加班级");
+            }
             student.setClassId(classMap.get(studentParamsDTO.getClassCode()));
             student.setCreateTime(date);
             student.setModifyTime(date);
