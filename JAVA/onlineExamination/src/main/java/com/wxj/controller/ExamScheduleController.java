@@ -130,7 +130,7 @@ public class ExamScheduleController {
                 throw new ParamEmptyException("data不能为空");
             }
             examScheduleService.delete(requestBean.getData());
-            return ResponseUtils.success("201");
+            return ResponseUtils.success("204");
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }
