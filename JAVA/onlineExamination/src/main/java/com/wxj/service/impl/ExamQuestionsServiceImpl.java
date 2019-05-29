@@ -146,7 +146,6 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                 EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
                 BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
                 entryStandardAnswerDetails.setRow(new Integer(i).byteValue());
-                entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1());
                 entryStandardAnswerDetails.setModifyTime(date);
                 entryStandardAnswerDetailsMapper.updateByPrimaryKeySelective(entryStandardAnswerDetails);
             }
