@@ -20,7 +20,7 @@
           <Select v-model="course.classCourseIdList" multiple style="width:260px">
             <OptionGroup
               :label="course.courseName"
-              v-for="(course,index) in classCourseList"
+              v-for="(course,index) in allCourseList"
               v-bind:key="index"
             >
               <Option
@@ -169,18 +169,16 @@ export default {
     getAllClassCourses() {
       getAllClassCourses().then((res) => {
         if (res.responseCode === '200') {
-          this.classCourseList = res.data;
+          this.allCourseList = res.data;
         } else {
-          this.classCourseList = [];
+          this.allCourseList = [];
         }
       });
     },
-
   },
   mounted() {
     this.getCourseList();
     this.getAllClassCourses();
-    this.getAllCourseList();
   },
 };
 </script>

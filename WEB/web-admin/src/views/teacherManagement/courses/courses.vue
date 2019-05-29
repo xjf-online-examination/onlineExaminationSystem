@@ -40,7 +40,7 @@
           <Input type="text" v-model="course.name" placeholder="请输入课程名称"/>
         </FormItem>
         <FormItem prop="classId" label="班级">
-          <Select v-model="course.classId" filterable placeholder="请选择班级">
+          <Select v-model="course.classIdList" multiple filterable placeholder="请选择班级">
             <Option v-for="item in classList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
@@ -129,7 +129,7 @@ export default {
       course: {
         name: '',
         code: '',
-        classId: '',
+        classIdList: '',
       },
       modalVisible: false,
       modalTitle: '',
@@ -144,9 +144,9 @@ export default {
         name: [
           { required: true, message: '课程姓名不能为空', trigger: 'blur' },
         ],
-        classId: [
+        classIdList: [
           {
-            required: true, message: '班级不能为空', trigger: 'change', type: 'number',
+            required: true, message: '班级不能为空', trigger: 'change', type: 'Array',
           },
         ],
       },

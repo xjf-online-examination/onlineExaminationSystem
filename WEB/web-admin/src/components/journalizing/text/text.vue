@@ -1,6 +1,6 @@
 <template>
   <div class="total">
-    <Input type="text" class="text-cell" v-model="total" @on-blur="handleEdit"/>
+    <Input type="textarea" class="text-cell" v-model="rowData.value" @on-blur="handleEdit"/>
   </div>
 </template>
 
@@ -20,13 +20,14 @@ export default {
   },
   data() {
     return {
-      total: '',
+      value: '',
     };
   },
   methods: {
     handleEdit() {
+      this.rowData.value = this.value;
       const params = {
-        type: 'text', index: this.index, rowData: this.rowData, field: this.field, value: this.total,
+        type: 'text', index: this.index, rowData: this.rowData, field: this.field, value: this.value,
       };
       this.$emit('on-custom-comp', params);
     },
@@ -42,7 +43,7 @@ export default {
     border: none;
     .ivu-input {
       border: none;
-      height: 40px;
+      height: -webkit-fill-available;
       border-radius: 0;
     }
   }

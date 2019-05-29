@@ -29,23 +29,29 @@
     <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
       <Form ref="schedulerForm" :model="scheduler" :rules="rules">
         <FormItem prop="title" label="考试安排名称">
-          <Input type="text" v-model="scheduler.title" placeholder="请输入课程名称"/>
+          <Input type="text" v-model="scheduler.title" placeholder="请输入考试安排名称"/>
         </FormItem>
         <FormItem prop="examPaperCode" label="试卷编号">
-          <Input type="text" v-model="scheduler.examPaperCode" placeholder="请输入课程名称"/>
+          <Input type="text" v-model="scheduler.examPaperCode" placeholder="请输入试卷编号"/>
         </FormItem>
-        <FormItem prop="startTime" label="考试开始时间">
+        <FormItem prop="time" label="考试开始时间">
           <DatePicker
             type="datetime"
-            v-model="scheduler.startTime"
+            v-model="scheduler.time"
             placeholder="请选择考试开始时间"
             style="width: 200px"
+            @on-change="setStartTime"
+            :options="options"
           ></DatePicker>
         </FormItem>
-        <FormItem prop="duration" label="考试时长">
+        <FormItem prop="duration" label="考试时长(分)">
           <InputNumber v-model="scheduler.duration"></InputNumber>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button type="text" @click="cancel('schedulerForm')">取消</Button>
+        <Button type="primary" @click="save('schedulerForm')">确定</Button>
+      </div>
     </Modal>
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteScheduler">
       <p>是否删除该考试安排，删除后无法恢复？</p>
@@ -65,14 +71,19 @@ export default {
   components: {
     Tables,
   },
-  data () {
+  data() {
     return {
+      options: {
+        disabledDate(date) {
+          return date && date.valueOf() < Date.now() - 86400000;
+        },
+      },
       columns: [
         {
           title: '序号', type: 'index', align: 'center',
         },
         {
-          title: '课程名称', key: 'code', align: 'center',
+          title: '课程名称', key: 'className', align: 'center',
         },
         {
           title: '考试时间', key: 'startTime', align: 'center',
@@ -81,7 +92,7 @@ export default {
           title: '考试时长', key: 'duration', align: 'center',
         },
         {
-          title: '试卷编号', type: 'examPaperCode', align: 'center',
+          title: '试卷编号', key: 'examPaperCode', align: 'center',
         },
         {
           title: '试卷名称', key: 'examPaperName', align: 'center',
@@ -138,6 +149,7 @@ export default {
         examPaperCode: '',
         startTime: '',
         duration: 0,
+        time: '',
       },
       modalVisible: false,
       modalTitle: '',
@@ -152,84 +164,96 @@ export default {
         examPaperCode: [
           { required: true, message: '试卷编号不能为空', trigger: 'blur' },
         ],
-        startTime: [
-          { required: true, message: '考试试卷不能为空', trigger: 'blur' },
+        time: [
+          {
+            required: true, message: '考试时间不能为空', trigger: 'blur', type: 'date',
+          },
         ],
-        duration: [{ required: true, message: '考试视窗不能为空', trigger: 'blur' },
+        duration: [{
+          required: true, message: '考试时长不能为空', trigger: 'blur', type: 'number',
+        },
         ],
       },
     };
   },
   methods: {
-    handleSearch () {
+    handleSearch() {
       this.getSchedulerList(this.searchData);
     },
-    handleReset (name) {
-      this.searchData = {
-        examPaperCode: '',
-        stauts: '',
-        currentPage: 1,
-        pageSize: 10,
-      };
+    handleReset(name) {
+      this.$refs[name].resetFields();
       this.getSchedulerList(this.searchData);
     },
-    onEdit (index) {
+    onEdit(index) {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
-      this.course = Object.assign({}, this.tableData.list[index]);
+      this.scheduler = Object.assign({}, this.tableData.list[index]);
+      this.scheduler.time = new Date(this.scheduler.startTime);
     },
-    onDelete (index) {
+    onDelete(index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange (params) {
+    onPageChange(params) {
       this.searchData.currentPage = params;
       this.getSchedulerList(this.searchData);
     },
-    onPageSizeChange (params) {
+    onPageSizeChange(params) {
       this.searchData.pageSize = params;
       this.getSchedulerList(this.searchData);
     },
-    onAdd () {
+    onAdd() {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save () {
-      if (this.isAdd) {
-        addScheduler(this.scheduler).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getSchedulerList();
-            this.$Message.success('添加成功');
+    save(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          if (this.isAdd) {
+            addScheduler(this.scheduler).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getSchedulerList();
+                this.$Notice.success({ title: '添加成功' });
+              } else {
+                this.$Notice.error({ title: '添加失败' });
+              }
+              this.$refs[name].resetFields();
+              this.modalVisible = false;
+            });
           } else {
-            this.$Message.success('添加失败');
+            editScheduler(this.scheduler).then((res) => {
+              console.log(res);
+              if (res.responseCode === '201') {
+                this.getSchedulerList();
+                this.$Notice.success({ title: '修改成功' });
+              } else {
+                this.$Notice.error({ title: '修改失败' });
+              }
+              this.$refs[name].resetFields();
+              this.modalVisible = false;
+            });
           }
-        });
-      } else {
-        editScheduler(this.scheduler).then((res) => {
-          console.log(res);
-          if (res.responseCode === '201') {
-            this.getSchedulerList();
-            this.$Message.success('修改成功');
-          } else {
-            this.$Message.success('修改失败');
-          }
-        });
-      }
-    },
-    deleteScheduler () {
-      deleteScheduler(this.tableData.list[this.selectIndex].id).then((res) => {
-        if (res.responseCode === '204') {
-          this.$Message.success('删除成功');
-          this.getSchedulerList();
-        } else {
-          this.$Message.error('删除失败');
         }
       });
     },
-    getSchedulerList () {
+    cancel(name) {
+      this.modalVisible = false;
+      this.$refs[name].resetFields();
+    },
+    deleteScheduler() {
+      deleteScheduler(this.tableData.list[this.selectIndex].id).then((res) => {
+        if (res.responseCode === '204') {
+          this.$Notice.success({ title: '删除成功' });
+          this.getSchedulerList();
+        } else {
+          this.$Notice.error({ title: '删除失败' });
+        }
+      });
+    },
+    getSchedulerList() {
       getSchedulerList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -238,15 +262,18 @@ export default {
         }
       });
     },
-    getAllCourses () {
+    getAllCourses() {
       getAllCourses().then((res) => {
         if (res.responseCode === '200') {
           this.courseList = res.data;
         }
       });
     },
+    setStartTime(value, type) {
+      this.scheduler.startTime = value;
+    },
   },
-  mounted () {
+  mounted() {
     this.getSchedulerList();
   },
 };

@@ -43,34 +43,6 @@ export default [{
   }],
 },
 {
-  path: '/teacher',
-  name: 'teacherManagement',
-  meta: {
-    hideInBread: true,
-    access: ['teacher'],
-  },
-  component: Main,
-  children: [{
-    path: 'teacher',
-    name: 'teacher',
-    meta: {
-      icon: 'ios-people',
-      title: '教师管理',
-    },
-    component: () => import('@/views/teacherManagement/teachers/teachers'),
-  }, {
-    path: 'course',
-    name: 'teacherCourse',
-    meta: {
-      icon: 'ios-people',
-      title: '所授课程',
-      hideInMenu: true,
-      notCache: true,
-    },
-    component: () => import('@/views/teacherManagement/teachers/course'),
-  }],
-},
-{
   path: '/student',
   name: 'studentManagement',
   meta: {
@@ -96,6 +68,34 @@ export default [{
       notCache: true,
     },
     component: () => import('@/views/teacherManagement/students/score'),
+  }],
+},
+{
+  path: '/teacher',
+  name: 'teacherManagement',
+  meta: {
+    hideInBread: true,
+    access: ['teacher'],
+  },
+  component: Main,
+  children: [{
+    path: 'teacher',
+    name: 'teacher',
+    meta: {
+      icon: 'ios-people',
+      title: '教师管理',
+    },
+    component: () => import('@/views/teacherManagement/teachers/teachers'),
+  }, {
+    path: 'course',
+    name: 'teacherCourse',
+    meta: {
+      icon: 'ios-people',
+      title: '所授课程',
+      hideInMenu: true,
+      notCache: true,
+    },
+    component: () => import('@/views/teacherManagement/teachers/course'),
   }],
 },
 {
@@ -135,6 +135,24 @@ export default [{
   }],
 },
 {
+  path: '/question',
+  name: 'questionManagement',
+  meta: {
+    hideInBread: true,
+    access: ['teacher'],
+  },
+  component: Main,
+  children: [{
+    path: 'question',
+    name: 'question',
+    meta: {
+      icon: 'ios-list-box',
+      title: '试题管理',
+    },
+    component: () => import('@/views/teacherManagement/question/question'),
+  }],
+},
+{
   path: '/paper',
   name: 'paperManagement',
   meta: {
@@ -163,24 +181,6 @@ export default [{
     component: () => import('@/views/teacherManagement/paper/question'),
   },
   ],
-},
-{
-  path: '/question',
-  name: 'questionManagement',
-  meta: {
-    hideInBread: true,
-    access: ['teacher'],
-  },
-  component: Main,
-  children: [{
-    path: 'question',
-    name: 'question',
-    meta: {
-      icon: 'ios-list-box',
-      title: '试题管理',
-    },
-    component: () => import('@/views/teacherManagement/question/question'),
-  }],
 },
 {
   path: '/scheduler',

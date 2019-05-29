@@ -1,6 +1,6 @@
 <template>
   <div class="cell-bg" @click="edit=true">
-    <span v-if="!edit" :class="isNegative ? 'font-negative' : 'font-normal' ">{{money}}</span>
+    <span v-if="!edit" :class="isNegative ? 'font-negative' : 'font-normal' ">{{positiveNumber}}</span>
     <Poptip trigger="focus" v-if="edit" style="width:100%">
       <Input v-model="value" type="number" @on-blur="handleEdit" autofocus/>
       <div slot="content">{{ formatNumber }}</div>
@@ -28,6 +28,7 @@ export default {
       edit: false,
       money: '',
       isNegative: false,
+      positiveNumber: '',
     };
   },
   methods: {
@@ -40,6 +41,7 @@ export default {
           this.isNegative = false;
         }
         this.money = val * 100;
+        this.positiveNumber = Math.abs(this.money);
       }
       this.edit = false;
       const params = {
@@ -50,7 +52,7 @@ export default {
   },
   computed: {
     formatNumber() {
-      if (this.value === '') return '';
+      if (this.value === '') return 0;
       function parseNumber(str) {
         const re = /(?=(?!)(d{3})+$)/g;
         return str.replace(re, ',');

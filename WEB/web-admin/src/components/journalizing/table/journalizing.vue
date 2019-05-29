@@ -263,6 +263,12 @@ export default {
       this.tableConfig.titleRows[0].push({
         fields: ['operation'], title: '操作', titleAlign: 'center', rowspan: 2,
       });
+
+      this.tableData.map((row) => {
+        row.yi1 = row.debitAmount;
+        row.yi2 = row.creditAmount;
+        return row;
+      });
     }
   },
 };

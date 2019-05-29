@@ -71,8 +71,8 @@ class HttpRequest {
       } = res;
       if (data.responseCode === '401') { // 超时
         // store.commit(types.LOGOUT);
-        router.push({
-          path: '/login',
+        this.$router.push({
+          name: 'login',
           query: {
             redirect: router.currentRoute.fullPath,
           },
