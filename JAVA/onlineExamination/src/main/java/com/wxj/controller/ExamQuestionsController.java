@@ -2,6 +2,7 @@ package com.wxj.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.wxj.constant.ExamConstant;
 import com.wxj.constant.SystemConstant;
 import com.wxj.exception.BusinessException;
 import com.wxj.exception.BusinessRuntimeException;
@@ -201,6 +202,9 @@ public class ExamQuestionsController {
                     if (row.getCell(map.get("试题类型")) != null) {
                         row.getCell(map.get("试题类型")).setCellType(CellType.STRING);
                         String type = row.getCell(map.get("试题类型")).toString();
+                        if (type.equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)) {
+                            throw new ParamEmptyException("不支持分录");
+                        }
                         if (type == null || "".equals(type) || "null".equals(type)) {
                             throw new ParamInvalidException("试题类型不能为空");
                         }
