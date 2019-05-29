@@ -8,6 +8,7 @@ import com.wxj.exception.ParamEmptyException;
 import com.wxj.exception.PermissionException;
 import com.wxj.model.Bean.RequestBean;
 import com.wxj.model.Bean.ResponseBean;
+import com.wxj.utils.StringUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -34,8 +35,8 @@ public class LoginValidateAspect {
      * @param request
      * @param requestBean
      */
-    public void before(HttpServletRequest request, RequestBean<?> requestBean) {
-//        logger.info("[#requestUrl#]:{}\t[#requestJson#]:{}", request.getRequestURI(), StringUtil.formatJson(JSONObject.fromObject(obj).toString()));
+    public void before(HttpServletRequest request, RequestBean requestBean) {
+        logger.info("[#requestUrl#]:{}\t[#requestJson#]:{}", request.getRequestURI(), StringUtil.formatJson(JSONObject.fromObject(requestBean).toString()));
         String requestUri = request.getRequestURI();
         String contextPath = request.getContextPath();
         String url = requestUri.substring(contextPath.length());
@@ -57,7 +58,7 @@ public class LoginValidateAspect {
      * 校验securityKey并刷新
      * @param baseQUERY
      */
-    private void validateSecurityKey(HttpServletRequest request, RequestBean<?> baseQUERY) {
+    private void validateSecurityKey(HttpServletRequest request, RequestBean baseQUERY) {
         String loginKey = LoginConstant.SECURITY_KEY+baseQUERY.getUserCode();
         String securityKey = (String)request.getSession().getAttribute(loginKey);
         if (null == securityKey || !securityKey.equals(baseQUERY.getSecurityKey())) {
@@ -71,21 +72,18 @@ public class LoginValidateAspect {
      * 校验参数
      * @param baseQUERY
      */
-    private void validateParamter(RequestBean<?> baseQUERY) {
+    private void validateParamter(RequestBean baseQUERY) {
         if (baseQUERY == null) {
             logger.info("统一aop拦截,请求参数为空");
-            ResponseBean responseBean = new ResponseBean("422", "请求参数不能为空");
-            throw new ParamEmptyException(JSONObject.fromObject(responseBean).toString());
+            throw new ParamEmptyException("请求参数不能为空");
         }
         if (StringUtils.isEmpty(baseQUERY.getSecurityKey())) {
             logger.warn("统一aop拦截,请求参数securityKey不能为空");
-            ResponseBean responseBean = new ResponseBean("422", "请求参数securityKey不能为空");
-            throw new ParamEmptyException(JSONObject.fromObject(responseBean).toString());
+            throw new ParamEmptyException("请求参数securityKey不能为空");
         }
         if (StringUtils.isEmpty(baseQUERY.getUserCode())) {
             logger.warn("统一aop拦截,请求参数userCode不能为空");
-            ResponseBean responseBean = new ResponseBean("422", "请求参数userCode不能为空");
-            throw new ParamEmptyException(JSONObject.fromObject(responseBean).toString());
+            throw new ParamEmptyException("请求参数userCode不能为空");
         }
     }
 

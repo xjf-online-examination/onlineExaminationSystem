@@ -126,7 +126,7 @@ public class ExamQuestionsController {
      * @return
      */
     @RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object modify(HttpServletRequest request, RequestBean<ExamQuestionsSaveDTO> requestBean) {
+    public Object modify(HttpServletRequest request, @RequestBody RequestBean<ExamQuestionsSaveDTO> requestBean) {
         try {
             ExamQuestionsSaveDTO examQuestionsSaveDTO = requestBean.getData();
             examQuestionsService.modify(examQuestionsSaveDTO);
