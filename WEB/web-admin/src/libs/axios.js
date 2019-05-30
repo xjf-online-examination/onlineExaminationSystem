@@ -71,9 +71,10 @@ class HttpRequest {
       } = res;
       if (data.responseCode === '401') { // 超时
         // 返回 401 清除token信息并跳转到登录页面
-        store.commit(types.LOGOUT);
+        store.commit('setToken', '');
+        store.commit('setAccess', []);
         router.replace({
-          path: 'login',
+          path: '/login',
           query: {
             redirect: router.currentRoute.fullPath,
           },
