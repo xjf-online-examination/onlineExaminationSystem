@@ -33,8 +33,7 @@
         :data="uploadData"
         accept=".xlsx, .xlx"
         :show-upload-list="false"
-        @on-success="importSuccess()"
-        @on-error="importError()"
+        :on-success="importSuccess"
       >
         <Button type="primary">导入</Button>
       </Upload>
@@ -606,12 +605,12 @@ export default {
       });
     },
     importSuccess(res) {
-      console.log(res);
-      // TODO:
-    },
-    importError(res) {
-      console.log(res);
-      // TODO:
+      if (res.responseCode === '200') {
+        this.$Notice.success({ title: '导入成功' });
+        this.getQuestionList();
+      } else {
+        this.$Notice.error({ title: '导入失败' });
+      }
     },
   },
   mounted() {

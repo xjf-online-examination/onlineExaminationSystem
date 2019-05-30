@@ -56,7 +56,7 @@ export default {
   components: {
     Tables,
   },
-  data() {
+  data () {
     return {
       columns: [
         {
@@ -88,20 +88,20 @@ export default {
                   },
                 },
               }, '修改'),
-              h('a', {
-                props: {
-                  type: 'text',
-                  size: 'small',
-                },
-                style: {
-                  'margin-left': '10px',
-                },
-                on: {
-                  click: () => {
-                    this.onDelete(params.index);
-                  },
-                },
-              }, '删除'),
+              // h('a', {
+              //   props: {
+              //     type: 'text',
+              //     size: 'small',
+              //   },
+              //   style: {
+              //     'margin-left': '10px',
+              //   },
+              //   on: {
+              //     click: () => {
+              //       this.onDelete(params.index);
+              //     },
+              //   },
+              // }, '删除'),
             ]),
           ],
         }],
@@ -135,37 +135,37 @@ export default {
     };
   },
   methods: {
-    handleSearch() {
+    handleSearch () {
       this.getClassList(this.searchData);
     },
-    handleReset(name) {
+    handleReset (name) {
       this.$refs[name].resetFields();
       this.getClassList(this.searchData);
     },
-    onEdit(index) {
+    onEdit (index) {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
       this.classes = Object.assign({}, this.tableData.list[index]);
     },
-    onDelete(index) {
+    onDelete (index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange(params) {
+    onPageChange (params) {
       this.searchData.currentPage = params;
       this.getStudentList(this.searchData);
     },
-    onPageSizeChange(params) {
+    onPageSizeChange (params) {
       this.searchData.pageSize = params;
       this.getStudentList(this.searchData);
     },
-    onAdd() {
+    onAdd () {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save(name) {
+    save (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isAdd) {
@@ -194,11 +194,11 @@ export default {
         }
       });
     },
-    cancel(name) {
+    cancel (name) {
       this.modalVisible = false;
       this.$refs[name].resetFields();
     },
-    deleteClass() {
+    deleteClass () {
       deleteClass(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
           this.$Notice.success({ title: '删除成功' });
@@ -208,7 +208,7 @@ export default {
         }
       });
     },
-    getClassList() {
+    getClassList () {
       getClassList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -218,7 +218,7 @@ export default {
       });
     },
   },
-  mounted() {
+  mounted () {
     this.getClassList();
   },
 };

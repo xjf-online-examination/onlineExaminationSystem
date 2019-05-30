@@ -2,21 +2,21 @@
   <div class="demo-split">
     <Split v-model="split1">
       <div slot="left" class="demo-split-pane">
-        <Form ref="classSearch" :model="searchData" inline>
+        <Form ref="questionsSearch" :model="searchData" inline>
           <FormItem prop="classCode" label="试题编号" label-position="left" class="search-flex">
             <Input type="text" v-model="searchData.code" placeholder="试题编号"/>
           </FormItem>
           <FormItem prop="className" label="题目" label-position="left" class="search-flex">
             <Input type="text" v-model="searchData.title" placeholder="题目"/>
           </FormItem>
-          <FormItem prop="classCode" label="课程编号" label-position="left" class="search-flex">
+          <!-- <FormItem prop="classCode" label="课程编号" label-position="left" class="search-flex">
             <Input type="text" v-model="searchData.courseCode" placeholder="课程编号"/>
-          </FormItem>
+          </FormItem>-->
           <FormItem label="类型" label-position="left" class="search-flex">
             <Select v-model="searchData.type" style="width:150px">
               <Option :value="1">单选题</Option>
               <Option :value="2">多选题</Option>
-              <Option :value="3">不定向选择题</Option>
+              <!-- <Option :value="3">不定向选择题</Option> -->
               <Option :value="4">判断题</Option>
               <!-- <Option :value="5">简答题</Option> -->
               <Option :value="6">分录</Option>
@@ -24,7 +24,7 @@
           </FormItem>
           <FormItem>
             <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
-            <Button type="default" @click="handleReset('classSearch')" class="m-l-s">重置</Button>
+            <Button type="default" @click="handleReset('questionsSearch')" class="m-l-s">重置</Button>
           </FormItem>
         </Form>
         <tables
@@ -202,6 +202,7 @@ export default {
       console.info('取消全选', selection);
     },
     listPage() {
+      this.searchData.courseCode = this.$route.query.courseCode;
       listPage(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;

@@ -1,5 +1,7 @@
 <template>
-  <div>hello</div>
+  <div>
+    <img class="home-bg" src="../../assets/images/home.jpg">
+  </div>
 </template>
 
 <script>
@@ -53,7 +55,8 @@ export default {
 </script>
 
 <style lang="less">
-.count-style {
-  font-size: 50px;
+.home-bg {
+  max-width: 100%;
+  max-height: 100%;
 }
 </style>

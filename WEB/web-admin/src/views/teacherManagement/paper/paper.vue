@@ -150,8 +150,7 @@ export default {
         name: '',
         code: '',
         courseCode: '',
-        type: 2,
-        course: {},
+        type: '2',
       },
       modalVisible: false,
       modalTitle: '',
@@ -213,7 +212,6 @@ export default {
     save(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.paper.courseCode = this.paper.course.code;
           if (this.isAdd) {
             if (this.paper.type === '1') {
               automaticPaper(this.paper).then((res) => {
@@ -222,7 +220,7 @@ export default {
                   this.getPaperList();
                   this.$Notice.success({ title: '添加成功' });
                 } else {
-                  this.$Notice.success({ title: '添加失败' });
+                  this.$Notice.error({ title: '添加失败' });
                 }
                 this.modalVisible = false;
               });

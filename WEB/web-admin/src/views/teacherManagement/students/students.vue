@@ -25,8 +25,7 @@
         :data="uploadData"
         accept=".xlsx, .xlx"
         :show-upload-list="false"
-        @on-success="importSuccess()"
-        @on-error="importError()"
+        :on-success="importSuccess"
       >
         <Button type="primary">导入</Button>
       </Upload>
@@ -170,7 +169,7 @@ export default {
                     this.onResetPwd(params.index);
                   },
                 },
-              }, '修改密码'),
+              }, '重置密码'),
             ]),
           ],
         }],
@@ -244,7 +243,7 @@ export default {
       resetStudentPassword(this.tableData.list[index].id).then((res) => {
         if (res.responseCode === '201') {
           this.getStudentList();
-          this.$Message.success('密码重置成功');
+          this.$Message.success({ title: '密码重置成功' });
         }
       });
     },
@@ -291,9 +290,10 @@ export default {
                 this.getStudentList();
                 this.$Notice.success({ title: '添加成功' });
               } else {
-                this.$Notice.success({ title: '添加失败' });
+                this.$Notice.error({ title: '添加失败' });
               }
               this.modalVisible = false;
+              this.$refs[name].resetFields();
             });
           } else {
             editStudent(this.student).then((res) => {
@@ -302,12 +302,12 @@ export default {
                 this.getStudentList();
                 this.$Notice.success({ title: '修改成功' });
               } else {
-                this.$Notice.success({ title: '修改失败' });
+                this.$Notice.error({ title: '修改失败' });
               }
               this.modalVisible = false;
+              this.$refs[name].resetFields();
             });
           }
-          this.$refs[name].resetFields();
         }
       });
     },
@@ -352,12 +352,13 @@ export default {
       });
     },
     importSuccess(res) {
-      console.log(res);
-      // TODO:
-    },
-    importError(res) {
-      console.log(res);
-      // TODO:
+      console.info('success', res);
+      if (res.responseCode === '200') {
+        this.$Notice.success({ title: '导入成功!' });
+        this.getStudentList();
+      } else {
+        this.$Notice.error({ title: '导入失败!' });
+      }
     },
   },
   mounted() {

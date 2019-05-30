@@ -70,13 +70,20 @@ class HttpRequest {
         data,
       } = res;
       if (data.responseCode === '401') { // 超时
-        // store.commit(types.LOGOUT);
-        this.$router.push({
-          name: 'login',
+        // 返回 401 清除token信息并跳转到登录页面
+        store.commit(types.LOGOUT);
+        router.replace({
+          path: 'login',
           query: {
             redirect: router.currentRoute.fullPath,
           },
         });
+        // this.$router.push({
+        //   name: 'login',
+        //   query: {
+        //     redirect: router.currentRoute.fullPath,
+        //   },
+        // });
       } else {
         return data;
       }

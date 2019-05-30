@@ -83,7 +83,7 @@ export default {
           title: '序号', type: 'index', align: 'center',
         },
         {
-          title: '课程名称', key: 'className', align: 'center',
+          title: '考试安排名称', key: 'title', align: 'center',
         },
         {
           title: '考试时间', key: 'startTime', align: 'center',
@@ -224,6 +224,7 @@ export default {
               this.modalVisible = false;
             });
           } else {
+            console.log(this.scheduler);
             editScheduler(this.scheduler).then((res) => {
               console.log(res);
               if (res.responseCode === '201') {
