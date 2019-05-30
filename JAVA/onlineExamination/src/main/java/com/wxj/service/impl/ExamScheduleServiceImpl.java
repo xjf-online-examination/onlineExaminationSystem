@@ -146,6 +146,7 @@ public class ExamScheduleServiceImpl implements ExamScheduleServiceI {
 
     @Override
     public void delete(Integer id) {
+        //删除该考试安排会将该考试安排以及答题信息删除，确定删除？
         //删除这个试卷的考试安排
         try {
             int examScheduleDeleteSize = examScheduleMapper.deleteByPrimaryKey(id);

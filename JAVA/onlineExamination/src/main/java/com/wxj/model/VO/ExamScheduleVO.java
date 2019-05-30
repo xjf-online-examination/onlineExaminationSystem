@@ -39,7 +39,7 @@ public class ExamScheduleVO implements Serializable {
      */
     private String className;
     /**
-     * 状态
+     * 状态1:未开始 2：进行中 3：已结束
      */
     private String status;
 }

@@ -150,6 +150,7 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
     @Transactional
     @Override
     public void delete(Integer examPaperId) {
+        //删除试卷会将改试卷相关的考试信息以及答题信息删除，确定删除？
         //删除试卷与试题对应关系
         ExamPaper examPaper = examPaperMapper.selectByPrimaryKey(examPaperId);
         if (null == examPaper) {

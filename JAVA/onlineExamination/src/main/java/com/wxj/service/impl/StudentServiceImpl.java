@@ -124,6 +124,7 @@ public class StudentServiceImpl implements StudentServiceI {
     @Transactional
     @Override
     public int delete(Integer id) {
+        //删除学生会将该学生信息和考试信息删除，确定删除？
         int i = 0;
         Student student = studentMapper.selectByPrimaryKey(id);
         i = studentMapper.deleteByPrimaryKey(id);
@@ -164,6 +165,7 @@ public class StudentServiceImpl implements StudentServiceI {
                     achievementVO.setCourseName(entry.getValue().iterator().next().getCourseName());
                     achievementVO.setExamScheduleTitle(entry.getValue().iterator().next().getExamScheduleTitle());
                     achievementVO.setAchievement(studentLogic.countScore(entry.getValue()));
+                    achievementVO.setStartTime(entry.getValue().iterator().next().getStartTime());
                     achievementVOList.add(achievementVO);
                 } else {
                     continue;
