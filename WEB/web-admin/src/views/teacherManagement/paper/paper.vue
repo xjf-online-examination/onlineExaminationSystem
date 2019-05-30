@@ -196,6 +196,7 @@ export default {
         query: {
           id: this.tableData.list[index].id,
           status: 'edit',
+          courseCode: this.tableData.list[index].courseCode,
         },
       });
     },

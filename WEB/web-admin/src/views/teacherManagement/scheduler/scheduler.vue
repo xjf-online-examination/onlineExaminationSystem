@@ -67,7 +67,7 @@
 <script>
 import Tables from '@/components/tables';
 import {
-  getSchedulerList, addScheduler, editScheduler, deleteScheduler, getAllCourses,
+  getSchedulerList, addScheduler, editScheduler, deleteScheduler,
 } from '@/api/teacher';
 
 export default {
@@ -265,20 +265,14 @@ export default {
           this.tableData.list.map((rowData) => {
             rowData.title = rowData.examScheduleName;
             rowData.statusStr = rowData.status == 1 ? '未开始' : (rowData.status == 2 ? '进行中' : '已结束');
+            return rowData;
           });
         } else {
           this.tableData = { list: [], count: 0 };
         }
       });
     },
-    getAllCourses() {
-      getAllCourses().then((res) => {
-        if (res.responseCode === '200') {
-          this.courseList = res.data;
-        }
-      });
-    },
-    setStartTime(value, type) {
+    setStartTime(value) {
       this.scheduler.startTime = value;
     },
   },
