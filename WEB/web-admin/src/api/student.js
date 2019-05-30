@@ -27,4 +27,10 @@ export const examScheduleList = data =>
     method: 'POST'
   });
 
+  export const saveExamAnswer = data =>
+  axios.request({
+    url: '',
+    data: { data },
+    method: 'POST'
+  });
 /** ***********考试安排模块 end ************* */
