@@ -10,7 +10,7 @@ module.exports = {
   // 默认情况下，Vue CLI假设您的应用程序将部署在域的根目录下。
   // https://www.my-app.com/。如果应用程序部署在子路径上，则需要使用此选项指定子路径。例如，如果您的应用程序部署在https://www.foobar.com/my-app/，集baseUrl到'/my-app/'.
 
-  baseUrl: process.env.NODE_ENV === 'production' ? '/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
 
   // outputDir: 在npm run build时 生成文件的目录 type:string, default:'dist'
 
@@ -41,7 +41,7 @@ module.exports = {
 
   //   lintOnSave：{ type:Boolean default:true } 问你是否使用eslint
   lintOnSave: true,
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
       .set('_c', resolve('src/components'));
@@ -49,6 +49,9 @@ module.exports = {
   // productionSourceMap：{ type:Bollean,default:true } 生产源映射
   // 如果您不需要生产时的源映射，那么将此设置为false可以加速生产构建
   productionSourceMap: false,
+  css: {
+    sourceMap: false
+  },
   // devServer:{type:Object} 3个属性host,port,https
   // 它支持webPack-dev-server的所有选项
 
@@ -56,6 +59,6 @@ module.exports = {
     port: 9099, // 端口号
     host: '127.0.0.1',
     https: false, // https:{type:Boolean}
-    open: true, // 配置自动启动浏览器
-  },
+    open: true // 配置自动启动浏览器
+  }
 };

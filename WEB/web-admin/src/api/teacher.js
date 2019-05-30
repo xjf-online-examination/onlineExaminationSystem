@@ -1,8 +1,8 @@
 /*
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
- * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-29 02:23:16
+ * @Last Modified by: HuKai
+ * @Last Modified time: 2019-05-30 15:33:48
  */
 import axios from '@/libs/api.request';
 /** ***********教师管理模块 begin ************* */

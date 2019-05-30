@@ -255,21 +255,21 @@ export default [{
   }],
 },
 {
-  path: '/testScheduler',
-  name: 'testScheduler',
+  path: '/examScheduler',
+  name: 'examScheduler',
   meta: {
     hideInBread: false,
     access: ['student'],
   },
   component: Main,
   children: [{
-    path: 'test',
-    name: 'test',
+    path: 'examScheduler',
+    name: 'examScheduler',
     meta: {
       icon: 'ios-stats-outline',
       title: '考试安排',
     },
-    component: () => import('@/views/studentManagement/test/test'),
+    component: () => import('@/views/studentManagement/examScheduler/examScheduler'),
   }],
 },
 ];

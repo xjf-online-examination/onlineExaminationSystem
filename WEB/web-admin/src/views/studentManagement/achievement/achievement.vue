@@ -40,7 +40,7 @@ export default {
     };
   },
   methods: {
-    getScoreList() {
+    getScore() {
       getScoreList(this.$store.state.user.userCode).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -51,7 +51,7 @@ export default {
     },
   },
   mounted() {
-    this.getScoreList();
+    this.getScore();
   },
 };
 </script>
