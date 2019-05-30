@@ -81,6 +81,13 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     @Transactional
     @Override
     public int save(ExamQuestionsSaveDTO examQuestionsSaveDTO) {
+        CourseExample courseExample = new CourseExample();
+        courseExample.createCriteria().andCodeEqualTo(examQuestionsSaveDTO.getCourseCode());
+        List<Course> courseList = courseMapper.selectByExample(courseExample);
+        if (null == courseList && courseList.size() == 0) {
+            throw new OperationException("课程不存在，请先添加课程");
+        }
+
         int examQuestionsInsertSize;
         int entryStandardAnswerDetailsInsertSize = 0;
         Date date = new Date();

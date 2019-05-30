@@ -78,5 +78,5 @@ public interface CourseMapper {
 
     List<CourseVO> selectCourseByParams(@Param("record")CourseParamsDTO courseParamsDTO, PageBounds pageBounds);
 
-    Long countCourseByParams(@Param("record")CourseParamsDTO courseParamsDTO);
+    List<CourseVO> countCourseByParams(@Param("record")CourseParamsDTO courseParamsDTO);
 }

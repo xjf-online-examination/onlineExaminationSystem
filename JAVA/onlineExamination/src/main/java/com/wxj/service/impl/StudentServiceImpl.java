@@ -152,16 +152,12 @@ public class StudentServiceImpl implements StudentServiceI {
     public List<AchievementVO> achievement(String sno) {
         List<AchievementVO> achievementVOList = Lists.newArrayList();
         List<Achievement> achievementList = studentMapper.selectAchievementByStudentId(sno);
-        if (achievementList.size() > 0) {
+        if (null != achievementList && achievementList.size() > 0) {
             //按考试安排分组
-            Multimap<Integer, Achievement> achievementMultimap = ArrayListMultimap.create();
-            for (int i=0,size=achievementList.size(); i<size; i++) {
-                achievementMultimap.put(achievementList.get(i).getExamScheduleId(),achievementList.get(i));
-            }
+            Map<Integer, List<Achievement>> achievementMap = achievementList.stream().collect(Collectors.groupingBy(Achievement::getExamScheduleId));
             //遍历achievementMultimap
             AchievementVO achievementVO;
-            Map<Integer, Collection<Achievement>> map = achievementMultimap.asMap();
-            for (Map.Entry<Integer, Collection<Achievement>> entry : map.entrySet()) {
+            for (Map.Entry<Integer, List<Achievement>> entry : achievementMap.entrySet()) {
                 //判断是否有没判的题目
                 if (!studentLogic.noScore(entry.getValue())) {
                     achievementVO = new AchievementVO();
