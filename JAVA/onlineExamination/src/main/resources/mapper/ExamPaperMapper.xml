@@ -273,7 +273,7 @@
   </update>
 
   <select id="selectExamPaperByParams" parameterType="com.wxj.model.DTO.ExamPaperParamsDTO" resultType="com.wxj.model.VO.ExamPaperVO">
-    select ep.id id, ep.code code, ep.name name, ep.questions_amount number,c.name courseName, t.name teacherName
+    select ep.id id, ep.code code, ep.name name, ep.questions_amount number,c.code courseCode, c.name courseName, t.name teacherName
     from exam_paper ep
     LEFT JOIN course c on ep.course_code = c.code
     LEFT JOIN teacher t on ep.opeator = t.id

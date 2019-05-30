@@ -289,6 +289,18 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <resultMap id="selectExamScheduleMap" type="com.wxj.model.VO.ExamScheduleVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="CHAR" property="examScheduleName" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="duration" jdbcType="TINYINT" property="duration" />
+    <result column="exam_paper_code" jdbcType="CHAR" property="examPaperCode" />
+    <result column="exam_paper_name" jdbcType="CHAR" property="examPaperName" />
+    <collection property="className" ofType="java.lang.String" javaType="java.util.List">
+      <result column="className"/>
+    </collection>
+  </resultMap>
+
   <select id="listExamScheduleByParams" parameterType="com.wxj.model.DTO.ExamScheduleParamsDTO" resultType="com.wxj.model.VO.ExamScheduleVO">
     select es.id,es.title examScheduleName, es.start_time startTime, es.duration, es.exam_paper_code examPaperCode, es.exam_paper_name examPaperName, cla.`name` className
     from exam_schedule es

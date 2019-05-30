@@ -27,6 +27,10 @@ public class ExamPaperVO implements Serializable {
      */
     private int number;
     /**
+     * 课程code
+     */
+    private String courseCode;
+    /**
      * 所属课程
      */
     private String courseName;
