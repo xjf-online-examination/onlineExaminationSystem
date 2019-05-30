@@ -319,16 +319,7 @@
     <result column="questions_amount" jdbcType="TINYINT" property="questionsAmount" />
     <result column="course_name" jdbcType="CHAR" property="courseName" />
     <result column="teacher_name" jdbcType="CHAR" property="teacherName" />
-    <collection property="examQuestionsDetailsVOList" ofType="com.wxj.model.VO.ExamQuestionsDetailsVO" javaType="java.util.ArrayList"
-                select="selectGoodRecommendFloorItemSql"   column="{examPaperId=id}">
-    </collection>
   </resultMap>
-
-  <select id="selectGoodRecommendFloorItemSql" parameterType="map" resultType="com.wxj.model.VO.ExamQuestionsDetailsVO">
-    select eq.id, eq.code, eq.course_code courseCode, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE, eq.single_answer singleAnswer, eq.multiple_answer multipleAnswer, eq.yes_no_answer yesNoAnswer
-    from exam_paper_questions epq left join exam_questions eq on epq.exam_questions_id = eq.id
-    where epq.exam_paper_id = #{examPaperId,jdbcType=INTEGER}
-  </select>
 
   <select id="selectExamPaperDetailsById" parameterType="java.lang.Integer" resultMap="ExamPaperDetailsMap">
     select ep.id id, ep.code, ep.name, ep.questions_amount,c.name course_name, t.name teacher_name

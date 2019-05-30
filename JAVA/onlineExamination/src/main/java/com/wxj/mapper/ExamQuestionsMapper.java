@@ -8,6 +8,7 @@ import com.wxj.model.PO.ExamQuestions;
 import com.wxj.model.PO.ExamQuestionsExample;
 import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import com.wxj.model.VO.ExamQuestionsVO;
+import com.wxj.model.VO.StudentExamQuestionsVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -102,5 +103,7 @@ public interface ExamQuestionsMapper {
      */
     Long countExamQuestions(@Param("record") QuestionsPageDTO pageDTO);
 
-    List<ExamQuestionsDO> selectExamPaperQuestionsDetails(Integer examPaperId);
+    List<StudentExamQuestionsVO> selectStudentExamPaperDetailsById(Integer examPaperId);
+
+    List<ExamQuestionsDO> selectExamPaperQuestionsDetailsAnswer(Integer examPaperId);
 }
