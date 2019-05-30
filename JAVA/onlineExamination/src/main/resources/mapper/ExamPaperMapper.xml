@@ -321,11 +321,44 @@
     <result column="teacher_name" jdbcType="CHAR" property="teacherName" />
   </resultMap>
 
+  <resultMap id="selectExamQuestionsMap" type="com.wxj.model.VO.ExamQuestionsDetailsVO">
+      <id column="questions_no" jdbcType="TINYINT" property="questionsNo" />
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="course_code" jdbcType="CHAR" property="courseCode" />
+      <result column="code" jdbcType="CHAR" property="code" />
+      <result column="type" jdbcType="CHAR" property="type" />
+      <result column="title" jdbcType="VARCHAR" property="title" />
+      <result column="optionA" jdbcType="CHAR" property="optionA" />
+      <result column="optionB" jdbcType="CHAR" property="optionB" />
+      <result column="optionC" jdbcType="CHAR" property="optionC" />
+      <result column="optionD" jdbcType="CHAR" property="optionD" />
+      <result column="optionE" jdbcType="CHAR" property="optionE" />
+      <result column="single_answer" jdbcType="CHAR" property="singleAnswer" />
+      <result column="multiple_answer" jdbcType="CHAR" property="multipleAnswer" />
+      <result column="yes_no_answer" jdbcType="CHAR" property="yesNoAnswer" />
+      <result column="score" jdbcType="INTEGER" property="score" />
+  </resultMap>
+
+  <select id="selectExamQuestions" parameterType="java.lang.Integer" resultMap="selectExamQuestionsMap">
+    select epq.questions_no, eq.id, eq.code, eq.course_code, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE, eq.single_answer, eq.multiple_answer,
+    eq.yes_no_answer, eq.score
+    from exam_paper_questions epq left join exam_questions eq on epq.exam_questions_id = eq.id
+    where epq.exam_paper_id = #{examPaperId,jdbcType=INTEGER}
+  </select>
+
   <select id="selectExamPaperDetailsById" parameterType="java.lang.Integer" resultMap="ExamPaperDetailsMap">
     select ep.id id, ep.code, ep.name, ep.questions_amount,c.name course_name, t.name teacher_name
     from exam_paper ep
     LEFT JOIN course c on ep.course_code = c.code
     LEFT JOIN teacher t on ep.opeator = t.id
     where ep.id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectEntryAnswer" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.EntryStandardAnswerDetailsVO">
+    select id, entry_answer_id entryAnswerId, `row`, summary, summary_score summaryScore, subject1, subject1_score subject1Score, subject2, subject2_score subject2Score,
+    debit_amount debitAmount, debit_amount_score debitAmountScore, credit_amount creditAmount, credit_amount_score creditAmountScore, total, total_score totalScore,
+    debit_total debitTotal, debit_total_score debitTotalScore, credit_total creditTotal, credit_total_score creditTotalScore
+    from entry_standard_answer_details
+    where entry_answer_id = #{examQuestionsId,jdbcType=INTEGER}
   </select>
 </mapper>

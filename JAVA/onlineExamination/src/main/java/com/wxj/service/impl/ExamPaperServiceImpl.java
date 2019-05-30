@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -87,8 +84,17 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
 
     @Override
     public ExamPaperDetailsVO getTeacherExamPaperDetailsById(Integer id) {
+        ExamPaperDetailsVO examPaperDetailsVO = examPaperMapper.selectExamPaperDetailsById(id);
 
-        return null;
+        List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList = examPaperMapper.selectExamQuestions(id);
+        examQuestionsDetailsVOList.sort(Comparator.comparing(ExamQuestionsDetailsVO::getType));
+        examPaperDetailsVO.setExamQuestionsDetailsVOList(examQuestionsDetailsVOList);
+
+        for (ExamQuestionsDetailsVO examQuestionsDetailsVO : examQuestionsDetailsVOList) {
+            List<EntryStandardAnswerDetailsVO> entryStandardAnswerDetailsVOList = examPaperMapper.selectEntryAnswer(examQuestionsDetailsVO.getId());
+            examQuestionsDetailsVO.setEntryStandardAnswerDetailsVOList(entryStandardAnswerDetailsVOList);
+        }
+        return examPaperDetailsVO;
     }
 
     @Override

@@ -4,8 +4,10 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.wxj.model.DTO.ExamPaperParamsDTO;
 import com.wxj.model.PO.ExamPaper;
 import com.wxj.model.PO.ExamPaperExample;
+import com.wxj.model.VO.EntryStandardAnswerDetailsVO;
 import com.wxj.model.VO.ExamPaperDetailsVO;
 import com.wxj.model.VO.ExamPaperVO;
+import com.wxj.model.VO.ExamQuestionsDetailsVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -82,4 +84,8 @@ public interface ExamPaperMapper {
     int countExamPaperByParams(@Param("record")ExamPaperParamsDTO examPaperParamsDTO);
 
     ExamPaperDetailsVO selectExamPaperDetailsById(Integer id);
+
+    List<ExamQuestionsDetailsVO> selectExamQuestions(Integer examPaperId);
+
+    List<EntryStandardAnswerDetailsVO> selectEntryAnswer(Integer examQuestionsId);
 }
