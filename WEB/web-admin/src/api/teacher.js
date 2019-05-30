@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-29 02:23:16
+ * @Last Modified time: 2019-05-31 00:46:29
  */
 import axios from '@/libs/api.request';
 /** ***********教师管理模块 begin ************* */
@@ -309,13 +309,13 @@ export const addCourse = data => axios.request({
 });
 export const editCourse = ({
   id,
-  classId,
+  classIdList,
   name,
   code,
 }) => {
   const data = {
     id,
-    classId,
+    classIdList,
     name,
     code,
   };
@@ -379,6 +379,13 @@ export const deletePaper = id => axios.request({
 });
 export const getPaperById = id => axios.request({
   url: 'examPaper/get',
+  data: {
+    data: id,
+  },
+  method: 'post',
+});
+export const getPaperDetailForTeacher = id => axios.request({
+  url: 'examPaper/teacherExamPaper',
   data: {
     data: id,
   },

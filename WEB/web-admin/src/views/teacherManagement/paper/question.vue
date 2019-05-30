@@ -86,7 +86,7 @@ import Tables from '@/components/tables';
 
 import Journalizing from '@/components/journalizing/table';
 import {
-  addPaper, editPaper, listPage,
+  addPaper, editPaper, listPage, getPaperDetailForTeacher,
 } from '@/api/teacher';
 
 export default {
@@ -158,6 +158,7 @@ export default {
         creditTotal: '',
         creditTotalScore: '',
       },
+      questionList: [],
     };
   },
   methods: {
@@ -211,13 +212,21 @@ export default {
         }
       });
     },
-    getParams() {
-      // 取到路由带过来的参数
-      this.paper = { ...this.paper, ...this.$route.params.paper };
+    getPaperDetail() {
+      getPaperDetailForTeacher(this.$route.query.id).then((res) => {
+        if (res.responseCode === '200') {
+          this.paper = res.data;
+        } else {
+          this.paper = {};
+        }
+      });
     },
   },
   mounted() {
     this.listPage();
+    if (this.$route.query.status === 'edit') {
+      this.getPaperDetail();
+    }
   },
   // watch: {
   //   // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可
