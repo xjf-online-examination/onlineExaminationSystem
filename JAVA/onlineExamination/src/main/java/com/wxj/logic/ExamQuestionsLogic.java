@@ -39,7 +39,7 @@ public class ExamQuestionsLogic {
             throw new SystemErrorException("考试安排不存在");
         }
         //获取标准答案
-        List<ExamQuestionsDO> examQuestionsDOList = examQuestionsMapper.selectExamPaperQuestionsDetails(studentAnswerSaveDTO.getExamScheduleId());
+        List<ExamQuestionsDO> examQuestionsDOList = examQuestionsMapper.selectExamPaperQuestionsDetailsAnswer(studentAnswerSaveDTO.getExamScheduleId());
         if (null == examQuestionsDOList && examQuestionsDOList.size() == 0) {
             throw new SystemErrorException("试卷不存在");
         }

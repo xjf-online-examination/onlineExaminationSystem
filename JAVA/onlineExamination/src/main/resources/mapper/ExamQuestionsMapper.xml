@@ -473,10 +473,10 @@
     <if test='record.questionsCode != null and record.questionsCode != ""'>
       and eq.code = #{record.questionsCode,jdbcType=CHAR}
     </if>
-    <if test='record.title != null and record.title != ""'>
+    <if test='record.questionsTitle != null and record.questionsTitle != ""'>
       and eq.title like concat('%', #{record.questionsTitle,jdbcType=CHAR}, '%')
     </if>
-    <if test='record.type != null and record.type != ""'>
+    <if test='record.questionsType != null and record.questionsType != ""'>
       and eq.type = #{record.questionsType,jdbctype=CHAR}
     </if>
   </select>
@@ -489,10 +489,10 @@
     <if test='record.questionsCode != null and record.questionsCode != ""'>
       and eq.code = #{record.questionsCode,jdbcType=CHAR}
     </if>
-    <if test='record.title != null and record.title != ""'>
+    <if test='record.questionsTitle != null and record.questionsTitle != ""'>
       and eq.title like concat('%', #{record.questionsTitle,jdbcType=CHAR}, '%')
     </if>
-    <if test='record.type != null and record.type != ""'>
+    <if test='record.questionsType != null and record.questionsType != ""'>
       and eq.type = #{record.questionsType,jdbctype=CHAR}
     </if>
   </select>
@@ -501,7 +501,13 @@
 
   </resultMap>
 
-  <select id="selectExamPaperQuestionsDetails" parameterType="java.lang.Integer" resultMap="ExamPaperQuestionsMap">
+  <select id="selectStudentExamPaperDetailsById" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.StudentExamQuestionsVO">
+    select epq.questions_no questionsNo, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE
+    from exam_paper_questions epq left join exam_questions eq on epq.exam_questions_id = eq.id
+    where epq.exam_paper_id = #{examPaperId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectExamPaperQuestionsDetailsAnswer" parameterType="java.lang.Integer" resultType="com.wxj.model.DO.ExamQuestionsDO">
 
   </select>
 </mapper>

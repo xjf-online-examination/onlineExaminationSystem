@@ -1,6 +1,7 @@
 package com.wxj.service.impl;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.wxj.constant.ExamConstant;
 import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.exception.OperationException;
 import com.wxj.logic.ExamPaperLogic;
@@ -8,8 +9,7 @@ import com.wxj.mapper.*;
 import com.wxj.model.DTO.ExamPaperParamsDTO;
 import com.wxj.model.DTO.ExamPaperSaveModifyDTO;
 import com.wxj.model.PO.*;
-import com.wxj.model.VO.ExamPaperDetailsVO;
-import com.wxj.model.VO.ExamPaperVO;
+import com.wxj.model.VO.*;
 import com.wxj.service.ExamPaperServiceI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +51,10 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
     StudentAnswerMapper studentAnswerMapper;
     @Autowired
     EntryAnswerDetailsMapper entryAnswerDetailsMapper;
+    @Autowired
+    ExamQuestionsMapper examQuestionsMapper;
+    @Autowired
+    EntryStandardAnswerDetailsMapper entryStandardAnswerDetailsMapper;
 
     @Override
     public List<ExamPaperVO> listExamPaperByParams(ExamPaperParamsDTO examPaperParamsDTO) {
@@ -62,8 +68,27 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
     }
 
     @Override
-    public ExamPaperDetailsVO getExamPaperDetailsById(Integer id) {
-        return examPaperMapper.selectExamPaperDetailsById(id);
+    public Map<String, List<StudentExamQuestionsVO>> getStudentExamPaperDetailsById(Integer id) {
+        Map<String, List<StudentExamQuestionsVO>> map = new HashMap<>();
+        try {
+            List<StudentExamQuestionsVO> studentExamQuestionsVOList = examQuestionsMapper.selectStudentExamPaperDetailsById(id);
+
+            map.put("1", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_ONE)).collect(Collectors.toList()));
+            map.put("2", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_TWE)).collect(Collectors.toList()));
+            map.put("3", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).collect(Collectors.toList()));
+            map.put("4", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FOUR)).collect(Collectors.toList()));
+            map.put("5", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).collect(Collectors.toList()));
+            map.put("6", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+    @Override
+    public ExamPaperDetailsVO getTeacherExamPaperDetailsById(Integer id) {
+
+        return null;
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.wxj.model.DTO.ExamPaperParamsDTO;
 import com.wxj.model.DTO.ExamPaperSaveModifyDTO;
 import com.wxj.model.VO.ExamPaperDetailsVO;
 import com.wxj.model.VO.ExamPaperVO;
+import com.wxj.model.VO.StudentExamQuestionsVO;
 import com.wxj.service.ExamPaperServiceI;
 import com.wxj.utils.ResponseUtils;
 import com.wxj.utils.ValidateParamsUtil;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Title: ExamPaperController</p >
@@ -53,17 +55,35 @@ public class ExamPaperController {
     }
 
     /**
-     * 获取详情根据ID
+     * 获取详情根据ID(学生考试用)
      * @param requestBean
      * @return
      */
-    @RequestMapping(value = "/get", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
-    public Object getExamQuestionsDetailsById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
+    @RequestMapping(value = "/studentExamPaper", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object getStudentExamPaperDetailsById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
         try {
             if (null == requestBean.getData()) {
                 throw new ParamEmptyException("data不能为空");
             }
-            ExamPaperDetailsVO examQuestionsDetailsVO = examPaperService.getExamPaperDetailsById(requestBean.getData());
+            Map<String, List<StudentExamQuestionsVO>> map = examPaperService.getStudentExamPaperDetailsById(requestBean.getData());
+            return ResponseUtils.success("200", map);
+        } catch (BusinessRuntimeException e) {
+            return ResponseUtils.error(e);
+        }
+    }
+
+    /**
+     * 获取详情根据ID(教师端用)
+     * @param requestBean
+     * @return
+     */
+    @RequestMapping(value = "/teacherExamPaper", method = RequestMethod.POST, consumes = "application/json;charset=utf-8")
+    public Object getTeacherExamPaperDetailsById(HttpServletRequest request, @RequestBody RequestBean<Integer> requestBean) {
+        try {
+            if (null == requestBean.getData()) {
+                throw new ParamEmptyException("data不能为空");
+            }
+            ExamPaperDetailsVO examQuestionsDetailsVO = examPaperService.getTeacherExamPaperDetailsById(requestBean.getData());
             return ResponseUtils.success("200", examQuestionsDetailsVO);
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);

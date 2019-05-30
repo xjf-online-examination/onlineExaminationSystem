@@ -188,8 +188,14 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
 
     @Override
     public List<ExamQuestionsDetailsVO> listExamQuestions(QuestionsPageDTO pageDTO) {
-        PageBounds pageBounds = new PageBounds(pageDTO.getCurrentPage(), pageDTO.getPageSize());
-        return examQuestionsMapper.selectExamQuestions(pageDTO, pageBounds);
+        List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList = Lists.newArrayList();
+        try {
+            PageBounds pageBounds = new PageBounds(pageDTO.getCurrentPage(), pageDTO.getPageSize());
+            examQuestionsDetailsVOList = examQuestionsMapper.selectExamQuestions(pageDTO, pageBounds);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return examQuestionsDetailsVOList;
     }
 
     @Override

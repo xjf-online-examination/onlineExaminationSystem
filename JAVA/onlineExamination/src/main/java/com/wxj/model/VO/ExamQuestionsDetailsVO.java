@@ -12,6 +12,10 @@ import java.util.List;
 @ToString
 public class ExamQuestionsDetailsVO implements Serializable {
     /**
+     * 题号
+     */
+    private Integer questionsNo;
+    /**
      * ID
      */
     private int id;
