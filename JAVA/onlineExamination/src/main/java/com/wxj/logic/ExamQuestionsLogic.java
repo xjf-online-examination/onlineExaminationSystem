@@ -40,6 +40,12 @@ public class ExamQuestionsLogic {
         }
         //获取标准答案
         List<ExamQuestionsDO> examQuestionsDOList = examQuestionsMapper.selectExamPaperQuestionsDetailsAnswer(studentAnswerSaveDTO.getExamScheduleId());
+
+        for (ExamQuestionsDO examQuestionsDO : examQuestionsDOList) {
+            List<ExamQuestionsEntryAnswerDO> examQuestionsEntryAnswerDOList = examQuestionsMapper.selectQuestionsEntryAnswer(examQuestionsDO.getExamQuestionsId());
+            examQuestionsDO.setExamQuestionsEntryAnswerDOList(examQuestionsEntryAnswerDOList);
+        }
+
         if (null == examQuestionsDOList && examQuestionsDOList.size() == 0) {
             throw new SystemErrorException("试卷不存在");
         }
