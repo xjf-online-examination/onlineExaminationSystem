@@ -70,12 +70,12 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
         try {
             List<StudentExamQuestionsVO> studentExamQuestionsVOList = examQuestionsMapper.selectStudentExamPaperDetailsById(id);
 
-            map.put("1", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_ONE)).collect(Collectors.toList()));
-            map.put("2", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_TWE)).collect(Collectors.toList()));
-            map.put("3", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).collect(Collectors.toList()));
-            map.put("4", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FOUR)).collect(Collectors.toList()));
-            map.put("5", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).collect(Collectors.toList()));
-            map.put("6", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).collect(Collectors.toList()));
+            map.put("1", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_ONE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            map.put("2", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_TWE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            map.put("3", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            map.put("4", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FOUR)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            map.put("5", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            map.put("6", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
         } catch (Exception e) {
             e.printStackTrace();
         }
