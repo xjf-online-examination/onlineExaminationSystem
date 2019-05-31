@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-16 14:40:30
  * @Last Modified by: xujiafei
- * @Last Modified time: 2019-05-18 01:52:55
+ * @Last Modified time: 2019-06-01 01:59:18
  */
 import axios from '@/libs/api.request';
 // 登录
@@ -53,10 +53,10 @@ export const getUserInfo = (userType) => {
     resolve(USER_MAP[role]);
   });
 };
-// export const getUserInfo = userType => axios.request({
-//   url: 'get_info',
-//   params: {
-//     userType,
-//   },
-//   method: 'get',
-// });
+export const modifyPwd = data => axios.request({
+  url: 'open/user/modifyPassword',
+  data: {
+    data,
+  },
+  method: 'post',
+});

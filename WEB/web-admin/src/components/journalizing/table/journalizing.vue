@@ -35,6 +35,9 @@ export default {
     subjectList: {
       type: Array,
     },
+    index: {
+      type: Number,
+    },
   },
   data() {
     return {
@@ -185,7 +188,7 @@ export default {
             colSpan: 3,
             rowSpan: 1,
             content: '',
-            componentName: this.type === 'answer' ? 'tabletotal' : 'tablescore',
+            componentName: (this.type === 'answer' || this.type === 'test') ? 'tabletotal' : 'tablescore',
           };
         }
         rowData.rows = this.tableData.length - 1;
@@ -193,7 +196,7 @@ export default {
           colSpan: 1,
           rowSpan: this.tableData.length - 1,
           content: '',
-          componentName: this.type === 'answer' ? 'tabletext' : 'tablescore',
+          componentName: (this.type === 'answer' || this.type === 'test') ? 'tabletext' : 'tablescore',
         };
       }
       if (field === 'subject1') {
@@ -202,7 +205,7 @@ export default {
           colSpan: 1,
           rowSpan: 1,
           content: '',
-          componentName: this.type === 'answer' ? 'tableselect' : 'tablescore',
+          componentName: (this.type === 'answer' || this.type === 'test') ? 'tableselect' : 'tablescore',
         };
       }
       if (field === 'subject2') {
@@ -210,7 +213,7 @@ export default {
           colSpan: 1,
           rowSpan: 1,
           content: '',
-          componentName: this.type === 'answer' ? 'tabletext' : 'tablescore',
+          componentName: (this.type === 'answer' || this.type === 'test') ? 'tabletext' : 'tablescore',
         };
       }
       if (field === 'yi1') {
@@ -218,7 +221,7 @@ export default {
           colSpan: 11,
           rowSpan: 1,
           content: '',
-          componentName: this.type === 'answer' ? 'tablemoney' : 'tablescore',
+          componentName: (this.type === 'answer' || this.type === 'test') ? 'tablemoney' : 'tablescore',
         };
       }
       if (field === 'yi2') {
@@ -226,7 +229,7 @@ export default {
           colSpan: 11,
           rowSpan: 1,
           content: '',
-          componentName: this.type === 'answer' ? 'tablemoney' : 'tablescore',
+          componentName: (this.type === 'answer' || this.type === 'test') ? 'tablemoney' : 'tablescore',
         };
       }
       if (this.type === 'answer' && field === 'operation' && rowIndex === this.tableData.length - 1) {
@@ -242,6 +245,7 @@ export default {
       if (params.type === 'add' || params.type === 'delete') {
         this.$emit('rowedit', params);
       } else {
+        params.outerIndex = this.index;
         this.$emit('tablechange', params);
       }
     },
@@ -262,12 +266,6 @@ export default {
       });
       this.tableConfig.titleRows[0].push({
         fields: ['operation'], title: '操作', titleAlign: 'center', rowspan: 2,
-      });
-
-      this.tableData.map((row) => {
-        row.yi1 = row.debitAmount;
-        row.yi2 = row.creditAmount;
-        return row;
       });
     }
   },

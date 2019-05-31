@@ -1,12 +1,6 @@
 <template>
   <div>
-    <tables
-      ref="tables"
-      search-place="top"
-      v-model="tableData"
-      :columns="columns"
-      @on-delete="handleDelete"
-    />
+    <tables ref="tables" v-model="tableData" :columns="columns"/>
   </div>
 </template>
 
@@ -28,7 +22,7 @@ export default {
         title: '课程', key: 'courseName', align: 'center',
       },
       {
-        title: '试卷名称', key: 'examPaperName', align: 'center',
+        title: '试卷名称', key: 'examScheduleTitle', align: 'center',
       },
       {
         title: '考试时间', key: 'startTime', align: 'center',
