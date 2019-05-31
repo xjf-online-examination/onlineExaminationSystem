@@ -1,9 +1,11 @@
 package com.wxj.service.impl;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.google.common.collect.Lists;
 import com.wxj.constant.ExamConstant;
 import com.wxj.exception.BusinessRuntimeException;
 import com.wxj.exception.OperationException;
+import com.wxj.exception.SystemErrorException;
 import com.wxj.logic.ExamPaperLogic;
 import com.wxj.mapper.*;
 import com.wxj.model.DTO.ExamPaperParamsDTO;
@@ -70,12 +72,46 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
         try {
             List<StudentExamQuestionsVO> studentExamQuestionsVOList = examQuestionsMapper.selectStudentExamPaperDetailsById(id);
 
-            map.put("1", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_ONE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            map.put("2", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_TWE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            map.put("3", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            map.put("4", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FOUR)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            map.put("5", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            map.put("6", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            List<StudentExamQuestionsVO> studentExamQuestionsVOList1 = studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_ONE)).collect(Collectors.toList());
+            List<StudentExamQuestionsVO> studentExamQuestionsVOList2 = studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_TWE)).collect(Collectors.toList());
+            List<StudentExamQuestionsVO> studentExamQuestionsVOList3 = studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).collect(Collectors.toList());
+            List<StudentExamQuestionsVO> studentExamQuestionsVOList4 = studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FOUR)).collect(Collectors.toList());
+            List<StudentExamQuestionsVO> studentExamQuestionsVOList5 = studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).collect(Collectors.toList());
+            List<StudentExamQuestionsVO> studentExamQuestionsVOList6 = studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).collect(Collectors.toList());
+            if (null != studentExamQuestionsVOList1 && studentExamQuestionsVOList1.size() > 0) {
+                map.put("1", studentExamQuestionsVOList1.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            } else {
+                map.put("1", studentExamQuestionsVOList1);
+            }
+
+            if (null != studentExamQuestionsVOList2 && studentExamQuestionsVOList2.size() > 0) {
+                map.put("2", studentExamQuestionsVOList2.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            } else {
+                map.put("2", studentExamQuestionsVOList2);
+            }
+
+            if (null != studentExamQuestionsVOList3 && studentExamQuestionsVOList3.size() > 0) {
+                map.put("3", studentExamQuestionsVOList3.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            } else {
+                map.put("4", studentExamQuestionsVOList3);
+            }
+
+            if (null != studentExamQuestionsVOList4 && studentExamQuestionsVOList4.size() > 0) {
+                map.put("4", studentExamQuestionsVOList4.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            } else {
+                map.put("4", studentExamQuestionsVOList4);
+            }
+
+            if (null != studentExamQuestionsVOList5 && studentExamQuestionsVOList5.size() > 0) {
+                map.put("5", studentExamQuestionsVOList5.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            } {
+                map.put("5", studentExamQuestionsVOList5);
+            }
+            if (null != studentExamQuestionsVOList6 && studentExamQuestionsVOList6.size() > 0) {
+                map.put("6", studentExamQuestionsVOList6.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            } else {
+                map.put("6", studentExamQuestionsVOList6);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,18 +124,59 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
 
         try {
             List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList = examPaperMapper.selectExamQuestions(id);
+            if (null == examQuestionsDetailsVOList) {
+                throw new SystemErrorException("试卷与试题对应关系不存在");
+            }
 
-            Map<String, List<ExamQuestionsDetailsVO>> map = new HashMap<>();
+            List<ExamQuestionsTypeVO> examQuestionsTypeVOList = Lists.newArrayList();
+            ExamQuestionsTypeVO examQuestionsTypeVO;
 
-            map.put("1", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_ONE)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
-            map.put("2", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_TWE)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
-            map.put("3", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
-            map.put("4", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FOUR)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
-            map.put("5", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
-            map.put("6", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
-            examPaperDetailsVO.setMap(map);
+            List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList1 =  examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_ONE)).collect(Collectors.toList());
 
-            for (ExamQuestionsDetailsVO examQuestionsDetailsVO : examQuestionsDetailsVOList) {
+            if (null != examQuestionsDetailsVOList1 && examQuestionsDetailsVOList1.size() > 0) {
+                examQuestionsTypeVO = new ExamQuestionsTypeVO();
+                examQuestionsTypeVO.setType("1");
+                examQuestionsTypeVO.setExamQuestionsDetailsVOList(examQuestionsDetailsVOList1.stream().sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+                examQuestionsTypeVOList.add(examQuestionsTypeVO);
+            }
+            List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList2 =  examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_TWE)).collect(Collectors.toList());
+            if (null != examQuestionsDetailsVOList2 && examQuestionsDetailsVOList2.size() > 0) {
+                examQuestionsTypeVO = new ExamQuestionsTypeVO();
+                examQuestionsTypeVO.setType("2");
+                examQuestionsTypeVO.setExamQuestionsDetailsVOList(examQuestionsDetailsVOList2.stream().sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+                examQuestionsTypeVOList.add(examQuestionsTypeVO);
+            }
+            List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList3 =  examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).collect(Collectors.toList());
+            if (null != examQuestionsDetailsVOList3 && examQuestionsDetailsVOList3.size() > 0) {
+                examQuestionsTypeVO = new ExamQuestionsTypeVO();
+                examQuestionsTypeVO.setType("3");
+                examQuestionsTypeVO.setExamQuestionsDetailsVOList(examQuestionsDetailsVOList3.stream().sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+                examQuestionsTypeVOList.add(examQuestionsTypeVO);
+            }
+            List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList4 =  examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).collect(Collectors.toList());
+            if (null != examQuestionsDetailsVOList4 && examQuestionsDetailsVOList4.size() > 0) {
+                examQuestionsTypeVO = new ExamQuestionsTypeVO();
+                examQuestionsTypeVO.setType("4");
+                examQuestionsTypeVO.setExamQuestionsDetailsVOList(examQuestionsDetailsVOList4.stream().sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+                examQuestionsTypeVOList.add(examQuestionsTypeVO);
+            }
+            List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList5 =  examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).collect(Collectors.toList());
+            if (null != examQuestionsDetailsVOList5 && examQuestionsDetailsVOList5.size() > 0) {
+                examQuestionsTypeVO = new ExamQuestionsTypeVO();
+                examQuestionsTypeVO.setType("5");
+                examQuestionsTypeVO.setExamQuestionsDetailsVOList(examQuestionsDetailsVOList5.stream().sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+                examQuestionsTypeVOList.add(examQuestionsTypeVO);
+            }
+            List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList6 = examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).collect(Collectors.toList());
+            if (null != examQuestionsDetailsVOList6 && examQuestionsDetailsVOList6.size() > 0) {
+                examQuestionsTypeVO = new ExamQuestionsTypeVO();
+                examQuestionsTypeVO.setType("6");
+                examQuestionsTypeVO.setExamQuestionsDetailsVOList(examQuestionsDetailsVOList6.stream().sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+                examQuestionsTypeVOList.add(examQuestionsTypeVO);
+            }
+            examPaperDetailsVO.setExamQuestionsTypeVOList(examQuestionsTypeVOList);
+
+            for (ExamQuestionsDetailsVO examQuestionsDetailsVO : examQuestionsDetailsVOList6) {
                 List<EntryStandardAnswerDetailsVO> entryStandardAnswerDetailsVOList = examPaperMapper.selectEntryAnswer(examQuestionsDetailsVO.getId());
                 examQuestionsDetailsVO.setEntryStandardAnswerDetailsVOList(entryStandardAnswerDetailsVOList);
             }
@@ -153,7 +230,7 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
             logger.error("com.wxj.service.impl.ExamPaperServiceImpl.modify", e);
             throw new OperationException("修改试卷失败");
         }
-        if (examPaperUpdateSize == 0 || examPaperQuestionsDeleteSize != examPaperSaveModifyDTO.getExamPaperQuestionsDTOList().size() || examPaperQuestionsInsertSize != examPaperSaveModifyDTO.getExamPaperQuestionsDTOList().size()) {
+        if (examPaperUpdateSize == 0 || examPaperQuestionsInsertSize != examPaperSaveModifyDTO.getExamPaperQuestionsDTOList().size()) {
             throw new OperationException("修改试卷失败");
         }
         return 0;
