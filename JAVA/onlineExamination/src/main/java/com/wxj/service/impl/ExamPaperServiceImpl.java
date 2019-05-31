@@ -232,7 +232,7 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
             examPaperQuestionsExample.createCriteria().andExamPaperIdEqualTo(examPaper.getId());
             examPaperQuestionsDeleteSize = examPaperQuestionsMapper.deleteByExample(examPaperQuestionsExample);
             //重新插入
-            List<ExamPaperQuestions> examPaperQuestionsList = examPaperLogic.assembleExamPaperQuestionsList(teacherList.get(0).getId(), examPaperSaveModifyDTO.getExamPaperQuestionsDTOList());
+            List<ExamPaperQuestions> examPaperQuestionsList = examPaperLogic.assembleExamPaperQuestionsList(examPaper.getId(), examPaperSaveModifyDTO.getExamPaperQuestionsDTOList());
             examPaperQuestionsInsertSize = examPaperQuestionsMapper.batchInsert(examPaperQuestionsList);
         } catch (Exception e) {
             logger.error("com.wxj.service.impl.ExamPaperServiceImpl.modify", e);

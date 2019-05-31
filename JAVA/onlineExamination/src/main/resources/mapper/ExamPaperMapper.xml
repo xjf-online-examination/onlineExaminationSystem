@@ -104,7 +104,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wxj.model.PO.ExamPaper">
+  <insert id="insert" parameterType="com.wxj.model.PO.ExamPaper" useGeneratedKeys="true" keyProperty="id">
     insert into exam_paper (id, code, name, questions_amount,
       course_code, opeator, create_time,
       modify_time, del_flag)
