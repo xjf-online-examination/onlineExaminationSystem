@@ -502,7 +502,7 @@
   </resultMap>
 
   <select id="selectStudentExamPaperDetailsById" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.StudentExamQuestionsVO">
-    select epq.questions_no questionsNo, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE
+    select epq.questions_no questionsNo, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE, eq.score
     from exam_paper_questions epq left join exam_questions eq on epq.exam_questions_id = eq.id
     where epq.exam_paper_id = #{examPaperId,jdbcType=INTEGER}
   </select>

@@ -50,4 +50,8 @@ public class StudentExamQuestionsVO implements Serializable {
      * 选项E
      */
     private String optionE;
+    /**
+     * 分数
+     */
+    private Integer score;
 }
