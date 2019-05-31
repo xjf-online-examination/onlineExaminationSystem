@@ -62,7 +62,7 @@
       </div>
     </Modal>
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteStudent">
-      <p>是否删除该学生，删除后无法恢复？</p>
+      <p>删除学生会将该学生信息和考试信息删除，确定删除？</p>
     </Modal>
     <Modal v-model="showScoreModal" title="学生成绩" :mask-closable="false">
       <tables ref="tables" v-model="scoreTable" :columns="scoreTableColumns"/>

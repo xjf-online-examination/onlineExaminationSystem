@@ -95,11 +95,7 @@
               <FormItem v-for="(item, index) in options" :key="index" :label="optionLabels[index]">
                 <Row>
                   <Col span="16">
-                    <Input
-                      type="textarea"
-                      v-model="question['option'+optionLabels[index]]"
-                      placeholder="请输入选项"
-                    />
+                    <Input type="textarea" v-model="options[index]" placeholder="请输入选项"/>
                   </Col>
                   <Col span="4" offset="1">
                     <Button @click="handleRemoveOption(index)">删除</Button>
@@ -154,13 +150,16 @@
             :data="journalizingData"
             v-on:tablechange="cusEditFunc"
           ></Journalizing>
-          <Input type="text" v-model="question.score" placeholder="请输入分值" v-else/>
+          <InputNumber :min="0" v-model="question.score" v-else placeholder="请输入分值"></InputNumber>
         </FormItem>
       </Form>
       <div slot="footer">
         <Button type="text" @click="cancel('questionForm')">取消</Button>
         <Button type="primary" @click="save('questionForm')">确定</Button>
       </div>
+    </Modal>
+    <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteQuestion">
+      <p>是否删除该试题，删除后无法恢复？</p>
     </Modal>
   </div>
 </template>
@@ -172,7 +171,7 @@ import Tables from '@/components/tables';
 import config from '@/config';
 import Journalizing from '@/components/journalizing/table';
 import {
-  addQuestion, editQuestion, getQuestionList, listSubjectOne, getQuestionById, downloadQuestionsTemplate,
+  addQuestion, editQuestion, getQuestionList, listSubjectOne, getQuestionById, downloadQuestionsTemplate, deleteQuestion,
 } from '@/api/teacher';
 import {
   getToken,
@@ -189,7 +188,7 @@ export default {
   },
   filters: {
     /* 格式化时间戳 */
-    questionType (value) {
+    questionType(value) {
       if (!value) return '';
       let result = '';
       if (value === '1') result = '单选题';
@@ -199,7 +198,7 @@ export default {
       return result;
     },
   },
-  data () {
+  data() {
     return {
       baseUrl,
       uploadData: {
@@ -295,7 +294,7 @@ export default {
         yesNoAnswer: '',
       },
       multipleAnswer: [],
-      options: [1],
+      options: [''],
       modalVisible: false,
       modalTitle: '',
       isAdd: true,
@@ -312,6 +311,11 @@ export default {
         ],
         title: [
           { required: true, message: '题目不能为空', trigger: 'change' },
+        ],
+        score: [
+          {
+            required: true, message: '分数不能为空', trigger: 'blur', type: 'number',
+          },
         ],
       },
       journalizingData: [],
@@ -335,18 +339,19 @@ export default {
         creditTotalScore: '',
       },
       operateError: '',
+      showDeleteModal: false,
     };
   },
   methods: {
-    handleSearch () {
+    handleSearch() {
       console.log(this.searchData);
       this.getQuestionList(this.searchData);
     },
-    handleReset (name) {
+    handleReset(name) {
       this.$refs[name].resetFields();
       this.getQuestionList(this.searchData);
     },
-    onEdit (index) {
+    onEdit(index) {
       this.modalTitle = '修改';
       this.isAdd = false;
       this.getQuestionById(this.tableData.list[index].id).then((res) => {
@@ -369,19 +374,29 @@ export default {
         this.modalVisible = true;
       });
     },
-    onDelete (index) {
+    onDelete(index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange (params) {
+    deleteQuestion() {
+      deleteQuestion(this.tableData.list[this.selectIndex].id).then((res) => {
+        if (res.responseCode === '204') {
+          this.$Notice.success({ title: '删除成功！' });
+          this.getQuestionList();
+        } else {
+          this.$Notice.error({ title: '删除失败！' });
+        }
+      });
+    },
+    onPageChange(params) {
       this.searchData.currentPage = params;
       this.getQuestionList(this.searchData);
     },
-    onPageSizeChange (params) {
+    onPageSizeChange(params) {
       this.searchData.pageSize = params;
       this.getQuestionList(this.searchData);
     },
-    onAdd () {
+    onAdd() {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
@@ -408,7 +423,7 @@ export default {
         this.journalizingData = data;
       }
     },
-    save (name) {
+    save(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isAdd) {
@@ -482,11 +497,11 @@ export default {
         }
       });
     },
-    cancel (name) {
+    cancel(name) {
       this.modalVisible = false;
       this.$refs[name].resetFields();
     },
-    handleAddOption () {
+    handleAddOption() {
       if (this.options.length === 5) {
         this.errMsg = '选项不能大于5个';
       } else {
@@ -494,11 +509,11 @@ export default {
         this.options.push(this.options.length + 1);
       }
     },
-    handleRemoveOption (index) {
+    handleRemoveOption(index) {
       // TODO:
       this.options.splice(index, 1);
     },
-    getQuestionList () {
+    getQuestionList() {
       getQuestionList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -517,7 +532,7 @@ export default {
         }
       });
     },
-    listSubjectOne () {
+    listSubjectOne() {
       listSubjectOne().then((res) => {
         if (res.responseCode === '200') {
           this.subjectList = res.data;
@@ -526,7 +541,7 @@ export default {
         }
       });
     },
-    cusEditFunc (params) {
+    cusEditFunc(params) {
       if (params.type === 'total') { // 合计
         this.journalizingData[params.index].total = params.value;
       } else if (params.type === 'text') {
@@ -577,7 +592,7 @@ export default {
         }
       }
     },
-    handleRowEdit (params) {
+    handleRowEdit(params) {
       if (params.type === 'add') {
         this.journalizingData.splice(params.index, 0, this.journalizingObj);
       } else if (this.journalizingData.length === 1) {
@@ -587,14 +602,14 @@ export default {
         this.journalizingData.splice(params.index, 1);
       }
     },
-    getQuestionById (id) {
+    getQuestionById(id) {
       return new Promise((resolve, reject) => {
         getQuestionById(id).then((res) => {
           resolve(res);
         });
       });
     },
-    onDownload () {
+    onDownload() {
       downloadQuestionsTemplate().then((res) => {
         const blob = new Blob([res], {
           type: 'application/octet-stream',
@@ -604,7 +619,7 @@ export default {
         FileSaver.saveAs(blob, fileName);
       });
     },
-    importSuccess (res) {
+    importSuccess(res) {
       if (res.responseCode === '200') {
         this.$Notice.success({ title: '导入成功' });
         this.getQuestionList();
@@ -613,7 +628,7 @@ export default {
       }
     },
   },
-  mounted () {
+  mounted() {
     this.getQuestionList();
     this.listSubjectOne();
   },

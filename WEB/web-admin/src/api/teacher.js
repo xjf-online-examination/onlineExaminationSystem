@@ -1,8 +1,8 @@
 /*
  * @Author: xujiafei
  * @Date: 2019-05-17 16:48:58
- * @Last Modified by: HuKai
- * @Last Modified time: 2019-05-31 08:38:35
+ * @Last Modified by: xujiafei
+ * @Last Modified time: 2019-05-31 13:29:34
  */
 import axios from '@/libs/api.request';
 /** ***********教师管理模块 begin ************* */
@@ -357,7 +357,7 @@ export const getPaperList = data => axios.request({
   method: 'POST',
 });
 export const automaticPaper = data => axios.request({
-  url: 'examPaper/automatic',
+  url: 'examPaper/save',
   data: {
     data,
   },

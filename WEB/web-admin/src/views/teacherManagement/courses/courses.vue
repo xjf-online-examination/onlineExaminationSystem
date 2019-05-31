@@ -34,7 +34,7 @@
     <Modal v-model="modalVisible" :title="modalTitle" :closable="false" :mask-closable="false">
       <Form ref="courseForm" :model="course" :rules="rules">
         <FormItem prop="code" label="课程编号">
-          <Input type="text" v-model="course.code" placeholder="请输入课程编号"/>
+          <Input type="text" v-model="course.code" placeholder="请输入课程编号" :disabled="!isAdd"/>
         </FormItem>
         <FormItem prop="name" label="课程名称">
           <Input type="text" v-model="course.name" placeholder="请输入课程名称"/>
@@ -196,6 +196,7 @@ export default {
                 this.$Notice.success({ title: '添加失败' });
               }
               this.modalVisible = false;
+              this.$refs[name].resetFields();
             });
           } else {
             editCourse(this.course).then((res) => {
@@ -207,6 +208,7 @@ export default {
                 this.$Notice.success({ title: '修改失败' });
               }
               this.modalVisible = false;
+              this.$refs[name].resetFields();
             });
           }
         }
