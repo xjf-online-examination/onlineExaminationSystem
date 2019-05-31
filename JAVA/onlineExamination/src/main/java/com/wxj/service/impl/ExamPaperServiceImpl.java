@@ -116,8 +116,16 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
             }
             if (null != studentExamQuestionsVOList6 && studentExamQuestionsVOList6.size() > 0) {
                 studentExamQuestionsTypeVO = new StudentExamQuestionsTypeVO();
+                List<StudentExamQuestionsVO> studentExamQuestionsVOS = studentExamQuestionsVOList6.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList());
+                for (StudentExamQuestionsVO studentExamQuestionsVO : studentExamQuestionsVOS) {
+                    Map<String, Object> map = new HashMap<>(2);
+                    map.put("examPaperId", id);
+                    map.put("questionsNo", studentExamQuestionsVO.getQuestionsNo());
+                    Integer row = examQuestionsMapper.selectQuestionsEntryRow(map);
+                    studentExamQuestionsVO.setRow(row);
+                }
                 studentExamQuestionsTypeVO.setType("6");
-                studentExamQuestionsTypeVO.setStudentExamQuestionsVOList(studentExamQuestionsVOList6.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+                studentExamQuestionsTypeVO.setStudentExamQuestionsVOList(studentExamQuestionsVOS);
                 studentExamQuestionsTypeVOList.add(studentExamQuestionsTypeVO);
             }
         } catch (Exception e) {

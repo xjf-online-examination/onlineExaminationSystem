@@ -54,4 +54,8 @@ public class StudentExamQuestionsVO implements Serializable {
      * 分数
      */
     private Integer score;
+    /**
+     * 分录有几行
+     */
+    private Integer row;
 }

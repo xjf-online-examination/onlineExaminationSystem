@@ -13,6 +13,7 @@ import com.wxj.model.VO.StudentExamQuestionsVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ExamQuestionsMapper {
     /**
@@ -109,4 +110,6 @@ public interface ExamQuestionsMapper {
     List<ExamQuestionsDO> selectExamPaperQuestionsDetailsAnswer(Integer examPaperId);
 
     List<ExamQuestionsEntryAnswerDO> selectQuestionsEntryAnswer(Integer examQuestionsId);
+
+    Integer selectQuestionsEntryRow(Map<String, Object> map);
 }

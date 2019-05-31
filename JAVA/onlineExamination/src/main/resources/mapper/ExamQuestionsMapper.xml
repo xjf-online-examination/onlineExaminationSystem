@@ -523,4 +523,15 @@
     from entry_standard_answer_details
     where entry_answer_id = #{examQuestionsId,jdbcType=INTEGER}
   </select>
+
+  <select id="selectQuestionsEntryRow" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(1)
+    from entry_standard_answer_details
+    where entry_answer_id = (
+        select eq.id
+        from exam_paper_questions epq left join exam_questions eq on epq.exam_questions_id = eq.id
+        where epq.exam_paper_id = #{examPaperId,jdbcType=INTEGER}
+        and epq.questions_no = #{questionsNo,jdbcType=TINYINT}
+    )
+  </select>
 </mapper>
