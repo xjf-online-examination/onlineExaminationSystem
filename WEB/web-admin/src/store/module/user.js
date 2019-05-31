@@ -23,7 +23,7 @@ import {
 
 export default {
   state: {
-    userName: '',
+    userName: getUserName(),
     userId: '',
     avatarImgPath: '',
     token: getToken(),

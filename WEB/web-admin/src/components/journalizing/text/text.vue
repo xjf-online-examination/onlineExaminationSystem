@@ -1,6 +1,6 @@
 <template>
   <div class="total">
-    <Input type="textarea" class="text-cell" v-model="rowData.value" @on-blur="handleEdit"/>
+    <Input type="textarea" class="text-cell" v-model="rowData[this.field]" @on-blur="handleEdit"/>
   </div>
 </template>
 
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     handleEdit() {
-      this.rowData.value = this.value;
+      this.value = this.rowData[this.field];
       const params = {
         type: 'text', index: this.index, rowData: this.rowData, field: this.field, value: this.value,
       };

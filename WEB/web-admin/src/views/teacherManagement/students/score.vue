@@ -7,7 +7,7 @@
 <script>
 import Tables from '@/components/tables';
 import {
-  getScoreListById,
+  getScoreListByCode,
 } from '@/api/teacher';
 
 export default {
@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      id: this.$route.query.id,
+      code: this.$route.query.code,
       columns: [
         {
           title: '序号', type: 'index', align: 'center',
@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     getScoreList() {
-      getScoreListById(this.id).then((res) => {
+      getScoreListByCode(this.code).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data.list;
         } else {

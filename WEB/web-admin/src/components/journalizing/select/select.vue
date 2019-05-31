@@ -31,11 +31,15 @@ export default {
   },
   methods: {
     handleEdit() {
+      this.rowData[this.field] = this.value;
       const params = {
-        type: 'subject1', index: this.index, rowData: this.rowData, field: this.field, value: this.total,
+        type: 'subject1', index: this.index, rowData: this.rowData, field: this.field, value: this.value,
       };
       this.$emit('on-custom-comp', params);
     },
+  },
+  mounted() {
+    this.value = this.rowData[this.field];
   },
 };
 </script>

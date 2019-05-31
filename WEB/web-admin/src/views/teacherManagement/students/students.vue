@@ -260,20 +260,20 @@ export default {
       this.getStudentList(this.searchData);
     },
     onScore(index) {
-      // this.$router.push({
-      //   name: 'studentScore',
-      //   query: {
-      //     id: this.tableData.list[index].id,
-      //   },
-      // });
-      this.showScoreModal = true;
-      getScoreListByCode(this.tableData.list[index].sno).then((res) => {
-        if (res.responseCode === '200') {
-          this.scoreTable = res.data;
-        } else {
-          this.scoreTable = [];
-        }
+      this.$router.push({
+        name: 'studentScore',
+        query: {
+          code: this.tableData.list[index].sno,
+        },
       });
+      // this.showScoreModal = true;
+      // getScoreListByCode(this.tableData.list[index].sno).then((res) => {
+      //   if (res.responseCode === '200') {
+      //     this.scoreTable = res.data;
+      //   } else {
+      //     this.scoreTable = [];
+      //   }
+      // });
     },
     onAdd() {
       this.modalVisible = true;
