@@ -19,38 +19,28 @@
                   <div class="main-block">
                     <div>{{question.title}}({{question.score}}分)</div>
                     <div class="answer-block">
-                      <div
-                        class="option-block"
-                        v-if="question.type!==6"
-                      >
-                        <RadioGroup>
-                          <Radio
-                            v-if="question.optionA!==''"
-                            :label="question.optionA"
-                            class="option-block"
-                          ></Radio>
-                          <Radio
-                            v-if="question.optionB!==''"
-                            :label="question.optionB"
-                            class="option-block"
-                          ></Radio>
-                          <Radio
-                            v-if="question.optionC!==''"
-                            :label="question.optionC"
-                            class="option-block"
-                          ></Radio>
-                          <Radio
-                            v-if="question.optionD!==''"
-                            :label="question.optionD"
-                            class="option-block"
-                          ></Radio>
-                          <Radio
-                            v-if="question.optionE!==''"
-                            :label="question.optionE"
-                            class="option-block"
-                          ></Radio>
-                        </RadioGroup>
-                      </div>
+                      <RadioGroup vertical>
+                        <Radio
+                          v-if="question.optionA!==''"
+                          :label="question.optionA"
+                        ></Radio>
+                        <Radio
+                          v-if="question.optionB!==''"
+                          :label="question.optionB"
+                        ></Radio>
+                        <Radio
+                          v-if="question.optionC!==''"
+                          :label="question.optionC"
+                        ></Radio>
+                        <Radio
+                          v-if="question.optionD!==''"
+                          :label="question.optionD"
+                        ></Radio>
+                        <Radio
+                          v-if="question.optionE!==''"
+                          :label="question.optionE"
+                        ></Radio>
+                      </RadioGroup>
                     </div>
                   </div>
                 </div>
@@ -66,35 +56,33 @@
                   <div class="main-block">
                     <div>{{question.title}}({{question.score}}分)</div>
                     <div class="answer-block">
-                      <div class="option-block">
-                        <CheckboxGroup>
-                          <Checkbox
-                            v-if="question.optionA!==''"
-                            :label="question.optionA"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionB!==''"
-                            :label="question.optionB"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionC!==''"
-                            :label="question.optionC"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionD!==''"
-                            :label="question.optionD"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionE!==''"
-                            :label="question.optionE"
-                            class="option-block"
-                          ></Checkbox>
-                        </CheckboxGroup>
-                      </div>
+                      <CheckboxGroup>
+                        <Checkbox
+                          v-if="question.optionA!==''"
+                          :label="question.optionA"
+                          class="option-block"
+                        ></Checkbox>
+                        <Checkbox
+                          v-if="question.optionB!==''"
+                          :label="question.optionB"
+                          class="option-block"
+                        ></Checkbox>
+                        <Checkbox
+                          v-if="question.optionC!==''"
+                          :label="question.optionC"
+                          class="option-block"
+                        ></Checkbox>
+                        <Checkbox
+                          v-if="question.optionD!==''"
+                          :label="question.optionD"
+                          class="option-block"
+                        ></Checkbox>
+                        <Checkbox
+                          v-if="question.optionE!==''"
+                          :label="question.optionE"
+                          class="option-block"
+                        ></Checkbox>
+                      </CheckboxGroup>
                     </div>
                   </div>
                 </div>
@@ -327,14 +315,18 @@ export default {
     },
     exitFS() {
       console.log("11111 :", 11111);
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitCancelFullScreen) {
-        document.webkitCancelFullScreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
+      try {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } catch (error) {
+        console.log("error :", error);
       }
       this.$router.push({ path: "/examScheduler/examScheduler" });
     }
@@ -353,12 +345,17 @@ export default {
     .main-block {
       display: flex;
       flex-direction: column;
+      margin-top: 10px;
       .answer-block {
         display: flex;
         align-items: center;
         .option-block {
           display: flex;
           flex: 1;
+          margin-top: 10px;
+        }
+        .ivu-checkbox.ivu-checkbox-checked {
+          margin-left: 5px;
         }
       }
     }

@@ -2,7 +2,7 @@
  * @Author: xujiafei
  * @Date: 2019-05-22 21:10:36
  * @Last Modified by: HuKai
- * @Last Modified time: 2019-05-31 10:16:04
+ * @Last Modified time: 2019-05-31 14:36:22
  */
 
 import axios from '@/libs/api.request';
@@ -32,7 +32,7 @@ export const getExamPaper = data => axios.request({
 });
 
 export const saveExamAnswer = data => axios.request({
-  url: '',
+  url: 'students/studentAnswer',
   data: { data },
   method: 'POST',
 });
