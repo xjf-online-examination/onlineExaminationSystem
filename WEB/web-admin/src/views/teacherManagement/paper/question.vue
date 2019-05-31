@@ -488,6 +488,9 @@ export default {
             if (res.responseCode === '201') {
               this.$Notice.success({ title: '修改成功！' });
               this.closeTag(this.$route);
+              this.$router.push({
+                name: 'paper',
+              });
             } else {
               this.$Notice.error({ title: '修改失败！' });
             }

@@ -60,6 +60,31 @@ export default {
       return parseNumber(this.value);
     },
   },
+  mounted() {
+    if (this.field == 'yi1') {
+      this.money = this.rowData.debitAmount ? this.rowData.debitAmount : this.debitTotal;
+      if (this.money) {
+        this.positiveNumber = Math.abs(this.money);
+        if (this.money < 0) {
+          this.isNegative = true;
+        } else {
+          this.isNegative = false;
+        }
+        this.value = (this.money / 100).toString();
+      }
+    } else if (this.field == 'yi2') {
+      this.money = this.rowData.creditAmount ? this.rowData.creditAmount : this.rowData.creditTotal;
+      if (this.money) {
+        this.positiveNumber = Math.abs(this.money);
+        if (this.money < 0) {
+          this.isNegative = true;
+        } else {
+          this.isNegative = false;
+        }
+        this.value = (this.money / 100).toString();
+      }
+    }
+  },
 };
 </script>
 <style lang="less">

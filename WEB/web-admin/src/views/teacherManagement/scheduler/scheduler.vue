@@ -38,6 +38,7 @@
         <FormItem prop="examPaperCode" label="试卷编号">
           <Input type="text" v-model="scheduler.examPaperCode" placeholder="请输入试卷编号"/>
         </FormItem>
+        <label class="err-info">{{errMsg}}</label>
         <FormItem prop="time" label="考试开始时间">
           <DatePicker
             type="datetime"
@@ -58,7 +59,7 @@
       </div>
     </Modal>
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteScheduler">
-      <p>是否删除该考试安排，删除后无法恢复？</p>
+      <p>删除该考试安排会将该考试安排以及答题信息删除，确定删除？</p>
     </Modal>
   </div>
 </template>
@@ -75,10 +76,10 @@ export default {
   components: {
     Tables,
   },
-  data() {
+  data () {
     return {
       options: {
-        disabledDate(date) {
+        disabledDate (date) {
           return date && date.valueOf() < Date.now() - 86400000;
         },
       },
@@ -178,41 +179,42 @@ export default {
         },
         ],
       },
+      errorMsg: '',
     };
   },
   methods: {
-    handleSearch() {
+    handleSearch () {
       this.getSchedulerList(this.searchData);
     },
-    handleReset(name) {
+    handleReset (name) {
       this.$refs[name].resetFields();
       this.getSchedulerList(this.searchData);
     },
-    onEdit(index) {
+    onEdit (index) {
       this.modalVisible = true;
       this.modalTitle = '修改';
       this.isAdd = false;
       this.scheduler = Object.assign({}, this.tableData.list[index]);
       this.scheduler.time = new Date(this.scheduler.startTime);
     },
-    onDelete(index) {
+    onDelete (index) {
       this.showDeleteModal = true;
       this.selectIndex = index;
     },
-    onPageChange(params) {
+    onPageChange (params) {
       this.searchData.currentPage = params;
       this.getSchedulerList(this.searchData);
     },
-    onPageSizeChange(params) {
+    onPageSizeChange (params) {
       this.searchData.pageSize = params;
       this.getSchedulerList(this.searchData);
     },
-    onAdd() {
+    onAdd () {
       this.modalVisible = true;
       this.modalTitle = '添加';
       this.isAdd = true;
     },
-    save(name) {
+    save (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isAdd) {
@@ -221,11 +223,17 @@ export default {
               if (res.responseCode === '201') {
                 this.getSchedulerList();
                 this.$Notice.success({ title: '添加成功' });
+                this.$refs[name].resetFields();
+                this.modalVisible = false;
+                this.errorMsg = '';
+              } else if (res.responseCode === '404') {
+                this.errorMsg = '试卷编号不存在，请重新填写';
               } else {
+                this.errorMsg = '';
                 this.$Notice.error({ title: '添加失败' });
+                this.$refs[name].resetFields();
+                this.modalVisible = false;
               }
-              this.$refs[name].resetFields();
-              this.modalVisible = false;
             });
           } else {
             console.log(this.scheduler);
@@ -234,21 +242,27 @@ export default {
               if (res.responseCode === '201') {
                 this.getSchedulerList();
                 this.$Notice.success({ title: '修改成功' });
+                this.$refs[name].resetFields();
+                this.modalVisible = false;
+                this.errorMsg = '';
+              } else if (res.responseCode === '404') {
+                this.errorMsg = '试卷编号不存在，请重新填写';
               } else {
+                this.errorMsg = '';
                 this.$Notice.error({ title: '修改失败' });
+                this.$refs[name].resetFields();
+                this.modalVisible = false;
               }
-              this.$refs[name].resetFields();
-              this.modalVisible = false;
             });
           }
         }
       });
     },
-    cancel(name) {
+    cancel (name) {
       this.modalVisible = false;
       this.$refs[name].resetFields();
     },
-    deleteScheduler() {
+    deleteScheduler () {
       deleteScheduler(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
           this.$Notice.success({ title: '删除成功' });
@@ -258,7 +272,7 @@ export default {
         }
       });
     },
-    getSchedulerList() {
+    getSchedulerList () {
       getSchedulerList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
@@ -272,11 +286,11 @@ export default {
         }
       });
     },
-    setStartTime(value) {
+    setStartTime (value) {
       this.scheduler.startTime = value;
     },
   },
-  mounted() {
+  mounted () {
     this.getSchedulerList();
   },
 };

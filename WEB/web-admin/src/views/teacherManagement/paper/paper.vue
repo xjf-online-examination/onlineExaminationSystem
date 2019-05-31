@@ -62,7 +62,7 @@
       </div>
     </Modal>
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deletePaper">
-      <p>是否删除该试卷，删除后无法恢复？</p>
+      <p>删除试卷会将改试卷相关的考试信息以及答题信息删除，确定删除？</p>
     </Modal>
   </div>
 </template>
@@ -274,7 +274,7 @@ export default {
       deletePaper(this.tableData.list[this.selectIndex].id).then((res) => {
         if (res.responseCode === '204') {
           this.$Notice.success({ title: '删除成功' });
-          this.getCourseList();
+          this.getPaperList();
         } else {
           this.$Notice.error({ title: '删除失败' });
         }
