@@ -134,6 +134,8 @@ public class ExamScheduleServiceImpl implements ExamScheduleServiceI {
 
         ExamSchedule examSchedule = new ExamSchedule();
         BeanUtils.copyProperties(examScheduleSaveDTO, examSchedule);
+        examSchedule.setExamPaperId(examPaperList.get(0).getId());
+        examSchedule.setExamPaperName(examPaperList.get(0).getName());
         try {
             examSchedule.setStartTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(examScheduleSaveDTO.getStartTime()));
         } catch (ParseException e) {
