@@ -100,7 +100,7 @@ public class ExamPaperController {
     public Object save(HttpServletRequest request, @RequestBody RequestBean<ExamPaperSaveModifyDTO> requestBean) {
         try {
             ExamPaperSaveModifyDTO examPaperSaveModifyDTO = requestBean.getData();
-            new ValidateParamsUtil().vaildParams(examPaperSaveModifyDTO, "jobNo", "name");
+            new ValidateParamsUtil().vaildParams(examPaperSaveModifyDTO, "code", "name");
             examPaperService.save(examPaperSaveModifyDTO, requestBean.getUserCode());
             return ResponseUtils.success("201");
         } catch (BusinessException e) {
