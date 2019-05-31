@@ -1,6 +1,232 @@
 <template>
   <div>
-    这个是考试页面
+    <div class="paper-preview">
+      <h1 class="paper-title">试卷名称</h1>
+      <hr>
+      <div class="paper-type-block">
+        <template v-for="(examType, index) in examPaper">
+          <div
+            v-if="examType.studentExamQuestionsVOList.length>0"
+            :key="index"
+          >
+            <div v-if="examType.type === '1'">
+              <h3>单选题（共{{examType.studentExamQuestionsVOList.length}}题）</h3>
+              <div
+                v-for="(question, index) in examType.studentExamQuestionsVOList"
+                :key="index"
+              >
+                <div class="question-block">
+                  <div class="main-block">
+                    <div>{{question.title}}({{question.score}}分)</div>
+                    <div class="answer-block">
+                      <div
+                        class="option-block"
+                        v-if="question.type!==6"
+                      >
+                        <RadioGroup>
+                          <Radio
+                            v-if="question.optionA!==''"
+                            :label="question.optionA"
+                            class="option-block"
+                          ></Radio>
+                          <Radio
+                            v-if="question.optionB!==''"
+                            :label="question.optionB"
+                            class="option-block"
+                          ></Radio>
+                          <Radio
+                            v-if="question.optionC!==''"
+                            :label="question.optionC"
+                            class="option-block"
+                          ></Radio>
+                          <Radio
+                            v-if="question.optionD!==''"
+                            :label="question.optionD"
+                            class="option-block"
+                          ></Radio>
+                          <Radio
+                            v-if="question.optionE!==''"
+                            :label="question.optionE"
+                            class="option-block"
+                          ></Radio>
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else-if="examType.type === '2'">
+              <h3>多选题（共{{examType.studentExamQuestionsVOList.length}}题）</h3>
+              <div
+                v-for="(question,index) in examType.studentExamQuestionsVOList"
+                v-bind:key="index"
+              >
+                <div class="question-block">
+                  <div class="main-block">
+                    <div>{{question.title}}({{question.score}}分)</div>
+                    <div class="answer-block">
+                      <div class="option-block">
+                        <CheckboxGroup>
+                          <Checkbox
+                            v-if="question.optionA!==''"
+                            :label="question.optionA"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionB!==''"
+                            :label="question.optionB"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionC!==''"
+                            :label="question.optionC"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionD!==''"
+                            :label="question.optionD"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionE!==''"
+                            :label="question.optionE"
+                            class="option-block"
+                          ></Checkbox>
+                        </CheckboxGroup>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div v-else-if="examType.type === '3'"></div> -->
+            <div v-else-if="examType.type === '4'"></div>
+            <!-- <div v-else-if="examType.type === '5'"></div> -->
+            <div v-else-if="examType.type === '6'">
+              <h3>分录题（共{{examType.studentExamQuestionsVOList.length}}题）</h3>
+              <div
+                v-for="(question,index) in examType.studentExamQuestionsVOList"
+                v-bind:key="index"
+              >
+                <div class="question-block">
+                  <label>{{index+1}}.</label>
+                  <div class="main-block">
+                    <div>{{question.title}}({{question.score}}分)</div>
+                    <div class="answer-block">
+                      <div class="option-block">
+                        <Journalizing
+                          type="test"
+                          :data="journalizingData"
+                          :subject-list="subjectList"
+                        ></Journalizing>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+        <!-- <div v-if="paper.map[2].length>0">
+          <h3>多选题（共{{paper.map[2].length}}题）</h3>
+          <div
+            v-for="(question,index) in paper.map[2]"
+            v-bind:key="index"
+          >
+            <div class="question-block">
+              <label>{{index+1}}.</label>
+              <div class="main-block">
+                <div>{{question.title}}({{question.score}}分)</div>
+                <div class="answer-block">
+                  <div class="option-block">
+                    <CheckboxGroup>
+                      <Checkbox
+                        :label="optionLabels[idx]+'.'+answer"
+                        v-for="(answer,idx) in question.options"
+                        v-bind:key="idx"
+                        class="option-block"
+                      ></Checkbox>
+                    </CheckboxGroup>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="paper.map[4].length>0">
+          <h3>判断题（共{{paper.map[4].length}}题）</h3>
+          <div
+            v-for="(question,index) in paper.map[4]"
+            v-bind:key="index"
+          >
+            <div class="question-block">
+              <label>{{index+1}}.</label>
+              <div class="main-block">
+                <div>{{question.title}}({{question.score}}分)</div>
+                <div class="answer-block">
+                  <div
+                    class="option-block"
+                    v-if="question.type!==6"
+                  >
+                    <CheckboxGroup>
+                      <Checkbox
+                        v-if="question.optionA!==''"
+                        :label="'A.'+question.optionA"
+                        class="option-block"
+                      ></Checkbox>
+                      <Checkbox
+                        v-if="question.optionB!==''"
+                        :label="'B.'+question.optionB"
+                        class="option-block"
+                      ></Checkbox>
+                      <Checkbox
+                        v-if="question.optionC!==''"
+                        :label="'C.'+question.optionC"
+                        class="option-block"
+                      ></Checkbox>
+                      <Checkbox
+                        v-if="question.optionD!==''"
+                        :label="'D.'+question.optionD"
+                        class="option-block"
+                      ></Checkbox>
+                      <Checkbox
+                        v-if="question.optionE!==''"
+                        :label="'E.'+question.optionE"
+                        class="option-block"
+                      ></Checkbox>
+                    </CheckboxGroup>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="paper.map[6].length>0">
+          <h3>分录题（共{{paper.map[6].length}}题）</h3>
+          <div
+            v-for="(question,index) in paper.map[6]"
+            v-bind:key="index"
+          >
+            <div class="question-block">
+              <label>{{index+1}}.</label>
+              <div class="main-block">
+                <div>{{question.title}}({{question.score}}分)</div>
+                <div class="answer-block">
+                  <div class="option-block">
+                    <Journalizing
+                      type="test"
+                      :data="journalizingData"
+                      :subject-list="subjectList"
+                    ></Journalizing>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
     <Button
       type="success"
       @click="exitFS"
@@ -10,12 +236,19 @@
 
 <script>
 import { getExamPaper, saveExamAnswer } from "@/api/student";
+import Journalizing from "@/components/journalizing/table";
 export default {
   name: "",
   props: {},
+  components: {
+    Journalizing
+  },
   data() {
     return {
-      isFullscreen: ""
+      isFullscreen: "",
+      examPaper: [],
+      journalizingData: [],
+      subjectList: []
     };
   },
   created() {},
@@ -57,9 +290,10 @@ export default {
     let param = this.$route.query;
     let Id = "";
     try {
-      if (param.examPaperId) {
-        Id = param.examPaperId;
-      }
+      Id = param.examPaperId;
+      timer = setTimeout(() => {
+        this.$Message.warning({ content: "离考试结束还有10分钟", duration: 5 });
+      }, 60 * 1000 * (param.duration - 10));
     } catch (error) {}
     this.getExamPaperWithId(Id);
     this.handleFullscreen();
@@ -67,11 +301,17 @@ export default {
   computed: {},
   methods: {
     getExamPaperWithId(Id) {
-      getExamPaper(Id).then(res => {
-        if (res.responseCode === "200") {
-        } else {
-        }
-      });
+      getExamPaper(Id)
+        .then(res => {
+          if (res.responseCode === "200") {
+            console.log("res :", res.data);
+            this.examPaper = res.data;
+          } else {
+          }
+        })
+        .catch(err => {
+          console.log("err :", err);
+        });
     },
     handleFullscreen() {
       let main = document.body;
@@ -102,5 +342,26 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="less" scoped>
+.paper-preview {
+  padding: 0 10px;
+  .paper-title {
+    text-align: center;
+  }
+  .question-block {
+    display: flex;
+    .main-block {
+      display: flex;
+      flex-direction: column;
+      .answer-block {
+        display: flex;
+        align-items: center;
+        .option-block {
+          display: flex;
+          flex: 1;
+        }
+      }
+    }
+  }
+}
 </style>

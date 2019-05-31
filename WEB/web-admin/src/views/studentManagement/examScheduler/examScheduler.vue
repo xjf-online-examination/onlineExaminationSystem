@@ -98,12 +98,12 @@ export default {
         this.$Message.warning({ content: "考试时间还没有开始", duration: 5 });
       } else {
         // fullScreen
-        this.$router.push({ path: "/examPage" });
       }
       this.$router.push({
         path: "/examPage",
         query: {
-          examPaperId: data.examPaperId
+          examPaperId: data.examPaperId,
+          duration: data.duration
         }
       });
     }
