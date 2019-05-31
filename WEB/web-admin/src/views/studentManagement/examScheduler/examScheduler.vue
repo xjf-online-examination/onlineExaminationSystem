@@ -100,8 +100,12 @@ export default {
         // fullScreen
         this.$router.push({ path: "/examPage" });
       }
-        this.$router.push({ path: "/examPage" });
-
+      this.$router.push({
+        path: "/examPage",
+        query: {
+          examPaperId: data.examPaperId
+        }
+      });
     }
   },
   mounted() {

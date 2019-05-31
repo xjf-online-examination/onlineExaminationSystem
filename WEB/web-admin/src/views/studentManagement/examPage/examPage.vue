@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { getExamPaper, saveExamAnswer } from "@/api/student";
 export default {
   name: "",
   props: {},
@@ -19,35 +20,59 @@ export default {
   },
   created() {},
   mounted() {
-    // let isFullscreen =
-    //   document.fullscreenElement ||
-    //   document.mozFullScreenElement ||
-    //   document.webkitFullscreenElement ||
-    //   document.fullScreen ||
-    //   document.mozFullScreen ||
-    //   document.webkitIsFullScreen;
-    // isFullscreen = !!isFullscreen;
-    // document.addEventListener("fullscreenchange", () => {
-    //   this.$emit("input", !this.value);
-    //   this.$emit("on-change", !this.value);
-    // });
-    // document.addEventListener("mozfullscreenchange", () => {
-    //   this.$emit("input", !this.value);
-    //   this.$emit("on-change", !this.value);
-    // });
-    // document.addEventListener("webkitfullscreenchange", () => {
-    //   this.$emit("input", !this.value);
-    //   this.$emit("on-change", !this.value);
-    // });
-    // document.addEventListener("msfullscreenchange", () => {
-    //   this.$emit("input", !this.value);
-    //   this.$emit("on-change", !this.value);
-    // });
-    // this.$emit("input", isFullscreen);
+    //禁止内容选择
+    document.onselectstart = function() {
+      return false;
+    };
+    // //禁止内容拖放
+    document.ondragstart = function() {
+      return false;
+    };
+    // //禁止右键弹出菜单
+    document.oncontextmenu = function() {
+      return false;
+    };
+
+    document.onkeydown = function() {
+      if (
+        window.event.keyCode == 116 || //屏蔽 F5
+        window.event.keyCode == 122 || //屏蔽 F11
+        (window.event.shiftKey && window.event.keyCode == 121)
+      ) {
+        //shift+F10
+        window.event.keyCode = 0;
+        window.event.returnValue = false;
+      }
+      if (window.event.altKey && window.event.keyCode == 115) {
+        //屏蔽Alt+F4
+        window.showModelessDialog(
+          "about:blank",
+          "",
+          "dialogWidth:1px;dialogheight:1px"
+        );
+        return false;
+      }
+    };
+
+    let param = this.$route.query;
+    let Id = "";
+    try {
+      if (param.examPaperId) {
+        Id = param.examPaperId;
+      }
+    } catch (error) {}
+    this.getExamPaperWithId(Id);
     this.handleFullscreen();
   },
   computed: {},
   methods: {
+    getExamPaperWithId(Id) {
+      getExamPaper(Id).then(res => {
+        if (res.responseCode === "200") {
+        } else {
+        }
+      });
+    },
     handleFullscreen() {
       let main = document.body;
       if (main.requestFullscreen) {
