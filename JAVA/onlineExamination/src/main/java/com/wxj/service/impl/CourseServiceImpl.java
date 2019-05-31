@@ -60,7 +60,8 @@ public class CourseServiceImpl implements CourseServiceI {
 
     @Override
     public Long countCourseByParams(CourseParamsDTO courseParamsDTO) {
-        return courseMapper.countCourseByParams(courseParamsDTO);
+        Long size = Long.valueOf(courseMapper.countCourseByParams(courseParamsDTO).size());
+        return size;
     }
 
     @Transactional

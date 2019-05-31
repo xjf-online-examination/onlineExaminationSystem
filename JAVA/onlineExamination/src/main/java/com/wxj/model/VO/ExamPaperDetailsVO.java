@@ -38,5 +38,5 @@ public class ExamPaperDetailsVO implements Serializable {
     /**
      * 试题
      */
-    private List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList;
+    private Map<String, List<ExamQuestionsDetailsVO>> map;
 }

@@ -43,4 +43,8 @@ public class Achievement implements Serializable {
      * 分数
      */
     private Float score;
+    /**
+     * 考试时间
+     */
+    private String startTime;
 }

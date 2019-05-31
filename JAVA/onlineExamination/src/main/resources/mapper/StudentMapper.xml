@@ -320,13 +320,13 @@
   </select>
 
   <select id="selectAchievementByStudentId" parameterType="java.lang.String" resultType="com.wxj.model.PO.Achievement">
-    select ss.exam_schedule_id examScheduleId, c.name courseName, es.title examScheduleTitle, eq.type questionsType,ss.finish_flag finisFlag, ss.score score
+    select ss.exam_schedule_id examScheduleId, c.name courseName, es.title examScheduleTitle, eq.type questionsType,ss.finish_flag finisFlag, ss.score score, es.start_time startTime
     from student_answer ss
     LEFT JOIN exam_schedule es on ss.exam_schedule_id = es.id
-    LEFT JOIN exam_paper_questions epq on es.exam_paper_id = epq.exam_paper_id
+    LEFT JOIN exam_paper_questions epq on es.exam_paper_id = epq.exam_paper_id and ss.questions_no = epq.questions_no
     LEFT JOIN exam_questions eq on epq.exam_questions_id = eq.id
     LEFT JOIN course c on eq.course_code = c.code
-    where ss.sno = #{sno,jdbcType=CHAR}
+    where ss.student_sno = #{sno,jdbcType=CHAR}
   </select>
 
   <insert id="bathInsert" parameterType="java.util.List">

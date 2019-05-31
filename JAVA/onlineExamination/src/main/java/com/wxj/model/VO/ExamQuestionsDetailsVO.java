@@ -14,7 +14,7 @@ public class ExamQuestionsDetailsVO implements Serializable {
     /**
      * 题号
      */
-    private Integer questionsNo;
+    private Byte questionsNo;
     /**
      * ID
      */

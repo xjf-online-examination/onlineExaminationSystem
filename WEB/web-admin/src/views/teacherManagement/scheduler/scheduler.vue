@@ -5,7 +5,11 @@
         <Input type="text" v-model="searchData.examPaperCode" placeholder="试卷编号"/>
       </FormItem>
       <FormItem prop="status" label="考试状态" label-position="left" class="search-flex">
-        <Input type="text" v-model="searchData.status" placeholder="考试状态"/>
+        <Select v-model="searchData.status" style="width:150px">
+          <Option value="1">未开始</Option>
+          <Option value="2">进行中</Option>
+          <Option value="3">已结束</Option>
+        </Select>
       </FormItem>
       <FormItem>
         <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
@@ -63,7 +67,7 @@
 <script>
 import Tables from '@/components/tables';
 import {
-  getSchedulerList, addScheduler, editScheduler, deleteScheduler, getAllCourses,
+  getSchedulerList, addScheduler, editScheduler, deleteScheduler,
 } from '@/api/teacher';
 
 export default {
@@ -83,7 +87,7 @@ export default {
           title: '序号', type: 'index', align: 'center',
         },
         {
-          title: '考试安排名称', key: 'title', align: 'center',
+          title: '考试安排名称', key: 'examScheduleName', align: 'center',
         },
         {
           title: '考试时间', key: 'startTime', align: 'center',
@@ -101,7 +105,7 @@ export default {
           title: '考试班级', key: 'className', align: 'center',
         },
         {
-          title: '考试状态', key: 'status', align: 'center',
+          title: '考试状态', key: 'statusStr', align: 'center',
         },
         {
           title: '操作',
@@ -258,19 +262,17 @@ export default {
       getSchedulerList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
+          this.tableData.list.map((rowData) => {
+            rowData.title = rowData.examScheduleName;
+            rowData.statusStr = rowData.status == 1 ? '未开始' : (rowData.status == 2 ? '进行中' : '已结束');
+            return rowData;
+          });
         } else {
           this.tableData = { list: [], count: 0 };
         }
       });
     },
-    getAllCourses() {
-      getAllCourses().then((res) => {
-        if (res.responseCode === '200') {
-          this.courseList = res.data;
-        }
-      });
-    },
-    setStartTime(value, type) {
+    setStartTime(value) {
       this.scheduler.startTime = value;
     },
   },

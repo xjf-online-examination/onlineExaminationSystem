@@ -27,7 +27,7 @@
             <Button type="default" @click="handleReset('questionsSearch')" class="m-l-s">重置</Button>
           </FormItem>
         </Form>
-        <tables
+        <Tables
           ref="tables"
           search-place="top"
           v-model="tableData.list"
@@ -50,31 +50,140 @@
       </div>
       <div slot="right" class="demo-split-pane">
         <div class="paper-preview">
-          <h1 class="paper-title">{{paper.course.name}}</h1>
-          <div v-for="(question,index) in paper.examPaperQuestionsDTO" v-bind:key="index">
-            <div class="question-block">
-              <label>{{index+1}}.</label>
-              <div class="main-block">
-                <div>{{question.title}}({{paper.type|paperTypeFilter}}:{{paper.score}}分)</div>
-                <div class="answer-block">
-                  <div class="option-block" v-if="question.type!==6">
-                    <CheckboxGroup>
-                      <Checkbox
-                        :label="optionLabels[idx]+'.'+answer"
-                        v-for="(answer,idx) in question.options"
-                        v-bind:key="idx"
-                        class="option-block"
-                      ></Checkbox>
-                    </CheckboxGroup>
+          <h1 class="paper-title">{{paper.courseName}}</h1>
+          <hr>
+          <div class="paper-type-block">
+            <div ng-if="paper.map[1].length>0">
+              <h3>单选题（共{{paper.map[1].length}}题）</h3>
+              <div v-for="(question,index) in paper.map[1]" v-bind:key="index">
+                <div class="question-block">
+                  <label>{{index+1}}.</label>
+
+                  <div class="main-block">
+                    <div>{{question.title}}({{question.score}}分)</div>
+                    <div class="answer-block">
+                      <div class="option-block" v-if="question.type!==6">
+                        <CheckboxGroup>
+                          <Checkbox
+                            v-if="question.optionA!==''"
+                            :label="'A.'+question.optionA"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionB!==''"
+                            :label="'B.'+question.optionB"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionC!==''"
+                            :label="'C.'+question.optionC"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionD!==''"
+                            :label="'D.'+question.optionD"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionE!==''"
+                            :label="'E.'+question.optionE"
+                            class="option-block"
+                          ></Checkbox>
+                        </CheckboxGroup>
+                      </div>
+                    </div>
                   </div>
-                  <div class="option-block" v-if="question.type===6">
-                    <Journalizing type="test" :data="journalizingData" :subject-list="subjectList"></Journalizing>
+                </div>
+              </div>
+            </div>
+            <div ng-if="paper.map[2].length>0">
+              <h3>多选题（共{{paper.map[2].length}}题）</h3>
+              <div v-for="(question,index) in paper.map[2]" v-bind:key="index">
+                <div class="question-block">
+                  <label>{{index+1}}.</label>
+                  <div class="main-block">
+                    <div>{{question.title}}({{question.score}}分)</div>
+                    <div class="answer-block">
+                      <div class="option-block">
+                        <CheckboxGroup>
+                          <Checkbox
+                            :label="optionLabels[idx]+'.'+answer"
+                            v-for="(answer,idx) in question.options"
+                            v-bind:key="idx"
+                            class="option-block"
+                          ></Checkbox>
+                        </CheckboxGroup>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div ng-if="paper.map[4].length>0">
+              <h3>判断题（共{{paper.map[4].length}}题）</h3>
+              <div v-for="(question,index) in paper.map[4]" v-bind:key="index">
+                <div class="question-block">
+                  <label>{{index+1}}.</label>
+                  <div class="main-block">
+                    <div>{{question.title}}({{question.score}}分)</div>
+                    <div class="answer-block">
+                      <div class="option-block" v-if="question.type!==6">
+                        <CheckboxGroup>
+                          <Checkbox
+                            v-if="question.optionA!==''"
+                            :label="'A.'+question.optionA"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionB!==''"
+                            :label="'B.'+question.optionB"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionC!==''"
+                            :label="'C.'+question.optionC"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionD!==''"
+                            :label="'D.'+question.optionD"
+                            class="option-block"
+                          ></Checkbox>
+                          <Checkbox
+                            v-if="question.optionE!==''"
+                            :label="'E.'+question.optionE"
+                            class="option-block"
+                          ></Checkbox>
+                        </CheckboxGroup>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div ng-if="paper.map[6].length>0">
+              <h3>分录题（共{{paper.map[6].length}}题）</h3>
+              <div v-for="(question,index) in paper.map[6]" v-bind:key="index">
+                <div class="question-block">
+                  <label>{{index+1}}.</label>
+                  <div class="main-block">
+                    <div>{{question.title}}({{question.score}}分)</div>
+                    <div class="answer-block">
+                      <div class="option-block">
+                        <Journalizing
+                          type="test"
+                          :data="journalizingData"
+                          :subject-list="subjectList"
+                        ></Journalizing>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <Button type="primary" icon="ios-save" @click="savePaper()">保存</Button>
       </div>
     </Split>
   </div>
@@ -86,7 +195,7 @@ import Tables from '@/components/tables';
 
 import Journalizing from '@/components/journalizing/table';
 import {
-  addPaper, editPaper, listPage,
+  automaticPaper, editPaper, listPage, getPaperDetailForTeacher,
 } from '@/api/teacher';
 
 export default {
@@ -99,7 +208,7 @@ export default {
     return {
       paper: {
         ...this.$route.query,
-        examPaperQuestionsDTO: [],
+        examPaperQuestionsDTOList: [],
       },
       studentAnswer: '',
       split1: 0.5,
@@ -158,6 +267,7 @@ export default {
         creditTotal: '',
         creditTotalScore: '',
       },
+      questionList: [],
     };
   },
   methods: {
@@ -178,19 +288,22 @@ export default {
     },
     handleSelect(selection) {
       console.info('selection', selection);
-      this.paper.examPaperQuestionsDTO = selection;
-      this.options = [];
-      if (this.paper.examPaperQuestionsDTO) {
-        this.paper.examPaperQuestionsDTO.map((question) => {
-          question.options = [];
-          if (question.optionA) question.options.push(question.optionA);
-          if (question.optionB) question.options.push(question.optionB);
-          if (question.optionC) question.options.push(question.optionC);
-          if (question.optionD) question.options.push(question.optionD);
-          if (question.optionE) question.options.push(question.optionE);
-          return question;
-        });
-      }
+      // this.paper.examPaperQuestionsDTO = selection;
+      // this.options = [];
+      // if (this.paper.examPaperQuestionsDTO) {
+      //   this.paper.examPaperQuestionsDTO.map((question) => {
+      //     question.options = [];
+      //     if (question.optionA) question.options.push(question.optionA);
+      //     if (question.optionB) question.options.push(question.optionB);
+      //     if (question.optionC) question.options.push(question.optionC);
+      //     if (question.optionD) question.options.push(question.optionD);
+      //     if (question.optionE) question.options.push(question.optionE);
+      //     return question;
+      //   });
+      // }
+      selection.forEach((select) => {
+        this.addQuestion(select);
+      });
     },
     handleSelectCancel(selection) {
       console.info('取消选择', selection);
@@ -211,18 +324,72 @@ export default {
         }
       });
     },
-    getParams() {
-      // 取到路由带过来的参数
-      this.paper = { ...this.paper, ...this.$route.params.paper };
+    getPaperDetail() {
+      getPaperDetailForTeacher(this.$route.query.id).then((res) => {
+        if (res.responseCode === '200') {
+          this.paper = res.data;
+        } else {
+          this.paper = {};
+        }
+      });
+    },
+    addQuestion(selection) {
+      const type = parseInt(selection.type);
+      for (const i in this.paper.map[type]) {
+        if (selection.id === this.paper.map[type][i].id) {
+          this.paper.map[type].splice(i, 1);
+          break;
+        }
+      }
+      this.paper.map[type].push(selection);
+    },
+    savePaper() {
+      const keys = Object.keys(this.paper.map);
+      this.paper.examPaperQuestionsDTOList = [];
+      if (keys.length > 0) {
+        keys.forEach((key) => {
+          for (const i in this.paper.map[key]) {
+            this.paper.examPaperQuestionsDTOList.push(this.paper.map[key][i]);
+          }
+        });
+        if (this.paper.examPaperQuestionsDTOList.length > 0) {
+          if (this.$route.query.status === 'add') {
+            automaticPaper(this.paper).then((res) => {
+              if (res.responseCode === '200') {
+                this.$Notice.success({ title: '保存成功！' });
+                this.closeTag({
+                  name: 'paperQuestions',
+                });
+              } else {
+                this.$Notice.error({ title: '保存失败！' });
+              }
+            });
+          } else {
+            editPaper(this.paper).then((res) => {
+              if (res.responseCode === '200') {
+                this.$Notice.success({ title: '修改成功！' });
+                this.closeTag({
+                  name: 'paperQuestions',
+                });
+              } else {
+                this.$Notice.error({ title: '修改失败！' });
+              }
+            });
+          }
+        } else {
+          this.$Notice.error({ title: '试题不能为空!' });
+        }
+      } else {
+        this.$Notice.error({ title: '试题不能为空!' });
+      }
     },
   },
   mounted() {
     this.listPage();
+    if (this.$route.query.status === 'edit') {
+      this.getPaperDetail();
+    }
   },
-  // watch: {
-  //   // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可
-  //   $route: 'getParams',
-  // },
 };
 </script>
 

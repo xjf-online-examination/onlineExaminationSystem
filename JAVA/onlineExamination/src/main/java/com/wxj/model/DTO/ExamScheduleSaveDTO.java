@@ -11,6 +11,10 @@ import java.io.Serializable;
 @ToString
 public class ExamScheduleSaveDTO implements Serializable {
     /**
+     * id
+     */
+    private Integer id;
+    /**
      * title
      */
     private String title;

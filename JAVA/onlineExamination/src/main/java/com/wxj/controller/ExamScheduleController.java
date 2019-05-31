@@ -100,7 +100,7 @@ public class ExamScheduleController {
     }
 
     /**
-     * 新增
+     * 　修改
      * @param requestBean
      * @return
      */

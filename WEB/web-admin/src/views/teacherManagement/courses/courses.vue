@@ -51,7 +51,7 @@
       </div>
     </Modal>
     <Modal v-model="showDeleteModal" :title="'提示'" @on-ok="deleteCourse">
-      <p>是否删除该课程，删除后无法恢复？</p>
+      <p>删除课程会把该课程对应的试题，试卷，考试信息，考试成绩删除。确认删除？</p>
     </Modal>
   </div>
 </template>
@@ -82,7 +82,7 @@ export default {
           title: '课程名称', key: 'name', align: 'center',
         },
         {
-          title: '所属班级', key: 'className', align: 'center',
+          title: '所属班级', key: 'classNameString', align: 'center',
         },
         {
           title: '操作',
@@ -230,6 +230,17 @@ export default {
       getCourseList(this.searchData).then((res) => {
         if (res.responseCode === '200') {
           this.tableData = res.data;
+          this.tableData.list.forEach((rowData) => {
+            rowData.classNameString = '';
+            rowData.classIdList = [];
+            rowData.className.map((item, index) => {
+              rowData.classIdList.push(item.id);
+              rowData.classNameString += item.name;
+              if (index !== rowData.className.length - 1) {
+                rowData.classNameString += '、';
+              }
+            });
+          });
         } else {
           this.tableData = { list: [], count: 0 };
         }

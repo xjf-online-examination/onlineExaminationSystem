@@ -81,6 +81,13 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
     @Transactional
     @Override
     public int save(ExamQuestionsSaveDTO examQuestionsSaveDTO) {
+        CourseExample courseExample = new CourseExample();
+        courseExample.createCriteria().andCodeEqualTo(examQuestionsSaveDTO.getCourseCode());
+        List<Course> courseList = courseMapper.selectByExample(courseExample);
+        if (null == courseList && courseList.size() == 0) {
+            throw new OperationException("课程不存在，请先添加课程");
+        }
+
         int examQuestionsInsertSize;
         int entryStandardAnswerDetailsInsertSize = 0;
         Date date = new Date();
@@ -172,8 +179,8 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
         CourseExample courseExample = new CourseExample();
         List<String> courseList = courseMapper.selectByExample(courseExample).stream().map(Course::getCode).collect(Collectors.toList());
         for (int j=0,size=examQuestionsList.size(); j<size; j++) {
-            if (!courseList.contains(examQuestionsList.get(j).getCode())) {
-                throw new OperationException("导入试题失败, " + examQuestionsList.get(j).getCode() + "不存在, 请先添加课程");
+            if (!courseList.contains(examQuestionsList.get(j).getCourseCode())) {
+                throw new OperationException("导入试题失败, " + examQuestionsList.get(j).getCourseCode() + "不存在, 请先添加课程");
             }
         }
         int i;

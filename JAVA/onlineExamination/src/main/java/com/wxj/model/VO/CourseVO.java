@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,5 +24,5 @@ public class CourseVO implements Serializable {
     /**
      * 所属班级
      */
-    private String className;
+    private List<ClassSelectVO> className;
 }

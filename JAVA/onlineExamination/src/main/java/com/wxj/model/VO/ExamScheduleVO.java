@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,9 +38,9 @@ public class ExamScheduleVO implements Serializable {
     /**
      * 班级名称
      */
-    private String className;
+    private List<String> className;
     /**
-     * 状态
+     * 状态1:未开始 2：进行中 3：已结束
      */
     private String status;
 }

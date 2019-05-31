@@ -508,6 +508,19 @@
   </select>
 
   <select id="selectExamPaperQuestionsDetailsAnswer" parameterType="java.lang.Integer" resultType="com.wxj.model.DO.ExamQuestionsDO">
+    select epq.questions_no, eq.id, eq.code, eq.course_code, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE, eq.single_answer, eq.multiple_answer,
+    eq.yes_no_answer, eq.score
+    from exam_paper_questions epq
+    left join exam_questions eq on epq.exam_questions_id = eq.id
+    LEFT JOIN exam_schedule es on es.exam_paper_id = epq.exam_paper_id
+    where epq.exam_paper_id = #{examPaperId,jdbcType=INTEGER}
+  </select>
 
+  <select id="selectQuestionsEntryAnswer" parameterType="java.lang.Integer" resultType="com.wxj.model.DO.ExamQuestionsEntryAnswerDO">
+    select id, entry_answer_id entryAnswerId, `row`, summary, summary_score summaryScore, subject1, subject1_score subject1Score, subject2, subject2_score subject2Score,
+    debit_amount debitAmount, debit_amount_score debitAmountScore, credit_amount creditAmount, credit_amount_score creditAmountScore, total, total_score totalScore,
+    debit_total debitTotal, debit_total_score debitTotalScore, credit_total creditTotal, credit_total_score creditTotalScore
+    from entry_standard_answer_details
+    where entry_answer_id = #{examQuestionsId,jdbcType=INTEGER}
   </select>
 </mapper>

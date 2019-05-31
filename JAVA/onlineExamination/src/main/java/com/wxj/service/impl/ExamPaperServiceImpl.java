@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -73,12 +70,12 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
         try {
             List<StudentExamQuestionsVO> studentExamQuestionsVOList = examQuestionsMapper.selectStudentExamPaperDetailsById(id);
 
-            map.put("1", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_ONE)).collect(Collectors.toList()));
-            map.put("2", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_TWE)).collect(Collectors.toList()));
-            map.put("3", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).collect(Collectors.toList()));
-            map.put("4", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FOUR)).collect(Collectors.toList()));
-            map.put("5", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).collect(Collectors.toList()));
-            map.put("6", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).collect(Collectors.toList()));
+            map.put("1", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_ONE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            map.put("2", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_TWE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            map.put("3", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            map.put("4", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FOUR)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            map.put("5", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+            map.put("6", studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,8 +84,29 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
 
     @Override
     public ExamPaperDetailsVO getTeacherExamPaperDetailsById(Integer id) {
+        ExamPaperDetailsVO examPaperDetailsVO = examPaperMapper.selectExamPaperDetailsById(id);
 
-        return null;
+        try {
+            List<ExamQuestionsDetailsVO> examQuestionsDetailsVOList = examPaperMapper.selectExamQuestions(id);
+
+            Map<String, List<ExamQuestionsDetailsVO>> map = new HashMap<>();
+
+            map.put("1", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_ONE)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+            map.put("2", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_TWE)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+            map.put("3", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_THREE)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+            map.put("4", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FOUR)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+            map.put("5", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+            map.put("6", examQuestionsDetailsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).sorted(Comparator.comparing(ExamQuestionsDetailsVO::getType)).collect(Collectors.toList()));
+            examPaperDetailsVO.setMap(map);
+
+            for (ExamQuestionsDetailsVO examQuestionsDetailsVO : examQuestionsDetailsVOList) {
+                List<EntryStandardAnswerDetailsVO> entryStandardAnswerDetailsVOList = examPaperMapper.selectEntryAnswer(examQuestionsDetailsVO.getId());
+                examQuestionsDetailsVO.setEntryStandardAnswerDetailsVOList(entryStandardAnswerDetailsVOList);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return examPaperDetailsVO;
     }
 
     @Override
@@ -144,6 +162,7 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
     @Transactional
     @Override
     public void delete(Integer examPaperId) {
+        //删除试卷会将改试卷相关的考试信息以及答题信息删除，确定删除？
         //删除试卷与试题对应关系
         ExamPaper examPaper = examPaperMapper.selectByPrimaryKey(examPaperId);
         if (null == examPaper) {

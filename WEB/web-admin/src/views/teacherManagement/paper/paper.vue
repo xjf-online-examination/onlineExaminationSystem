@@ -180,16 +180,24 @@ export default {
       this.getPaperList(this.searchData);
     },
     onEdit(index) {
-      this.modalVisible = true;
-      this.modalTitle = '修改';
-      this.isAdd = false;
-      this.getPaperById(this.tableData.list[index].id).then((res) => {
-        if (res.responseCode === '200') {
-          this.paper = res.data;
-        } else {
-          this.paper = {};
-        }
-        this.modalVisible = true;
+      // this.modalVisible = true;
+      // this.modalTitle = '修改';
+      // this.isAdd = false;
+      // this.getPaperById(this.tableData.list[index].id).then((res) => {
+      //   if (res.responseCode === '200') {
+      //     this.paper = res.data;
+      //   } else {
+      //     this.paper = {};
+      //   }
+      //   this.modalVisible = true;
+      // });
+      this.$router.push({
+        name: 'paperQuestions',
+        query: {
+          id: this.tableData.list[index].id,
+          status: 'edit',
+          courseCode: this.tableData.list[index].courseCode,
+        },
       });
     },
     onDelete(index) {
@@ -227,7 +235,10 @@ export default {
             } else {
               this.$router.push({
                 name: 'paperQuestions',
-                query: { ...this.paper },
+                query: {
+                  ...this.paper,
+                  status: 'add',
+                },
               });
               this.modalVisible = false;
               // addPaper(this.paper).then((res) => {

@@ -224,8 +224,18 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectCourseByParams" parameterType="com.wxj.model.DTO.CourseParamsDTO" resultType="com.wxj.model.VO.CourseVO">
-    select c1.id id, c1.code code, c1.name name, c2.name className
+  <resultMap id="SelectCourseMap" type="com.wxj.model.VO.CourseVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="CHAR" property="code" />
+    <result column="name" jdbcType="CHAR" property="name" />
+    <collection property="className" ofType="com.wxj.model.VO.ClassSelectVO" javaType="java.util.List">
+      <id column="class_id" jdbcType="INTEGER" property="id" />
+      <result column="class_name" jdbcType="CHAR" property="name" />
+    </collection>
+  </resultMap>
+
+  <select id="selectCourseByParams" parameterType="com.wxj.model.DTO.CourseParamsDTO" resultMap="SelectCourseMap">
+    select c1.id id, c1.code code, c1.name name,c2.id class_id, c2.name class_name
     from course c1
     left join class_course cc on c1.id = cc.course_id
     left join class c2 on cc.class_id = c2.id
@@ -244,8 +254,8 @@
     </if>
   </select>
 
-  <select id="countCourseByParams" parameterType="com.wxj.model.DTO.CourseParamsDTO" resultType="java.lang.Long">
-    select count(1)
+  <select id="countCourseByParams" parameterType="com.wxj.model.DTO.CourseParamsDTO" resultMap="SelectCourseMap">
+    select c1.id id, c1.code code, c1.name name, c2.name class_name
     from course c1
     left join class_course cc on c1.id = cc.course_id
     left join class c2 on cc.class_id = c2.id
