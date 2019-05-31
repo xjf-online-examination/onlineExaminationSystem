@@ -9,6 +9,7 @@ import com.wxj.model.DTO.ExamPaperParamsDTO;
 import com.wxj.model.DTO.ExamPaperSaveModifyDTO;
 import com.wxj.model.VO.ExamPaperDetailsVO;
 import com.wxj.model.VO.ExamPaperVO;
+import com.wxj.model.VO.StudentExamQuestionsTypeVO;
 import com.wxj.model.VO.StudentExamQuestionsVO;
 import com.wxj.service.ExamPaperServiceI;
 import com.wxj.utils.ResponseUtils;
@@ -65,8 +66,8 @@ public class ExamPaperController {
             if (null == requestBean.getData()) {
                 throw new ParamEmptyException("data不能为空");
             }
-            Map<String, List<StudentExamQuestionsVO>> map = examPaperService.getStudentExamPaperDetailsById(requestBean.getData());
-            return ResponseUtils.success("200", map);
+            List<StudentExamQuestionsTypeVO> studentExamQuestionsTypeVOList = examPaperService.getStudentExamPaperDetailsById(requestBean.getData());
+            return ResponseUtils.success("200", studentExamQuestionsTypeVOList);
         } catch (BusinessRuntimeException e) {
             return ResponseUtils.error(e);
         }

@@ -4,6 +4,7 @@ import com.wxj.model.DTO.ExamPaperParamsDTO;
 import com.wxj.model.DTO.ExamPaperSaveModifyDTO;
 import com.wxj.model.VO.ExamPaperDetailsVO;
 import com.wxj.model.VO.ExamPaperVO;
+import com.wxj.model.VO.StudentExamQuestionsTypeVO;
 import com.wxj.model.VO.StudentExamQuestionsVO;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface ExamPaperServiceI {
 
     int countExamPaperByParams(ExamPaperParamsDTO examPaperParamsDTO);
 
-    Map<String, List<StudentExamQuestionsVO>> getStudentExamPaperDetailsById(Integer id);
+    List<StudentExamQuestionsTypeVO> getStudentExamPaperDetailsById(Integer id);
 
     ExamPaperDetailsVO getTeacherExamPaperDetailsById(Integer id);
 

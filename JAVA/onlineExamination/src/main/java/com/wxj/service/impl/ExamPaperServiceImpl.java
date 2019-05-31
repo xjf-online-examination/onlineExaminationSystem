@@ -67,8 +67,8 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
     }
 
     @Override
-    public Map<String, List<StudentExamQuestionsVO>> getStudentExamPaperDetailsById(Integer id) {
-        Map<String, List<StudentExamQuestionsVO>> map = new HashMap<>();
+    public List<StudentExamQuestionsTypeVO> getStudentExamPaperDetailsById(Integer id) {
+        List<StudentExamQuestionsTypeVO> studentExamQuestionsTypeVOList = Lists.newArrayList();
         try {
             List<StudentExamQuestionsVO> studentExamQuestionsVOList = examQuestionsMapper.selectStudentExamPaperDetailsById(id);
 
@@ -78,44 +78,52 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
             List<StudentExamQuestionsVO> studentExamQuestionsVOList4 = studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FOUR)).collect(Collectors.toList());
             List<StudentExamQuestionsVO> studentExamQuestionsVOList5 = studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_FIVE)).collect(Collectors.toList());
             List<StudentExamQuestionsVO> studentExamQuestionsVOList6 = studentExamQuestionsVOList.stream().filter(obj->obj.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)).collect(Collectors.toList());
+
+            StudentExamQuestionsTypeVO studentExamQuestionsTypeVO;
             if (null != studentExamQuestionsVOList1 && studentExamQuestionsVOList1.size() > 0) {
-                map.put("1", studentExamQuestionsVOList1.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            } else {
-                map.put("1", studentExamQuestionsVOList1);
+                studentExamQuestionsTypeVO = new StudentExamQuestionsTypeVO();
+                studentExamQuestionsTypeVO.setType("1");
+                studentExamQuestionsTypeVO.setStudentExamQuestionsVOList(studentExamQuestionsVOList1.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+                studentExamQuestionsTypeVOList.add(studentExamQuestionsTypeVO);
             }
 
             if (null != studentExamQuestionsVOList2 && studentExamQuestionsVOList2.size() > 0) {
-                map.put("2", studentExamQuestionsVOList2.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            } else {
-                map.put("2", studentExamQuestionsVOList2);
+                studentExamQuestionsTypeVO = new StudentExamQuestionsTypeVO();
+                studentExamQuestionsTypeVO.setType("2");
+                studentExamQuestionsTypeVO.setStudentExamQuestionsVOList(studentExamQuestionsVOList2.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+                studentExamQuestionsTypeVOList.add(studentExamQuestionsTypeVO);
             }
 
             if (null != studentExamQuestionsVOList3 && studentExamQuestionsVOList3.size() > 0) {
-                map.put("3", studentExamQuestionsVOList3.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            } else {
-                map.put("4", studentExamQuestionsVOList3);
+                studentExamQuestionsTypeVO = new StudentExamQuestionsTypeVO();
+                studentExamQuestionsTypeVO.setType("3");
+                studentExamQuestionsTypeVO.setStudentExamQuestionsVOList(studentExamQuestionsVOList3.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+                studentExamQuestionsTypeVOList.add(studentExamQuestionsTypeVO);
             }
 
             if (null != studentExamQuestionsVOList4 && studentExamQuestionsVOList4.size() > 0) {
-                map.put("4", studentExamQuestionsVOList4.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            } else {
-                map.put("4", studentExamQuestionsVOList4);
+                studentExamQuestionsTypeVO = new StudentExamQuestionsTypeVO();
+                studentExamQuestionsTypeVO.setType("4");
+                studentExamQuestionsTypeVO.setStudentExamQuestionsVOList(studentExamQuestionsVOList4.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+                studentExamQuestionsTypeVOList.add(studentExamQuestionsTypeVO);
             }
 
             if (null != studentExamQuestionsVOList5 && studentExamQuestionsVOList5.size() > 0) {
-                map.put("5", studentExamQuestionsVOList5.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            } {
-                map.put("5", studentExamQuestionsVOList5);
+                studentExamQuestionsTypeVO = new StudentExamQuestionsTypeVO();
+                studentExamQuestionsTypeVO.setType("5");
+                studentExamQuestionsTypeVO.setStudentExamQuestionsVOList(studentExamQuestionsVOList5.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+                studentExamQuestionsTypeVOList.add(studentExamQuestionsTypeVO);
             }
             if (null != studentExamQuestionsVOList6 && studentExamQuestionsVOList6.size() > 0) {
-                map.put("6", studentExamQuestionsVOList6.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
-            } else {
-                map.put("6", studentExamQuestionsVOList6);
+                studentExamQuestionsTypeVO = new StudentExamQuestionsTypeVO();
+                studentExamQuestionsTypeVO.setType("6");
+                studentExamQuestionsTypeVO.setStudentExamQuestionsVOList(studentExamQuestionsVOList6.stream().sorted(Comparator.comparing(StudentExamQuestionsVO::getType)).collect(Collectors.toList()));
+                studentExamQuestionsTypeVOList.add(studentExamQuestionsTypeVO);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return map;
+        return studentExamQuestionsTypeVOList;
     }
 
     @Override
