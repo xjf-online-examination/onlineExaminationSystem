@@ -354,6 +354,28 @@
     where ep.id = #{id,jdbcType=INTEGER}
   </select>
 
+  <resultMap id="selectEntryAnswerMap" type="com.wxj.model.VO.EntryStandardAnswerDetailsVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="entry_answer_id" jdbcType="INTEGER" property="entryAnswerId" />
+    <result column="row" jdbcType="TINYINT" property="row" />
+    <result column="summary" jdbcType="CHAR" property="summary" />
+    <result column="summary_score" jdbcType="REAL" property="summaryScore" />
+    <result column="subject1" jdbcType="CHAR" property="subject1" />
+    <result column="subject1_score" jdbcType="REAL" property="subject1Score" />
+    <result column="subject2" jdbcType="CHAR" property="subject2" />
+    <result column="subject2_score" jdbcType="REAL" property="subject2Score" />
+    <result column="debit_amount" jdbcType="INTEGER" property="debitAmount" />
+    <result column="debit_amount_score" jdbcType="REAL" property="debitAmountScore" />
+    <result column="credit_amount" jdbcType="INTEGER" property="creditAmount" />
+    <result column="credit_amount_score" jdbcType="REAL" property="creditAmountScore" />
+    <result column="total" jdbcType="CHAR" property="total" />
+    <result column="total_score" jdbcType="REAL" property="totalScore" />
+    <result column="debit_total" jdbcType="INTEGER" property="debitTotal" />
+    <result column="debit_total_score" jdbcType="REAL" property="debitTotalScore" />
+    <result column="credit_total" jdbcType="INTEGER" property="creditTotal" />
+    <result column="credit_total_score" jdbcType="REAL" property="creditTotalScore" />
+  </resultMap>
+
   <select id="selectEntryAnswer" parameterType="java.lang.Integer" resultType="com.wxj.model.VO.EntryStandardAnswerDetailsVO">
     select id, entry_answer_id entryAnswerId, `row`, summary, summary_score summaryScore, subject1, subject1_score subject1Score, subject2, subject2_score subject2Score,
     debit_amount debitAmount, debit_amount_score debitAmountScore, credit_amount creditAmount, credit_amount_score creditAmountScore, total, total_score totalScore,

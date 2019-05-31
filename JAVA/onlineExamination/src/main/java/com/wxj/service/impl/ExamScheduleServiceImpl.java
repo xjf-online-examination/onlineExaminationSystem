@@ -11,6 +11,7 @@ import com.wxj.mapper.StudentAnswerMapper;
 import com.wxj.model.DTO.ExamScheduleParamsDTO;
 import com.wxj.model.DTO.ExamScheduleSaveDTO;
 import com.wxj.model.PO.*;
+import com.wxj.model.PO.Class;
 import com.wxj.model.VO.ExamScheduleDetailsVO;
 import com.wxj.model.VO.ExamScheduleVO;
 import com.wxj.model.VO.StudentExamScheduleVO;
@@ -55,6 +56,11 @@ public class ExamScheduleServiceImpl implements ExamScheduleServiceI {
         PageBounds pageBounds = new PageBounds(examScheduleParamsDTO.getCurrentPage(), examScheduleParamsDTO.getPageSize());
         List<ExamScheduleVO> examScheduleVOList = examScheduleMapper.listExamScheduleByParams(examScheduleParamsDTO, pageBounds);
         for (ExamScheduleVO examScheduleVO : examScheduleVOList) {
+
+            Course course = examScheduleMapper.selectCourse(examScheduleVO.getId());
+            List<Class> cLassList = examScheduleMapper.selectClassName(course.getId());
+            examScheduleVO.setClassName(cLassList.stream().map(Class::getName).collect(Collectors.toList()));
+
             Date startTime = null;
             try {
                 startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(examScheduleVO.getStartTime());

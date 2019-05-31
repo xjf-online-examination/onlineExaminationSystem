@@ -2,6 +2,8 @@ package com.wxj.mapper;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.wxj.model.DTO.ExamScheduleParamsDTO;
+import com.wxj.model.PO.Class;
+import com.wxj.model.PO.Course;
 import com.wxj.model.PO.ExamSchedule;
 import com.wxj.model.PO.ExamScheduleExample;
 import com.wxj.model.VO.ExamScheduleDetailsVO;
@@ -90,4 +92,8 @@ public interface ExamScheduleMapper {
      * @return
      */
     List<StudentExamScheduleVO> selectStudentExamScheduleBySno(String sno);
+
+    Course selectCourse(Integer examScheduleId);
+
+    List<Class> selectClassName(Integer courseId);
 }

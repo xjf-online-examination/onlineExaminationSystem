@@ -296,18 +296,13 @@
     <result column="duration" jdbcType="TINYINT" property="duration" />
     <result column="exam_paper_code" jdbcType="CHAR" property="examPaperCode" />
     <result column="exam_paper_name" jdbcType="CHAR" property="examPaperName" />
-    <collection property="className" ofType="java.lang.String" javaType="java.util.List">
-      <result column="className"/>
-    </collection>
   </resultMap>
 
   <select id="listExamScheduleByParams" parameterType="com.wxj.model.DTO.ExamScheduleParamsDTO" resultType="com.wxj.model.VO.ExamScheduleVO">
-    select es.id,es.title examScheduleName, es.start_time startTime, es.duration, es.exam_paper_code examPaperCode, es.exam_paper_name examPaperName, cla.`name` className
+    select es.id,es.title examScheduleName, es.start_time startTime, es.duration, es.exam_paper_code examPaperCode, es.exam_paper_name examPaperName
     from exam_schedule es
     LEFT JOIN exam_paper ep on es.exam_paper_id = ep.id
     LEFT JOIN course cou on ep.course_code = cou.code
-    LEFT JOIN class_course cc on cou.id = cc.course_id
-    LEFT JOIN class cla on cc.class_id = cla.id
     where 1=1
     <if test='record.examPaperCode != null and record.examPaperCode != ""'>
       and ep.exam_paper_code = #{record.examPaperCode,jdbcType=CHAR}
@@ -366,6 +361,21 @@
     LEFT JOIN exam_schedule es on ep.id = es.exam_paper_id
     where s.sno = #{sno,jdbcType=CHAR}
     and now() &lt; date_add(es.start_time, interval es.duration minute)
+  </select>
+
+  <select id="selectCourse" parameterType="java.lang.Integer" resultType="com.wxj.model.PO.Course">
+    select cou.id
+    from exam_schedule es
+    LEFT JOIN exam_paper ep on es.exam_paper_id = ep.id
+    LEFT JOIN course cou  on ep.course_code = cou.code
+    where es.id = #{examScheduleId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectClassName" parameterType="java.lang.Integer" resultType="com.wxj.model.PO.Class">
+    select c.name
+    from class_course cc
+    LEFT JOIN class c on cc.class_id = c.id
+    where cc.course_id = #{courseId,jdbcType=INTEGER}
   </select>
 </mapper>
 
