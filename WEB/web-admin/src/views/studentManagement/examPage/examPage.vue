@@ -56,7 +56,7 @@
                   <div class="main-block">
                     <div>{{question.title}}({{question.score}}分)</div>
                     <div class="answer-block">
-                      <CheckboxGroup>
+                      <CheckboxGroup v-model="question.answer">
                         <Checkbox
                           v-if="question.optionA!==''"
                           :label="question.optionA"
@@ -314,7 +314,8 @@ export default {
       }
     },
     exitFS() {
-      console.log("11111 :", 11111);
+      const answerSaveDetailsDTOList = this.handleAnswer();
+      console.log("answerSaveDetailsDTOList :", answerSaveDetailsDTOList);
       try {
         if (document.exitFullscreen) {
           document.exitFullscreen();
@@ -328,7 +329,43 @@ export default {
       } catch (error) {
         console.log("error :", error);
       }
-      this.$router.push({ path: "/examScheduler/examScheduler" });
+      // this.$router.push({ path: "/examScheduler/examScheduler" });
+    },
+    // 处理答案
+    handleAnswer() {
+      return this.examPaper.reduce((o, item) => {
+        item.studentExamQuestionsVOList.forEach(ele => {
+          let obj = {};
+          if (ele.type !== "6") {
+            obj = {
+              questionsNo: ele.questionsNo,
+              questionsType: ele.type
+            };
+            if (this.isArray(ele.answer)) {
+              const arr = ele.answer.reduce((e, v) => {
+                let str = "";
+                str = v.split("、")[0];
+                e.push(str);
+                return e;
+              }, []);
+              obj.answer = arr.join(",");
+            } else {
+              obj.answer = ele.answer.split("、")[0];
+            }
+          } else {
+            obj = {
+              questionsNo: ele.questionsNo,
+              questionsType: ele.type,
+              studentEntryAnswerSaveDTOList: []
+            };
+          }
+          o.push(obj);
+        });
+        return o;
+      }, []);
+    },
+    isArray(obj) {
+      return Object.prototype.toString.call(obj) === "[object Array]";
     }
   }
 };
