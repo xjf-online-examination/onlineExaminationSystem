@@ -232,6 +232,11 @@ public class ExamPaperServiceImpl implements ExamPaperServiceI {
         try {
             ExamPaper examPaper = new ExamPaper();
             BeanUtils.copyProperties(examPaperSaveModifyDTO, examPaper);
+            Integer size = examPaperSaveModifyDTO.getExamPaperQuestionsDTOList().size();
+            if (size == null) {
+                size = 0;
+            }
+            examPaper.setQuestionsAmount(size.byteValue());
             examPaper.setOpeator(teacherList.get(0).getId());
             examPaper.setModifyTime(new Date());
             examPaperUpdateSize = examPaperMapper.updateByPrimaryKeySelective(examPaper);
