@@ -4,7 +4,6 @@
       <div slot="left" class="demo-split-pane">
         <Tables
           ref="tables"
-          search-place="top"
           v-model="tableData.list"
           :columns="columns"
           @on-select="handleSelect"
@@ -15,6 +14,7 @@
         <div class="table-pagenation m-t-s" v-if="tableData.count>0">
           <Page
             :total="tableData.count"
+            :page-size="searchData.pageSize"
             show-elevator
             show-total
             show-sizer
@@ -25,8 +25,7 @@
       </div>
       <div slot="right" class="demo-split-pane">
         <div class="paper-preview">
-          <h1 class="paper-title">{{paper.courseName}}</h1>
-          <hr>
+          <h1 class="paper-title">{{paper.name}}</h1>
           <div
             class="paper-type-block"
             v-for="(group,idx) in paper.examQuestionsTypeVOList"
@@ -34,137 +33,160 @@
           >
             <div v-if="group.type=='1'">
               <h3>{{types[idx]}}、单选题（共{{group.examQuestionsDetailsVOList.length}}题）</h3>
-              <div v-for="(question,index) in group.examQuestionsDetailsVOList" v-bind:key="index">
+              <div
+                v-for="(question,index) in group.examQuestionsDetailsVOList"
+                v-bind:key="index"
+                class="row-block"
+              >
                 <div class="question-block">
                   <label>{{index+1}}.</label>
                   <div class="main-block">
                     <div>{{question.title}}({{question.score}}分)</div>
                     <div class="answer-block">
                       <div class="option-block">
-                        <CheckboxGroup>
-                          <Checkbox
+                        <RadioGroup>
+                          <Radio
                             v-if="question.optionA!==''"
                             :label="'A.'+question.optionA"
                             class="option-block"
-                          ></Checkbox>
-                          <Checkbox
+                          ></Radio>
+                          <Radio
                             v-if="question.optionB!==''"
                             :label="'B.'+question.optionB"
                             class="option-block"
-                          ></Checkbox>
-                          <Checkbox
+                          ></Radio>
+                          <Radio
                             v-if="question.optionC!==''"
                             :label="'C.'+question.optionC"
                             class="option-block"
-                          ></Checkbox>
-                          <Checkbox
+                          ></Radio>
+                          <Radio
                             v-if="question.optionD!==''"
                             :label="'D.'+question.optionD"
                             class="option-block"
-                          ></Checkbox>
-                          <Checkbox
+                          ></Radio>
+                          <Radio
                             v-if="question.optionE!==''"
                             :label="'E.'+question.optionE"
                             class="option-block"
-                          ></Checkbox>
-                        </CheckboxGroup>
+                          ></Radio>
+                        </RadioGroup>
                       </div>
                     </div>
                   </div>
                 </div>
+                <Button class="del-btn" type="primary" ghost @click="handleDelete(idx,index)">删除</Button>
               </div>
             </div>
             <div v-if="group.type=='2'">
               <h3>{{types[idx]}}、多选题（共{{group.examQuestionsDetailsVOList.length}}题）</h3>
               <div v-for="(question,index) in group.examQuestionsDetailsVOList" v-bind:key="index">
-                <div class="question-block">
-                  <label>{{index+1}}.</label>
-                  <div class="main-block">
-                    <div>{{question.title}}({{question.score}}分)</div>
-                    <div class="answer-block">
-                      <div class="option-block">
-                        <CheckboxGroup>
-                          <Checkbox
-                            v-if="question.optionA!==''"
-                            :label="'A.'+question.optionA"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionB!==''"
-                            :label="'B.'+question.optionB"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionC!==''"
-                            :label="'C.'+question.optionC"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionD!==''"
-                            :label="'D.'+question.optionD"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionE!==''"
-                            :label="'E.'+question.optionE"
-                            class="option-block"
-                          ></Checkbox>
-                        </CheckboxGroup>
+                <div class="row-block">
+                  <div class="question-block">
+                    <label>{{index+1}}.</label>
+                    <div class="main-block">
+                      <div>{{question.title}}({{question.score}}分)</div>
+                      <div class="answer-block">
+                        <div class="option-block">
+                          <CheckboxGroup>
+                            <Checkbox
+                              v-if="question.optionA!==''"
+                              :label="'A.'+question.optionA"
+                              class="option-block"
+                            ></Checkbox>
+                            <Checkbox
+                              v-if="question.optionB!==''"
+                              :label="'B.'+question.optionB"
+                              class="option-block"
+                            ></Checkbox>
+                            <Checkbox
+                              v-if="question.optionC!==''"
+                              :label="'C.'+question.optionC"
+                              class="option-block"
+                            ></Checkbox>
+                            <Checkbox
+                              v-if="question.optionD!==''"
+                              :label="'D.'+question.optionD"
+                              class="option-block"
+                            ></Checkbox>
+                            <Checkbox
+                              v-if="question.optionE!==''"
+                              :label="'E.'+question.optionE"
+                              class="option-block"
+                            ></Checkbox>
+                          </CheckboxGroup>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <Button class="del-btn" type="primary" ghost @click="handleDelete(idx,index)">删除</Button>
                 </div>
               </div>
             </div>
             <div v-if="group.type=='4'">
               <h3>{{types[idx]}}、判断题（共{{group.examQuestionsDetailsVOList.length}}题）</h3>
               <div v-for="(question,index) in group.examQuestionsDetailsVOList" v-bind:key="index">
-                <div class="question-block">
-                  <label>{{index+1}}.</label>
-                  <div class="main-block">
-                    <div>{{question.title}}({{question.score}}分)</div>
-                    <div class="answer-block">
-                      <div class="option-block">
-                        <CheckboxGroup>
-                          <Checkbox
-                            v-if="question.optionA!==''"
-                            :label="'A.'+question.optionA"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionB!==''"
-                            :label="'B.'+question.optionB"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionC!==''"
-                            :label="'C.'+question.optionC"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionD!==''"
-                            :label="'D.'+question.optionD"
-                            class="option-block"
-                          ></Checkbox>
-                          <Checkbox
-                            v-if="question.optionE!==''"
-                            :label="'E.'+question.optionE"
-                            class="option-block"
-                          ></Checkbox>
-                        </CheckboxGroup>
+                <div class="row-block">
+                  <div class="question-block">
+                    <label>{{index+1}}.</label>
+                    <div class="main-block">
+                      <div>{{question.title}}({{question.score}}分)</div>
+                      <div class="answer-block">
+                        <div class="option-block">
+                          <CheckboxGroup>
+                            <Checkbox
+                              v-if="question.optionA!==''"
+                              :label="'A.'+question.optionA"
+                              class="option-block"
+                            ></Checkbox>
+                            <Checkbox
+                              v-if="question.optionB!==''"
+                              :label="'B.'+question.optionB"
+                              class="option-block"
+                            ></Checkbox>
+                            <Checkbox
+                              v-if="question.optionC!==''"
+                              :label="'C.'+question.optionC"
+                              class="option-block"
+                            ></Checkbox>
+                            <Checkbox
+                              v-if="question.optionD!==''"
+                              :label="'D.'+question.optionD"
+                              class="option-block"
+                            ></Checkbox>
+                            <Checkbox
+                              v-if="question.optionE!==''"
+                              :label="'E.'+question.optionE"
+                              class="option-block"
+                            ></Checkbox>
+                          </CheckboxGroup>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <Button class="del-btn" type="primary" ghost @click="handleDelete(idx,index)">删除</Button>
                 </div>
               </div>
             </div>
             <div v-if="group.type=='6'">
               <h3>{{types[idx]}}、分录题（共{{group.examQuestionsDetailsVOList.length}}题）</h3>
-              <div v-for="(question,index) in group.examQuestionsDetailsVOList" v-bind:key="index">
+              <div
+                v-for="(question,index) in group.examQuestionsDetailsVOList"
+                v-bind:key="index"
+                class="row-block"
+              >
                 <div class="question-block">
                   <label>{{index+1}}.</label>
                   <div class="main-block">
-                    <div>{{question.title}}({{question.score}}分)</div>
+                    <div class="row-block">
+                      <div>{{question.title}}({{question.score}}分)</div>
+                      <Button
+                        class="del-btn"
+                        type="primary"
+                        ghost
+                        @click="handleDelete(idx,index)"
+                      >删除</Button>
+                    </div>
                     <div class="answer-block">
                       <div class="option-block">
                         <Journalizing
@@ -210,11 +232,11 @@ export default {
         examQuestionsTypeVOList: [],
       },
       studentAnswer: '',
-      split1: 0.5,
+      split1: 0.4,
       columns: [
         {
           type: 'selection',
-          width: 60,
+          width: 50,
           align: 'center',
         },
         {
@@ -227,7 +249,7 @@ export default {
           title: '试题题目', key: 'title', align: 'center',
         },
         {
-          title: '试题课程', key: 'courseName', align: 'center',
+          title: '试题课程', key: 'courseName', align: 'center', width: 100,
         },
         {
           title: '试题类型', key: 'typeName', align: 'center', width: 100,
@@ -237,12 +259,9 @@ export default {
         count: 0,
       },
       searchData: {
-        code: '',
-        title: '',
         courseCode: '',
-        type: '',
         currentPage: 1,
-        pageSize: 50,
+        pageSize: 10,
       },
       optionLabels: ['A', 'B', 'C', 'D', 'E'],
       options: [],
@@ -282,33 +301,25 @@ export default {
       this.searchData.pageSize = params;
       this.listPage();
     },
-    handleSelect(selection) {
-      console.info('selection', selection);
-      // this.paper.examPaperQuestionsDTO = selection;
-      // this.options = [];
-      // if (this.paper.examPaperQuestionsDTO) {
-      //   this.paper.examPaperQuestionsDTO.map((question) => {
-      //     question.options = [];
-      //     if (question.optionA) question.options.push(question.optionA);
-      //     if (question.optionB) question.options.push(question.optionB);
-      //     if (question.optionC) question.options.push(question.optionC);
-      //     if (question.optionD) question.options.push(question.optionD);
-      //     if (question.optionE) question.options.push(question.optionE);
-      //     return question;
-      //   });
-      // }
+    handleSelect(selection, question) {
+      console.info('选择', selection);
+      this.addQuestion(question);
+    },
+    handleSelectCancel(selection, question) {
+      console.info('取消选择', selection);
+      this.removeQuestion(question);
+    },
+    handleSelectAll(selection) {
+      console.info('全选', selection);
       selection.forEach((select) => {
         this.addQuestion(select);
       });
     },
-    handleSelectCancel(selection) {
-      console.info('取消选择', selection);
-    },
-    handleSelectAll(selection) {
-      console.info('全选', selection);
-    },
     handleCancelAll(selection) {
       console.info('取消全选', selection);
+      this.tableData.list.forEach((select) => {
+        this.removeQuestion(select);
+      });
     },
     listPage() {
       this.searchData.courseCode = this.$route.query.courseCode;
@@ -332,6 +343,38 @@ export default {
       getPaperDetailForTeacher(this.$route.query.id).then((res) => {
         if (res.responseCode === '200') {
           this.paper = res.data;
+          this.journalizingData = [];
+          for (let i = 0; i < 4; i += 1) {
+            this.journalizingData.push({
+              summary: '',
+              summaryScore: '',
+              subject1: '',
+              subject1Score: '',
+              subject2: '',
+              subject2Score: '',
+              debitAmount: '',
+              debitAmountScore: '',
+              creditAmount: '',
+              creditAmountScore: '',
+              total: '',
+              totalScore: '',
+              debitTotal: '',
+              debitTotalScore: '',
+              creditTotal: '',
+              creditTotalScore: '',
+            });
+          }
+          if (this.paper.examQuestionsTypeVOList.length > 0) {
+            this.paper.examQuestionsTypeVOList.forEach((group) => {
+              if (group.type === '6') {
+                if (group.examQuestionsDetailsVOList.length > 0) {
+                  group.examQuestionsDetailsVOList.forEach((question) => {
+                    question.journalizingData = this.journalizingData;
+                  });
+                }
+              }
+            });
+          }
           console.log(this.paper);
         }
       });
@@ -393,6 +436,28 @@ export default {
         }
       }
     },
+    removeQuestion(selection) {
+      const { type } = selection;
+      this.paper.examQuestionsTypeVOList.forEach((group, index) => {
+        if (group.type === type) {
+          for (let idx = 0; idx < group.examQuestionsDetailsVOList.length; idx++) {
+            if (selection.id === group.examQuestionsDetailsVOList[idx].id) {
+              group.examQuestionsDetailsVOList.splice(idx, 1);
+              if (group.examQuestionsDetailsVOList.length === 0) {
+                this.paper.examQuestionsTypeVOList.splice(index, 1);
+              }
+              break;
+            }
+          }
+        }
+      });
+    },
+    handleDelete(idx, index) {
+      this.paper.examQuestionsTypeVOList[idx].examQuestionsDetailsVOList.splice(index, 1);
+      if (this.paper.examQuestionsTypeVOList[idx].examQuestionsDetailsVOList.length === 0) {
+        this.paper.examQuestionsTypeVOList.splice(idx, 1);
+      }
+    },
     savePaper() {
       if (this.paper.examQuestionsTypeVOList.length > 0) {
         this.paper.examPaperQuestionsDTOList = [];
@@ -411,7 +476,7 @@ export default {
         delete this.paper.examQuestionsTypeVOList;
         if (this.$route.query.status === 'add') {
           automaticPaper(this.paper).then((res) => {
-            if (res.responseCode === '200') {
+            if (res.responseCode === '201') {
               this.$Notice.success({ title: '保存成功！' });
               this.closeTag(this.$route);
             } else {
@@ -464,20 +529,28 @@ export default {
   }
   .paper-type-block {
     margin-top: 20px;
-    .question-block {
+    .row-block {
       display: flex;
-      margin-top: 5px;
-      .main-block {
+      justify-content: space-between;
+      .question-block {
         display: flex;
-        flex-direction: column;
-        .answer-block {
+        margin-top: 5px;
+        .main-block {
           display: flex;
-          align-items: center;
-          .option-block {
+          flex-direction: column;
+          .answer-block {
             display: flex;
-            flex: 1;
+            align-items: center;
+            margin-top: 10px;
+            .option-block {
+              display: flex;
+              flex: 1;
+            }
           }
         }
+      }
+      .del-btn {
+        height: 30px;
       }
     }
   }
@@ -486,5 +559,9 @@ export default {
   margin-top: 40px;
   position: absolute;
   right: 20px;
+}
+.ivu-split-pane.left-pane,
+.ivu-split-pane.right-pane {
+  overflow: scroll !important;
 }
 </style>

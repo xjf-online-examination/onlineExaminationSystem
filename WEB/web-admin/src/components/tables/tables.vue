@@ -40,6 +40,7 @@
       @on-select="onSelect"
       @on-select-cancel="onSelectCancel"
       @on-select-all="onSelectAll"
+      @on-select-all-cancel="onSelectAllCancel"
       @on-selection-change="onSelectionChange"
       @on-sort-change="onSortChange"
       @on-filter-change="onFilterChange"
@@ -79,13 +80,13 @@ export default {
   props: {
     value: {
       type: Array,
-      default () {
+      default() {
         return [];
       },
     },
     columns: {
       type: Array,
-      default () {
+      default() {
         return [];
       },
     },
@@ -114,7 +115,7 @@ export default {
     },
     rowClassName: {
       type: Function,
-      default () {
+      default() {
         return '';
       },
     },
@@ -162,7 +163,7 @@ export default {
    * @on-cancel-edit 返回值 {Object} 同上
    * @on-save-edit 返回值 {Object} ：除上面三个参数外，还有一个value: 修改后的数据
    */
-  data () {
+  data() {
     return {
       insideColumns: [],
       insideTableData: [],
@@ -173,7 +174,7 @@ export default {
     };
   },
   methods: {
-    suportEdit (item, index) {
+    suportEdit(item, index) {
       item.render = (h, params) => h(TablesEdit, {
         props: {
           params,
@@ -203,7 +204,7 @@ export default {
       });
       return item;
     },
-    surportHandle (item) {
+    surportHandle(item) {
       const options = item.options || [];
       const insideBtns = [];
       options.forEach((item) => {
@@ -216,7 +217,7 @@ export default {
       };
       return item;
     },
-    handleColumns (columns) {
+    handleColumns(columns) {
       this.insideColumns = columns.map((item, index) => {
         let res = item;
         if (res.editable) res = this.suportEdit(res, index);
@@ -224,70 +225,73 @@ export default {
         return res;
       });
     },
-    setDefaultSearchKey () {
+    setDefaultSearchKey() {
       this.searchKey = this.columns[0].key !== 'handle' ? this.columns[0].key : (this.columns.length > 1 ? this.columns[1].key : '');
     },
-    handleClear (e) {
+    handleClear(e) {
       if (e.target.value === '') this.insideTableData = this.value;
     },
-    handleSearch () {
+    handleSearch() {
       this.insideTableData = this.value.filter(item => item[this.searchKey].indexOf(this.searchValue) > -1);
     },
-    handleTableData () {
+    handleTableData() {
       this.insideTableData = this.value.map((item, index) => {
         const res = item;
         res.initRowIndex = index;
         return res;
       });
     },
-    exportCsv (params) {
+    exportCsv(params) {
       this.$refs.tablesMain.exportCsv(params);
     },
-    clearCurrentRow () {
+    clearCurrentRow() {
       this.$refs.talbesMain.clearCurrentRow();
     },
-    onCurrentChange (currentRow, oldCurrentRow) {
+    onCurrentChange(currentRow, oldCurrentRow) {
       this.$emit('on-current-change', currentRow, oldCurrentRow);
     },
-    onSelect (selection, row) {
+    onSelect(selection, row) {
       this.$emit('on-select', selection, row);
     },
-    onSelectCancel (selection, row) {
+    onSelectCancel(selection, row) {
       this.$emit('on-select-cancel', selection, row);
     },
-    onSelectAll (selection) {
+    onSelectAll(selection) {
       this.$emit('on-select-all', selection);
     },
-    onSelectionChange (selection) {
+    onSelectAllCancel(selection) {
+      this.$emit('on-select-all-cancel', selection);
+    },
+    onSelectionChange(selection) {
       this.$emit('on-selection-change', selection);
     },
-    onSortChange (column, key, order) {
+    onSortChange(column, key, order) {
       this.$emit('on-sort-change', column, key, order);
     },
-    onFilterChange (row) {
+    onFilterChange(row) {
       this.$emit('on-filter-change', row);
     },
-    onRowClick (row, index) {
+    onRowClick(row, index) {
       this.$emit('on-row-click', row, index);
     },
-    onRowDblclick (row, index) {
+    onRowDblclick(row, index) {
       this.$emit('on-row-dblclick', row, index);
     },
-    onExpand (row, status) {
+    onExpand(row, status) {
       this.$emit('on-expand', row, status);
     },
   },
   watch: {
-    columns (columns) {
+    columns(columns) {
       this.handleColumns(columns);
       this.setDefaultSearchKey();
     },
-    value (val) {
+    value(val) {
       this.handleTableData();
       if (this.searchable) this.handleSearch();
     },
   },
-  mounted () {
+  mounted() {
     this.handleColumns(this.columns);
     this.setDefaultSearchKey();
     this.handleTableData();
