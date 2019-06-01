@@ -24,6 +24,7 @@ import com.wxj.service.StudentServiceI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -176,6 +177,7 @@ public class StudentServiceImpl implements StudentServiceI {
         return achievementVOList;
     }
 
+    @Transactional
     @Override
     public int studentAnswer(StudentAnswerSaveDTO studentAnswerSaveDTO) throws BusinessRuntimeException {
         int studentAnswerInsertSize = 0;
@@ -184,46 +186,53 @@ public class StudentServiceImpl implements StudentServiceI {
         //判卷
         Map<Integer, Float> scoreMap = examQuestionsLogic.getScore(studentAnswerSaveDTO);
         //保存数据
-        for (int i=0,size=studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().size(); i<size; i++) {
-            StudentAnswerSaveDetailsDTO studentAnswerSaveDetailsDTO = studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().get(i);
+        try {
+            for (int i=0,size=studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().size(); i<size; i++) {
+                StudentAnswerSaveDetailsDTO studentAnswerSaveDetailsDTO = studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().get(i);
 
-            studentAnswer = new StudentAnswer();
-            BeanUtils.copyProperties(studentAnswerSaveDetailsDTO, studentAnswer);
-            studentAnswer.setQuestionsNo(studentAnswerSaveDetailsDTO.getQuestionsNo().byteValue());
+                studentAnswer = new StudentAnswer();
+                BeanUtils.copyProperties(studentAnswerSaveDetailsDTO, studentAnswer);
+                studentAnswer.setStudentSno(studentAnswerSaveDTO.getSno());
+                studentAnswer.setExamScheduleId(studentAnswerSaveDTO.getExamScheduleId());
+                studentAnswer.setQuestionsNo(studentAnswerSaveDetailsDTO.getQuestionsNo().byteValue());
 
-            float score = 0f;
-            if (null != scoreMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo())) {
-                score = scoreMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo());
-            }
-            studentAnswer.setScore(new BigDecimal(score));
-            studentAnswer.setFinishFlag("1");
-            studentAnswer.setFinishTime(date);
-            studentAnswer.setCreateTime(date);
-            studentAnswer.setModifyTime(date);
-            studentAnswer.setDelFlag(SystemConstant.NOUGHT);
-            studentAnswerInsertSize = studentAnswerMapper.insertSelective(studentAnswer);
-            if (SystemConstant.ZERO == studentAnswerInsertSize) {
-                throw new OperationException("删除失败");
-            }
-
-            if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(studentAnswerSaveDetailsDTO.getQuestionsType())) {
-                EntryAnswerDetails entryAnswerDetails;
-                int entryAnswerDetailsInsertSize = 0;
-                for (StudentEntryAnswerSaveDTO studentEntryAnswerSaveDTO : studentAnswerSaveDetailsDTO.getStudentEntryAnswerSaveDTOList()) {
-                    entryAnswerDetails = new EntryAnswerDetails();
-                    BeanUtils.copyProperties(studentEntryAnswerSaveDTO, entryAnswerDetails);
-                    entryAnswerDetails.setEntryAnswerId(studentAnswer.getId());
-                    entryAnswerDetails.setRow(studentEntryAnswerSaveDTO.getRow().byteValue());
-                    entryAnswerDetails.setSubject1(studentEntryAnswerSaveDTO.getSubject1());
-                    entryAnswerDetails.setCreateTime(date);
-                    entryAnswerDetails.setModifyTime(date);
-                    entryAnswerDetails.setDelFlag(SystemConstant.NOUGHT);
-                    entryAnswerDetailsInsertSize = entryAnswerDetailsMapper.insertSelective(entryAnswerDetails);
+                float score = 0f;
+                if (null != scoreMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo())) {
+                    score = scoreMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo());
                 }
-                if (SystemConstant.ZERO == entryAnswerDetailsInsertSize) {
+                studentAnswer.setScore(new BigDecimal(score));
+                studentAnswer.setFinishFlag("1");
+                studentAnswer.setFinishTime(date);
+                studentAnswer.setCreateTime(date);
+                studentAnswer.setModifyTime(date);
+                studentAnswer.setDelFlag(SystemConstant.NOUGHT);
+                studentAnswerInsertSize = studentAnswerMapper.insertSelective(studentAnswer);
+                if (SystemConstant.ZERO == studentAnswerInsertSize) {
                     throw new OperationException("删除失败");
                 }
+
+                if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(studentAnswerSaveDetailsDTO.getQuestionsType())) {
+                    EntryAnswerDetails entryAnswerDetails;
+                    int entryAnswerDetailsInsertSize = 0;
+                    for (int j=0; j<studentAnswerSaveDetailsDTO.getStudentEntryAnswerSaveDTOList().size(); j++) {
+                        StudentEntryAnswerSaveDTO studentEntryAnswerSaveDTO = studentAnswerSaveDetailsDTO.getStudentEntryAnswerSaveDTOList().get(j);
+                        entryAnswerDetails = new EntryAnswerDetails();
+                        BeanUtils.copyProperties(studentEntryAnswerSaveDTO, entryAnswerDetails);
+                        entryAnswerDetails.setEntryAnswerId(studentAnswer.getId());
+                        entryAnswerDetails.setRow(new Integer(j).byteValue());
+                        entryAnswerDetails.setSubject1(studentEntryAnswerSaveDTO.getSubject1());
+                        entryAnswerDetails.setCreateTime(date);
+                        entryAnswerDetails.setModifyTime(date);
+                        entryAnswerDetails.setDelFlag(SystemConstant.NOUGHT);
+                        entryAnswerDetailsInsertSize = entryAnswerDetailsMapper.insertSelective(entryAnswerDetails);
+                    }
+                    if (SystemConstant.ZERO == entryAnswerDetailsInsertSize) {
+                        throw new OperationException("删除失败");
+                    }
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return studentAnswerInsertSize;
     }

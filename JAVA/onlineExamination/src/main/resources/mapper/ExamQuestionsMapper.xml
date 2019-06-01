@@ -508,8 +508,8 @@
   </select>
 
   <select id="selectExamPaperQuestionsDetailsAnswer" parameterType="java.lang.Integer" resultType="com.wxj.model.DO.ExamQuestionsDO">
-    select epq.questions_no, eq.id, eq.code, eq.course_code, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE, eq.single_answer, eq.multiple_answer,
-    eq.yes_no_answer, eq.score
+    select epq.questions_no questionsNo, eq.id examQuestionsId, eq.code, eq.course_code, eq.type, eq.title, eq.optionA, eq.optionB, eq.optionC, eq.optionD, eq.optionE, eq.single_answer singleAnswer,
+    eq.multiple_answer multipleAnswer, eq.yes_no_answer yesNoAnswer, eq.score
     from exam_paper_questions epq
     left join exam_questions eq on epq.exam_questions_id = eq.id
     LEFT JOIN exam_schedule es on es.exam_paper_id = epq.exam_paper_id

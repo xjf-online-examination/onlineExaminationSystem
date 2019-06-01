@@ -131,7 +131,7 @@
         entry_answer_id,
       </if>
       <if test="row != null">
-        row,
+        `row`,
       </if>
       <if test="summary != null">
         summary,

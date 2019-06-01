@@ -1,5 +1,6 @@
 package com.wxj.logic;
 
+import com.wxj.constant.ExamConstant;
 import com.wxj.exception.SystemErrorException;
 import com.wxj.mapper.ExamQuestionsMapper;
 import com.wxj.mapper.ExamScheduleMapper;
@@ -42,8 +43,10 @@ public class ExamQuestionsLogic {
         List<ExamQuestionsDO> examQuestionsDOList = examQuestionsMapper.selectExamPaperQuestionsDetailsAnswer(studentAnswerSaveDTO.getExamScheduleId());
 
         for (ExamQuestionsDO examQuestionsDO : examQuestionsDOList) {
-            List<ExamQuestionsEntryAnswerDO> examQuestionsEntryAnswerDOList = examQuestionsMapper.selectQuestionsEntryAnswer(examQuestionsDO.getExamQuestionsId());
-            examQuestionsDO.setExamQuestionsEntryAnswerDOList(examQuestionsEntryAnswerDOList);
+            if (examQuestionsDO.getType().equals(ExamConstant.EXAM_QUESTIONS_TYPE_SIX)) {
+                List<ExamQuestionsEntryAnswerDO> examQuestionsEntryAnswerDOList = examQuestionsMapper.selectQuestionsEntryAnswer(examQuestionsDO.getExamQuestionsId());
+                examQuestionsDO.setExamQuestionsEntryAnswerDOList(examQuestionsEntryAnswerDOList);
+            }
         }
 
         if (null == examQuestionsDOList && examQuestionsDOList.size() == 0) {
@@ -143,34 +146,35 @@ public class ExamQuestionsLogic {
         float score = 0f;
         Map<Integer, ExamQuestionsEntryAnswerDO> standardAnswerMap = standardAnswer.stream().collect(Collectors.toMap(ExamQuestionsEntryAnswerDO::getRow, obj -> obj));
         //找到合计的row
-        int maxRow = studentAnswer.stream().max(Comparator.comparingInt(StudentEntryAnswerSaveDTO::getRow)).get().getRow();
-        for (StudentEntryAnswerSaveDTO studentEntryAnswer : studentAnswer) {
-            ExamQuestionsEntryAnswerDO standardEntryAnswer = standardAnswerMap.get(studentEntryAnswer.getRow());
+        int maxRow = studentAnswer.size()-1;
+        for (int i=0; i<studentAnswer.size(); i++) {
+            StudentEntryAnswerSaveDTO studentEntryAnswer = studentAnswer.get(i);
+            ExamQuestionsEntryAnswerDO standardEntryAnswer = standardAnswerMap.get(i);
             //行数最大的是合计
-            if (studentEntryAnswer.getRow() == maxRow) {
-                if (standardEntryAnswer.getTotal().equals(studentEntryAnswer.getTotal())) {
+            if (standardEntryAnswer.getRow() == maxRow) {
+                if (null != standardEntryAnswer.getTotal() && null != studentEntryAnswer.getTotal() && standardEntryAnswer.getTotal().equals(studentEntryAnswer.getTotal())) {
                     score += standardEntryAnswer.getTotalScore();
                 }
-                if (standardEntryAnswer.getDebitTotal().equals(studentEntryAnswer.getDebitTotal())) {
+                if (null != standardEntryAnswer.getDebitTotal() && null != studentEntryAnswer.getDebitTotal() && standardEntryAnswer.getDebitTotal().equals(studentEntryAnswer.getDebitTotal())) {
                     score += standardEntryAnswer.getDebitAmountScore();
                 }
-                if (standardEntryAnswer.getCreditTotal().equals(studentEntryAnswer.getCreditTotal())) {
+                if (null != standardEntryAnswer.getCreditTotal() && null != studentEntryAnswer.getCreditTotal() && standardEntryAnswer.getCreditTotal().equals(studentEntryAnswer.getCreditTotal())) {
                     score += standardEntryAnswer.getDebitAmountScore();
                 }
             } else {
-                if (standardEntryAnswer.getSummary().equals(studentEntryAnswer.getSummary())) {
+                if (null != standardEntryAnswer.getSummary() && null != studentEntryAnswer.getSummary() && standardEntryAnswer.getSummary().equals(studentEntryAnswer.getSummary())) {
                     score += standardEntryAnswer.getSummaryScore();
                 }
-                if (standardEntryAnswer.getSubject1().equals(studentEntryAnswer.getSubject1())) {
+                if (null != standardEntryAnswer.getSubject1() && null != studentEntryAnswer.getSubject1() && standardEntryAnswer.getSubject1().equals(studentEntryAnswer.getSubject1())) {
                     score += standardEntryAnswer.getSubject1Score();
                 }
-                if (standardEntryAnswer.getSubject2().equals(studentEntryAnswer.getSubject2())) {
+                if (null != standardEntryAnswer.getSubject2() && null != studentEntryAnswer.getSubject2() && standardEntryAnswer.getSubject2().equals(studentEntryAnswer.getSubject2())) {
                     score += standardEntryAnswer.getSubject2Score();
                 }
-                if (standardEntryAnswer.getDebitAmount().equals(studentEntryAnswer.getDebitAmount())) {
+                if (null != standardEntryAnswer.getDebitAmount() && null != studentEntryAnswer.getDebitAmount() && standardEntryAnswer.getDebitAmount().equals(studentEntryAnswer.getDebitAmount())) {
                     score += standardEntryAnswer.getDebitAmountScore();
                 }
-                if (standardEntryAnswer.getCreditAmount().equals(studentEntryAnswer.getCreditAmount())) {
+                if (null != standardEntryAnswer.getCreditAmount() && null != studentEntryAnswer.getCreditAmount() && standardEntryAnswer.getCreditAmount().equals(studentEntryAnswer.getCreditAmount())) {
                     score += standardEntryAnswer.getCreditAmountScore();
                 }
             }
