@@ -20,7 +20,6 @@ import com.wxj.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,25 +89,33 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
             throw new OperationException("课程不存在，请先添加课程");
         }
 
-        int examQuestionsInsertSize;
+        int examQuestionsInsertSize = 0;
         int entryStandardAnswerDetailsInsertSize = 0;
         Date date = new Date();
         ExamQuestions examQuestions = new ExamQuestions();
         BeanUtils.copyProperties(examQuestionsSaveDTO, examQuestions);
         examQuestions.setCode(StringUtil.getRandom());
+        examQuestions.setOptiona(examQuestionsSaveDTO.getOptionA());
+        examQuestions.setOptionb(examQuestionsSaveDTO.getOptionB());
+        examQuestions.setOptionc(examQuestionsSaveDTO.getOptionC());
+        examQuestions.setOptiond(examQuestionsSaveDTO.getOptionD());
+        examQuestions.setOptione(examQuestionsSaveDTO.getOptionE());
         examQuestions.setABCD(examQuestionsSaveDTO);
         examQuestions.setCreateTime(date);
         examQuestions.setModifyTime(date);
         examQuestions.setDelFlag(SystemConstant.NOUGHT);
-        examQuestionsInsertSize = examQuestionsMapper.insertSelective(examQuestions);
-        if (SystemConstant.ZERO == examQuestionsInsertSize) {
-            throw new OperationException("examQuestions插入失败");
+        try {
+            examQuestionsInsertSize = examQuestionsMapper.insertSelective(examQuestions);
+            if (SystemConstant.ZERO == examQuestionsInsertSize) {
+                throw new OperationException("examQuestions插入失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestions.getType())) {
             List<EntryStandardAnswerDetails> list = Lists.newArrayList();
             EntryStandardAnswerDetails entryStandardAnswerDetails;
-            try {
                 for (int i=0,size=examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().size(); i<size; i++) {
                     entryStandardAnswerDetails = new EntryStandardAnswerDetails();
                     EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
@@ -168,9 +175,6 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                     entryStandardAnswerDetails.setDelFlag(SystemConstant.NOUGHT);
                     list.add(entryStandardAnswerDetails);
                 }
-            } catch (BeansException e) {
-                e.printStackTrace();
-            }
             try {
                 entryStandardAnswerDetailsInsertSize = entryStandardAnswerDetailsMapper.batchInsert(list);
             } catch (Exception e) {
@@ -188,7 +192,11 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
         Date date = new Date();
         ExamQuestions examQuestions = new ExamQuestions();
         BeanUtils.copyProperties(examQuestionsSaveDTO, examQuestions);
-
+        examQuestions.setOptiona(examQuestionsSaveDTO.getOptionA());
+        examQuestions.setOptionb(examQuestionsSaveDTO.getOptionB());
+        examQuestions.setOptionc(examQuestionsSaveDTO.getOptionC());
+        examQuestions.setOptiond(examQuestionsSaveDTO.getOptionD());
+        examQuestions.setOptione(examQuestionsSaveDTO.getOptionE());
         examQuestions.setABCD(examQuestionsSaveDTO);
         examQuestions.setModifyTime(date);
 
