@@ -163,6 +163,7 @@ public class ExamQuestionsController {
      */
     @RequestMapping(value = "/import", method = RequestMethod.POST)
     public Object examQuestionsImport(MultipartHttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) {
+        int k = 0;
         try {
             // 读取上传的文件
             CommonsMultipartFile cf = (CommonsMultipartFile) file;
@@ -183,6 +184,7 @@ public class ExamQuestionsController {
                 //获取Excel中的数据
                 int sum = rs.getLastRowNum();
                 for (int i = 1; i <= sum; i++) {
+                    k = i;
                     ExamQuestions examQuestions = new ExamQuestions();
                     Row row = rs.getRow(i);
                     if (ExcelUtil.isRowEmpty(row)) {
@@ -223,6 +225,7 @@ public class ExamQuestionsController {
                         throw new ParamEmptyException("题目不能为空");
                     }
 
+                    System.out.println(i);
                     row.getCell(map.get("选项A")).setCellType(CellType.STRING);
                     String optiona = row.getCell(map.get("选项A")).toString();
                     examQuestions.setOptiona(optiona);
@@ -277,9 +280,11 @@ public class ExamQuestionsController {
             logger.error("com.wxj.controller.StudentController.studentImport数据解析错误", e);
             return ResponseUtils.error(e.getMessage());
         } catch (BusinessRuntimeException e) {
+            logger.error("com.wxj.controller.StudentController.studentImport数据解析错误", e);
             return ResponseUtils.error(e);
         } catch (Exception e) {
-            return ResponseUtils.error(e.getMessage());
+            logger.error("com.wxj.controller.StudentController.studentImport数据解析错误", e);
+            return ResponseUtils.error("第" + k + "行错误，请修改或删除");
         }
     }
 
