@@ -146,7 +146,7 @@ export default {
   components: {
     Journalizing,
   },
-  data() {
+  data () {
     return {
       isFullscreen: '',
       examPaper: [],
@@ -161,8 +161,8 @@ export default {
       showExitModal: false,
     };
   },
-  created() { },
-  mounted() {
+  created () { },
+  mounted () {
     this.listSubjectOne();
     // 禁止内容选择
     document.onselectstart = function () {
@@ -222,13 +222,13 @@ export default {
   },
   computed: {},
   methods: {
-    calculateTime(duration) {
+    calculateTime (duration) {
       const hour = parseInt(duration / 60 / 60);
       const minute = parseInt(duration / 60 % 60);
       const seconds = parseInt(duration % 60 % 60);
       return `${hour < 10 ? `0${hour}` : hour}:${minute < 10 ? `0${minute}` : minute}:${seconds < 10 ? `0${seconds}` : seconds}`;
     },
-    getExamPaperWithId(Id) {
+    getExamPaperWithId (Id) {
       getExamPaper(Id)
         .then((res) => {
           if (res.responseCode === '200') {
@@ -238,7 +238,7 @@ export default {
               if (group.type === '6') {
                 group.studentExamQuestionsVOList.forEach((question) => {
                   question.journalizingData = [];
-                  for (let i = 0; i < 4; i += 1) { // TODO:question.row
+                  for (let i = 0; i < question.row; i += 1) { // TODO:question.row
                     question.journalizingData.push({
                       summary: '',
                       summaryScore: '',
@@ -267,7 +267,7 @@ export default {
           console.log('err :', err);
         });
     },
-    handleFullscreen() {
+    handleFullscreen () {
       const main = document.body;
       if (main.requestFullscreen) {
         console.log(11);
@@ -283,7 +283,7 @@ export default {
         main.msRequestFullscreen();
       }
     },
-    exitFS() {
+    exitFS () {
       clearInterval(this.timer1);
       this.answerSaveDetailsDTOList = this.handleAnswer();
       try {
@@ -308,7 +308,7 @@ export default {
       // this.saveExamAnswer(this.answerSaveDetailsDTOList);
     },
     // 处理答案
-    handleAnswer() {
+    handleAnswer () {
       return this.examPaper.reduce((o, item) => {
         item.studentExamQuestionsVOList.forEach((ele) => {
           let obj = {};
@@ -324,9 +324,11 @@ export default {
                 e.push(str);
                 return e;
               }, []);
-              obj.answer = arr.join(',');
-            } else {
+              obj.answer = arr.join('');
+            } else if (ele.type === '1') {
               obj.answer = ele.answer ? ele.answer.split('、')[0] : '';
+            } else {
+              obj.answer = ele.answer === '是' ? 1 : 0;
             }
           } else {
             obj = {
@@ -340,10 +342,10 @@ export default {
         return o;
       }, []);
     },
-    isArray(obj) {
+    isArray (obj) {
       return Object.prototype.toString.call(obj) === '[object Array]';
     },
-    cusEditFunc(params) {
+    cusEditFunc (params) {
       this.examPaper.forEach((group) => {
         if (group.type == '6') {
           const question = group.studentExamQuestionsVOList[params.outerIndex];
@@ -399,7 +401,7 @@ export default {
         }
       });
     },
-    saveExamAnswer() {
+    saveExamAnswer () {
       const examAnswer = {
         sno: getUserCode(),
         examScheduleId: this.$route.query.examPaperId,
@@ -415,7 +417,7 @@ export default {
         }
       });
     },
-    listSubjectOne() {
+    listSubjectOne () {
       listSubjectOne().then((res) => {
         if (res.responseCode === '200') {
           this.subjectList = res.data;
