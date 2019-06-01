@@ -62,7 +62,7 @@ export default {
   },
   mounted() {
     if (this.field == 'yi1') {
-      this.money = this.rowData.debitAmount ? this.rowData.debitAmount : this.debitTotal;
+      this.money = this.rowData.debitAmount ? this.rowData.debitAmount : this.rowData.debitTotal;
       if (this.money) {
         this.positiveNumber = Math.abs(this.money);
         if (this.money < 0) {

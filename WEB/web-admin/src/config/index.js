@@ -17,8 +17,8 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://127.0.0.1:8080/onlineExamination',
-    // dev: 'http://wxj.vipgz1.idcfengye.com/onlineExamination',
+    // dev: 'http://127.0.0.1:8080/onlineExamination',
+    dev: 'http://wxj.vipgz1.idcfengye.com/onlineExamination',
     pro: 'https://produce.com',
   },
   /**
