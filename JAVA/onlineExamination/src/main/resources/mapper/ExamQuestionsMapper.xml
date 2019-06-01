@@ -477,7 +477,7 @@
       and eq.title like concat('%', #{record.questionsTitle,jdbcType=CHAR}, '%')
     </if>
     <if test='record.questionsType != null and record.questionsType != ""'>
-      and eq.type = #{record.questionsType,jdbctype=CHAR}
+      and eq.type = #{record.questionsType,jdbcType=CHAR}
     </if>
   </select>
 
@@ -493,7 +493,7 @@
       and eq.title like concat('%', #{record.questionsTitle,jdbcType=CHAR}, '%')
     </if>
     <if test='record.questionsType != null and record.questionsType != ""'>
-      and eq.type = #{record.questionsType,jdbctype=CHAR}
+      and eq.type = #{record.questionsType,jdbcType=CHAR}
     </if>
   </select>
 
