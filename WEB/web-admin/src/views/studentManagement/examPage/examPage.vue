@@ -304,7 +304,8 @@ export default {
       } catch (error) {
         console.log('error :', error);
       }
-      this.showSaveModal = true; this.saveExamAnswer(answerSaveDetailsDTOList);
+      this.showSaveModal = true;
+      // this.saveExamAnswer(this.answerSaveDetailsDTOList);
     },
     // 处理答案
     handleAnswer() {
@@ -398,11 +399,11 @@ export default {
         }
       });
     },
-    saveExamAnswer(answers) {
+    saveExamAnswer() {
       const examAnswer = {
         sno: getUserCode(),
         examScheduleId: this.$route.query.examPaperId,
-        answerSaveDetailsDTOList: answers,
+        answerSaveDetailsDTOList: this.answerSaveDetailsDTOList,
       };
       saveExamAnswer(examAnswer).then((res) => {
         console.log(res);

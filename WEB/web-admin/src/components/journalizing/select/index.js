@@ -1,3 +1,3 @@
-import tableselect from './select.vue';
+import tableselect from './tableselect.vue';
 
 export default tableselect;

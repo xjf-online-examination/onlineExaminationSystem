@@ -254,20 +254,20 @@ export default {
                   },
                 },
               }, '删除'),
-              h('a', {
-                props: {
-                  type: 'text',
-                  size: 'small',
-                },
-                style: {
-                  'margin-left': '10px',
-                },
-                on: {
-                  click: () => {
-                    this.onDetail(params.index);
-                  },
-                },
-              }, '详情'),
+              // h('a', {
+              //   props: {
+              //     type: 'text',
+              //     size: 'small',
+              //   },
+              //   style: {
+              //     'margin-left': '10px',
+              //   },
+              //   on: {
+              //     click: () => {
+              //       this.onDetail(params.index);
+              //     },
+              //   },
+              // }, '详情'),
             ]),
           ],
         }],
