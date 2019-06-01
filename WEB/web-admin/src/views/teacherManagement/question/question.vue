@@ -353,11 +353,19 @@ export default {
     },
     onEdit(index) {
       this.modalTitle = '修改';
+      this.multipleAnswer = [];
       this.isAdd = false;
       this.getQuestionById(this.tableData.list[index].id).then((res) => {
         if (res.responseCode === '200') {
-          this.options = [];
           this.question = res.data;
+          this.options = [];
+          if (this.question.optionA) this.options.push(this.question.optionA);
+          if (this.question.optionB) this.options.push(this.question.optionB);
+          if (this.question.optionC) this.options.push(this.question.optionC);
+          if (this.question.optionD) this.options.push(this.question.optionD);
+          if (this.question.optionE) this.options.push(this.question.optionE);
+          if (this.options.length === 0) { this.options.push(''); }
+
           const data = [];
           for (let i = 0; i < 4; i += 1) {
             data.push({
@@ -382,9 +390,8 @@ export default {
           this.journalizingData = res.data.entryStandardAnswerDetailsVOList || data;
           console.log(this.journalizingData);
           if (res.data.type === '2') {
-            this.multipleAnswer = res.data.multipleAnswer.split(',');
+            this.multipleAnswer = res.data.multipleAnswer.split('');
           }
-          this.options.push('');
         } else {
           this.question = {};
         }
