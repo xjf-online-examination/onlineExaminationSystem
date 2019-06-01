@@ -3,7 +3,7 @@
     <Sider
       hide-trigger
       collapsible
-      :width="256"
+      :width="200"
       :collapsed-width="64"
       v-model="collapsed"
       class="left-sider"
@@ -80,7 +80,7 @@ export default {
     User,
     ABackTop,
   },
-  data() {
+  data () {
     return {
       collapsed: false,
       minLogo,
@@ -92,32 +92,32 @@ export default {
     ...mapGetters([
       'errorCount',
     ]),
-    tagNavList() {
+    tagNavList () {
       return this.$store.state.app.tagNavList;
     },
-    tagRouter() {
+    tagRouter () {
       return this.$store.state.app.tagRouter;
     },
-    userAvatar() {
+    userAvatar () {
       return this.$store.state.user.avatarImgPath;
     },
-    userName() {
+    userName () {
       return this.$store.state.user.userName;
     },
-    cacheList() {
+    cacheList () {
       const list = ['ParentView', ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []];
       return list;
     },
-    menuList() {
+    menuList () {
       return this.$store.getters.menuList;
     },
-    local() {
+    local () {
       return this.$store.state.app.local;
     },
-    hasReadErrorPage() {
+    hasReadErrorPage () {
       return this.$store.state.app.hasReadErrorPage;
     },
-    unreadCount() {
+    unreadCount () {
       return this.$store.state.user.unreadCount;
     },
   },
@@ -134,7 +134,7 @@ export default {
       'handleLogin',
       'getUnreadMessageCount',
     ]),
-    turnToPage(route) {
+    turnToPage (route) {
       let { name, params, query } = {};
       if (typeof route === 'string') name = route;
       else {
@@ -152,10 +152,10 @@ export default {
         query,
       });
     },
-    handleCollapsedChange(state) {
+    handleCollapsedChange (state) {
       this.collapsed = state;
     },
-    handleCloseTag(res, type, route) {
+    handleCloseTag (res, type, route) {
       if (type !== 'others') {
         if (type === 'all') {
           this.turnToPage(this.$config.homeName);
@@ -165,12 +165,12 @@ export default {
       }
       this.setTagNavList(res);
     },
-    handleClick(item) {
+    handleClick (item) {
       this.turnToPage(item);
     },
   },
   watch: {
-    $route(newRoute) {
+    $route (newRoute) {
       const {
         name, query, params, meta,
       } = newRoute;
@@ -185,7 +185,7 @@ export default {
       this.$refs.sideMenu.updateOpenName(newRoute.name);
     },
   },
-  mounted() {
+  mounted () {
     /**
      * @description 初始化设置面包屑导航和标签导航
      */
