@@ -42,6 +42,8 @@ export default {
         }
         this.money = val * 100;
         this.positiveNumber = Math.abs(this.money);
+      } else {
+        this.money = 0;
       }
       this.edit = false;
       const params = {
