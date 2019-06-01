@@ -154,6 +154,14 @@ export default [{
       title: '试题管理',
     },
     component: () => import('@/views/teacherManagement/question/question'),
+  }, {
+    path: 'add',
+    name: 'questionAdd',
+    meta: {
+      title: '试题',
+      hideInMenu: true,
+    },
+    component: () => import('@/views/teacherManagement/question/add'),
   }],
 },
 {

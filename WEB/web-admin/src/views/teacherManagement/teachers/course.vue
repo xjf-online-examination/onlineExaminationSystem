@@ -27,6 +27,7 @@
                 v-for="classes in course.classNameVOList"
                 :value="classes.id"
                 :key="classes.id"
+                :label="classes.className+'-'+course.courseName"
               >{{ classes.className}}</Option>
             </OptionGroup>
           </Select>

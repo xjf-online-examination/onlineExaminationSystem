@@ -146,7 +146,7 @@ export default {
         ],
         classIdList: [
           {
-            required: true, message: '班级不能为空', trigger: 'change', type: 'array',
+            required: true, message: '班级不能为空', trigger: 'blur', type: 'array',
           },
         ],
       },

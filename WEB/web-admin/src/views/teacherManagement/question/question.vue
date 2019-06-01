@@ -166,10 +166,11 @@
 
 
 <script>
+import Journalizing from '@/components/journalizing/table';
 import FileSaver from 'file-saver';
 import Tables from '@/components/tables';
 import config from '@/config';
-import Journalizing from '@/components/journalizing/table';
+
 import {
   addQuestion, editQuestion, getQuestionList, listSubjectOne, getQuestionById, downloadQuestionsTemplate, deleteQuestion,
 } from '@/api/teacher';
@@ -187,7 +188,6 @@ export default {
     Journalizing,
   },
   filters: {
-    /* 格式化时间戳 */
     questionType(value) {
       if (!value) return '';
       let result = '';
@@ -358,16 +358,33 @@ export default {
         if (res.responseCode === '200') {
           this.options = [];
           this.question = res.data;
-          this.journalizingData = res.data.entryStandardAnswerDetailsVOList;
+          const data = [];
+          for (let i = 0; i < 4; i += 1) {
+            data.push({
+              summary: '',
+              summaryScore: '',
+              subject1: '',
+              subject1Score: '',
+              subject2: '',
+              subject2Score: '',
+              debitAmount: '',
+              debitAmountScore: '',
+              creditAmount: '',
+              creditAmountScore: '',
+              total: '',
+              totalScore: '',
+              debitTotal: '',
+              debitTotalScore: '',
+              creditTotal: '',
+              creditTotalScore: '',
+            });
+          }
+          this.journalizingData = res.data.entryStandardAnswerDetailsVOList || data;
           console.log(this.journalizingData);
           if (res.data.type === '2') {
             this.multipleAnswer = res.data.multipleAnswer.split(',');
           }
-          if (res.data.optionA) this.options.push(1);
-          if (res.data.optionB) this.options.push(2);
-          if (res.data.optionC) this.options.push(3);
-          if (res.data.optionD) this.options.push(4);
-          if (res.data.optionE) this.options.push(5);
+          this.options.push('');
         } else {
           this.question = {};
         }
@@ -426,6 +443,9 @@ export default {
     save(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
+          this.options.forEach((option, index) => {
+            this.question[`option${this.optionLabels[index]}`] = option;
+          });
           if (this.isAdd) {
             if (this.question.type === '6') {
               this.question.entryStandardAnswerDetailsDTOList = this.journalizingData;
@@ -450,7 +470,7 @@ export default {
                 yesNoAnswer: '',
               };
               this.multipleAnswer = [];
-              this.options = [1];
+              this.options = [''];
               this.journalizingData = [];
               if (res.responseCode === '201') {
                 this.getQuestionList();
@@ -483,7 +503,7 @@ export default {
                 yesNoAnswer: '',
               };
               this.multipleAnswer = [];
-              this.options = [1];
+              this.options = [''];
               this.journalizingData = [];
               if (res.responseCode === '201') {
                 this.getQuestionList();
@@ -506,7 +526,7 @@ export default {
         this.errMsg = '选项不能大于5个';
       } else {
         this.errMsg = '';
-        this.options.push(this.options.length + 1);
+        this.options.push('');
       }
     },
     handleRemoveOption(index) {

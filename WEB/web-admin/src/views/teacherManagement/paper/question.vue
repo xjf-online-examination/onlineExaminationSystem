@@ -2,6 +2,28 @@
   <div class="demo-split">
     <Split v-model="split1">
       <div slot="left" class="demo-split-pane">
+        <Form ref="questionSearch" :model="searchData" inline>
+          <FormItem prop="questionsCode" label="试题编号" label-position="left" class="search-flex">
+            <Input type="text" v-model="searchData.questionsCode" placeholder="试题编号"/>
+          </FormItem>
+          <FormItem prop="questionsTitle" label="题目" label-position="left" class="search-flex">
+            <Input type="text" v-model="searchData.questionsTitle" placeholder="题目"/>
+          </FormItem>
+          <FormItem prop="questionsType" label="类型" label-position="left" class="search-flex">
+            <Select v-model="searchData.questionsType" style="width:150px">
+              <Option :value="1">单选题</Option>
+              <Option :value="2">多选题</Option>
+              <!-- <Option :value="3">不定向选择题</Option> -->
+              <Option :value="4">判断题</Option>
+              <!-- <Option :value="5">简答题</Option> -->
+              <Option :value="6">分录</Option>
+            </Select>
+          </FormItem>
+          <FormItem>
+            <Button type="primary" icon="ios-search" @click="handleSearch()">搜索</Button>
+            <Button type="default" @click="handleReset('questionSearch')" class="m-l-s">重置</Button>
+          </FormItem>
+        </Form>
         <Tables
           ref="tables"
           v-model="tableData.list"
@@ -15,9 +37,8 @@
           <Page
             :total="tableData.count"
             :page-size="searchData.pageSize"
-            show-elevator
             show-total
-            show-sizer
+            simple
             @on-change="onPageChange"
             @on-page-size-change="onPageSizeChange"
           />
@@ -179,7 +200,7 @@
                   <label>{{index+1}}.</label>
                   <div class="main-block">
                     <div class="row-block">
-                      <div>{{question.title}}({{question.score}}分)</div>
+                      <div>{{question.title}}</div>
                       <Button
                         class="del-btn"
                         type="primary"
@@ -190,7 +211,7 @@
                     <div class="answer-block">
                       <div class="option-block">
                         <Journalizing
-                          type="answer"
+                          type="test"
                           :data="question.journalizingData"
                           :subject-list="subjectList"
                         ></Journalizing>
@@ -259,6 +280,9 @@ export default {
         count: 0,
       },
       searchData: {
+        questionsCode: '',
+        questionsTitle: '',
+        questionsType: '',
         courseCode: '',
         currentPage: 1,
         pageSize: 10,
@@ -293,6 +317,13 @@ export default {
     ...mapMutations([
       'closeTag',
     ]),
+    handleSearch() {
+      this.listPage();
+    },
+    handleReset(name) {
+      this.$refs[name].resetFields();
+      this.listPage();
+    },
     onPageChange(params) {
       this.searchData.currentPage = params;
       this.listPage();

@@ -1,8 +1,6 @@
 <template>
   <div style="width:100%;">
     <v-table
-      is-vertical-resize
-      :vertical-resize-offset="60"
       :multiple-sort="false"
       :min-height="350"
       :title-rows="tableConfig.titleRows"
