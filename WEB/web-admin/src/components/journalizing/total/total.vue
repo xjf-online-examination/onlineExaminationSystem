@@ -32,6 +32,9 @@ export default {
       this.$emit('on-custom-comp', params);
     },
   },
+  mounted() {
+    this.total = this.rowData.total;
+  },
 };
 </script>
 <style>

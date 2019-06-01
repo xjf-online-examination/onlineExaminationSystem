@@ -116,10 +116,12 @@ export default {
           password,
           userType,
         }).then((res) => {
-          commit('setToken', res.data.securityKey);
-          commit('setUserType', res.data.userType);
-          commit('setUserName', res.data.username);
-          commit('setUserCode', res.data.userCode);
+          if (res.responseCode === '200') {
+            commit('setToken', res.data.securityKey);
+            commit('setUserType', res.data.userType);
+            commit('setUserName', res.data.username);
+            commit('setUserCode', res.data.userCode);
+          }
           resolve(res);
         }).catch((err) => {
           reject(err);
