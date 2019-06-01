@@ -20,11 +20,13 @@ import com.wxj.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,7 +72,7 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
         try {
             if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestionsDetailsVO.getType())) {
                 List<EntryStandardAnswerDetailsVO> entryStandardAnswerDetailsVOList = entryStandardAnswerDetailsMapper.selectEntryStandardAnswerDetailsVOByEntryStandardAnswerId(examQuestionsDetailsVO.getId());
-
+                entryStandardAnswerDetailsVOList.sort(Comparator.comparing(EntryStandardAnswerDetailsVO::getRow));
                 examQuestionsDetailsVO.setEntryStandardAnswerDetailsVOList(entryStandardAnswerDetailsVOList);
             }
         } catch (Exception e) {
@@ -189,83 +191,92 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
 
     @Override
     public int modify(ExamQuestionsSaveDTO examQuestionsSaveDTO) {
-        Date date = new Date();
-        ExamQuestions examQuestions = new ExamQuestions();
-        BeanUtils.copyProperties(examQuestionsSaveDTO, examQuestions);
-        examQuestions.setOptiona(examQuestionsSaveDTO.getOptionA());
-        examQuestions.setOptionb(examQuestionsSaveDTO.getOptionB());
-        examQuestions.setOptionc(examQuestionsSaveDTO.getOptionC());
-        examQuestions.setOptiond(examQuestionsSaveDTO.getOptionD());
-        examQuestions.setOptione(examQuestionsSaveDTO.getOptionE());
-        examQuestions.setABCD(examQuestionsSaveDTO);
-        examQuestions.setModifyTime(date);
+        try {
+            Date date = new Date();
+            ExamQuestions examQuestions = new ExamQuestions();
+            BeanUtils.copyProperties(examQuestionsSaveDTO, examQuestions);
+            examQuestions.setOptiona(examQuestionsSaveDTO.getOptionA());
+            examQuestions.setOptionb(examQuestionsSaveDTO.getOptionB());
+            examQuestions.setOptionc(examQuestionsSaveDTO.getOptionC());
+            examQuestions.setOptiond(examQuestionsSaveDTO.getOptionD());
+            examQuestions.setOptione(examQuestionsSaveDTO.getOptionE());
+            examQuestions.setABCD(examQuestionsSaveDTO);
+            examQuestions.setModifyTime(date);
 
-        int examQuestionsUpdateSize = examQuestionsMapper.updateByPrimaryKeySelective(examQuestions);
-        if (SystemConstant.ZERO == examQuestionsUpdateSize) {
-            throw new OperationException("examQuestions更新失败");
-        }
+            int examQuestionsUpdateSize = examQuestionsMapper.updateByPrimaryKeySelective(examQuestions);
+            if (SystemConstant.ZERO == examQuestionsUpdateSize) {
+                throw new OperationException("examQuestions更新失败");
+            }
 
-        if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestions.getType())) {
-            EntryStandardAnswerDetails entryStandardAnswerDetails;
-            for (int i=0,size=examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().size(); i<size; i++) {
-                entryStandardAnswerDetails = new EntryStandardAnswerDetails();
-                EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
-                BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
-                if (null == entryStandardAnswerDetailsDTO.getSummaryScore()) {
-                    entryStandardAnswerDetails.setSummaryScore(new BigDecimal(0));
-                } else {
-                    entryStandardAnswerDetails.setSummaryScore(new BigDecimal(entryStandardAnswerDetailsDTO.getSummaryScore()));
-                }
-                if (null == entryStandardAnswerDetailsDTO.getSubject1Score()) {
-                    entryStandardAnswerDetails.setSubject1Score(new BigDecimal(0));
-                } else {
-                    entryStandardAnswerDetails.setSubject1Score(new BigDecimal(entryStandardAnswerDetailsDTO.getSubject1Score()));
-                }
-                if (null == entryStandardAnswerDetailsDTO.getSubject2Score()) {
-                    entryStandardAnswerDetails.setSubject2Score(new BigDecimal(0));
-                } else {
-                    entryStandardAnswerDetails.setSubject2Score(new BigDecimal(entryStandardAnswerDetailsDTO.getSubject2Score()));
-                }
-                if (null == entryStandardAnswerDetailsDTO.getDebitAmountScore()) {
-                    entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(0));
+            if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestions.getType())) {
+                EntryStandardAnswerDetails entryStandardAnswerDetails;
+                for (int i=0,size=examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().size(); i<size; i++) {
+                    entryStandardAnswerDetails = new EntryStandardAnswerDetails();
+                    EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
+                    BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
+                    if (null == entryStandardAnswerDetailsDTO.getSummaryScore()) {
+                        entryStandardAnswerDetails.setSummaryScore(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setSummaryScore(new BigDecimal(entryStandardAnswerDetailsDTO.getSummaryScore()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getSubject1Score()) {
+                        entryStandardAnswerDetails.setSubject1Score(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setSubject1Score(new BigDecimal(entryStandardAnswerDetailsDTO.getSubject1Score()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getSubject2Score()) {
+                        entryStandardAnswerDetails.setSubject2Score(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setSubject2Score(new BigDecimal(entryStandardAnswerDetailsDTO.getSubject2Score()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getDebitAmountScore()) {
+                        entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(0));
 
-                } else {
-                    entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(entryStandardAnswerDetailsDTO.getDebitAmountScore()));
-                }
-                if (null == entryStandardAnswerDetailsDTO.getCreditAmountScore()) {
-                    entryStandardAnswerDetails.setCreditAmountScore(new BigDecimal(0));
-                } else {
-                    entryStandardAnswerDetails.setCreditAmountScore(new BigDecimal(entryStandardAnswerDetailsDTO.getCreditAmountScore()));
-                }
-                if (null == entryStandardAnswerDetailsDTO.getTotalScore()) {
-                    entryStandardAnswerDetails.setTotalScore(new BigDecimal(0));
-                } else {
-                    entryStandardAnswerDetails.setTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getTotalScore()));
-                }
-                if (null == entryStandardAnswerDetailsDTO.getDebitTotalScore()) {
-                    entryStandardAnswerDetails.setDebitTotalScore(new BigDecimal(0));
-                } else {
-                    entryStandardAnswerDetails.setDebitTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getDebitTotalScore()));
-                }
-                if (null == entryStandardAnswerDetailsDTO.getCreditTotalScore()) {
-                    entryStandardAnswerDetails.setCreditTotalScore(new BigDecimal(0));
-                } else {
-                    entryStandardAnswerDetails.setCreditTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getCreditTotalScore()));
-                }
+                    } else {
+                        entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(entryStandardAnswerDetailsDTO.getDebitAmountScore()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getCreditAmountScore()) {
+                        entryStandardAnswerDetails.setCreditAmountScore(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setCreditAmountScore(new BigDecimal(entryStandardAnswerDetailsDTO.getCreditAmountScore()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getTotalScore()) {
+                        entryStandardAnswerDetails.setTotalScore(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getTotalScore()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getDebitTotalScore()) {
+                        entryStandardAnswerDetails.setDebitTotalScore(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setDebitTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getDebitTotalScore()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getCreditTotalScore()) {
+                        entryStandardAnswerDetails.setCreditTotalScore(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setCreditTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getCreditTotalScore()));
+                    }
 
-                if (entryStandardAnswerDetails.getSubject1() == "" && entryStandardAnswerDetails.getSubject2() == ""
-                        && null == entryStandardAnswerDetails.getDebitAmount() && null == entryStandardAnswerDetails.getCreditAmount()
-                        && null == entryStandardAnswerDetails.getDebitTotal() && null == entryStandardAnswerDetails.getCreditTotal()) {
-                    continue;
-                }
-                entryStandardAnswerDetails.setRow(new Integer(i).byteValue());
-                entryStandardAnswerDetails.setModifyTime(date);
-                try {
-                    entryStandardAnswerDetailsMapper.updateByPrimaryKeySelective(entryStandardAnswerDetails);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    if (entryStandardAnswerDetails.getSubject1() == "" && entryStandardAnswerDetails.getSubject2() == ""
+                            && null == entryStandardAnswerDetails.getDebitAmount() && null == entryStandardAnswerDetails.getCreditAmount()
+                            && null == entryStandardAnswerDetails.getDebitTotal() && null == entryStandardAnswerDetails.getCreditTotal()) {
+                        continue;
+                    }
+                    entryStandardAnswerDetails.setRow(new Integer(i).byteValue());
+                    entryStandardAnswerDetails.setModifyTime(date);
+                    try {
+                        if (null == entryStandardAnswerDetails.getId()) {
+                            entryStandardAnswerDetails.setEntryAnswerId(size=examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(0).getEntryAnswerId());
+                            entryStandardAnswerDetailsMapper.insertSelective(entryStandardAnswerDetails);
+                        } else {
+                            entryStandardAnswerDetailsMapper.updateByPrimaryKeySelective(entryStandardAnswerDetails);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return 0;
     }

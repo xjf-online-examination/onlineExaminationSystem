@@ -105,7 +105,9 @@ public class ExamQuestionsLogic {
 
         String stuAnswer = String.valueOf(studentAnswers);
         String standAnswer = String.valueOf(standardAnswers);
-        if (stuAnswer.length() > standAnswer.length()) {
+        int i = stuAnswer.length();
+        int j = standAnswer.length();
+        if (i <= j) {
             if (stuAnswer.equals(standAnswer)) {
                 return (float) score;
             } else if (this.find(standAnswer, stuAnswer)) {
