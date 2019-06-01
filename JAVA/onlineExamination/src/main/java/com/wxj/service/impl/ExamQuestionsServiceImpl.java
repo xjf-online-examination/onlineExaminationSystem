@@ -309,6 +309,11 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
         try {
             PageBounds pageBounds = new PageBounds(pageDTO.getCurrentPage(), pageDTO.getPageSize());
             examQuestionsDetailsVOList = examQuestionsMapper.selectExamQuestions(pageDTO, pageBounds);
+
+            for (ExamQuestionsDetailsVO examQuestionsDetailsVO : examQuestionsDetailsVOList) {
+                List<EntryStandardAnswerDetailsVO> entryStandardAnswerDetailsVOList = entryStandardAnswerDetailsMapper.selectEntryStandardAnswerDetailsVOByEntryStandardAnswerId(examQuestionsDetailsVO.getId());
+                examQuestionsDetailsVO.setEntryStandardAnswerDetailsVOList(entryStandardAnswerDetailsVOList);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
