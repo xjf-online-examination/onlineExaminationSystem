@@ -391,7 +391,7 @@
         entry_answer_id = #{entryAnswerId,jdbcType=INTEGER},
       </if>
       <if test="row != null">
-        row = #{row,jdbcType=TINYINT},
+        `row` = #{row,jdbcType=TINYINT},
       </if>
       <if test="summary != null">
         summary = #{summary,jdbcType=CHAR},
@@ -456,7 +456,7 @@
   <update id="updateByPrimaryKey" parameterType="com.wxj.model.PO.EntryStandardAnswerDetails">
     update entry_standard_answer_details
     set entry_answer_id = #{entryAnswerId,jdbcType=INTEGER},
-      row = #{row,jdbcType=TINYINT},
+      `row` = #{row,jdbcType=TINYINT},
       summary = #{summary,jdbcType=CHAR},
       summary_score = #{summaryScore,jdbcType=DECIMAL},
       subject1 = #{subject1,jdbcType=CHAR},

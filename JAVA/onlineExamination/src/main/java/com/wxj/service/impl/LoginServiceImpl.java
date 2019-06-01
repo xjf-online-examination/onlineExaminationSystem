@@ -70,21 +70,21 @@ public class LoginServiceImpl implements LoginServiceI {
     }
 
     @Override
-    public int modifyPassword(LoginDTO loginDTO) {
+    public int modifyPassword(LoginDTO loginDTO, String userCode) {
         int i = 0;
         switch (loginDTO.getUserType()) {
             case 1:
                 Student student = new Student();
                 student.setLoginPassword(loginDTO.getPassword());
                 StudentExample studentExample = new StudentExample();
-                studentExample.createCriteria().andSnoEqualTo(loginDTO.getUsername());
+                studentExample.createCriteria().andSnoEqualTo(userCode);
                 i = studentMapper.updateByExampleSelective(student, studentExample);
                 break;
             case 2:
                 Teacher teacher = new Teacher();
                 teacher.setLoginPassword(loginDTO.getPassword());
                 TeacherExample teacherExample = new TeacherExample();
-                teacherExample.createCriteria().andJobNoEqualTo(loginDTO.getUsername());
+                teacherExample.createCriteria().andJobNoEqualTo(userCode);
                 i = teacherMapper.updateByExampleSelective(teacher, teacherExample);
                 break;
             default:{

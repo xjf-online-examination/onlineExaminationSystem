@@ -66,7 +66,7 @@ public class LoginController {
             LoginDTO loginDTO = requestBean.getData();
             new ValidateParamsUtil().vaildParams(loginDTO, "userType", "username", "password");
 
-            loginService.modifyPassword(loginDTO);
+            loginService.modifyPassword(loginDTO, requestBean.getUserCode());
             return ResponseUtils.success("201");
         } catch (BusinessException e) {
             return ResponseUtils.error(e);

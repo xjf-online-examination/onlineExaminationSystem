@@ -114,7 +114,6 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                     EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
 
                     BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
-                    entryStandardAnswerDetails.setSummary(entryStandardAnswerDetailsDTO.getSummary());
                     if (null == entryStandardAnswerDetailsDTO.getSummaryScore()) {
                         entryStandardAnswerDetails.setSummaryScore(new BigDecimal(0));
                     } else {
@@ -146,10 +145,10 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                     } else {
                         entryStandardAnswerDetails.setTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getTotalScore()));
                     }
-                    if (null == entryStandardAnswerDetailsDTO.getDebitAmountScore()) {
-                        entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(0));
+                    if (null == entryStandardAnswerDetailsDTO.getDebitTotalScore()) {
+                        entryStandardAnswerDetails.setDebitTotalScore(new BigDecimal(0));
                     } else {
-                        entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(entryStandardAnswerDetailsDTO.getDebitAmountScore()));
+                        entryStandardAnswerDetails.setDebitTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getDebitTotalScore()));
                     }
                     if (null == entryStandardAnswerDetailsDTO.getCreditTotalScore()) {
                         entryStandardAnswerDetails.setCreditTotalScore(new BigDecimal(0));
@@ -157,12 +156,13 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                         entryStandardAnswerDetails.setCreditTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getCreditTotalScore()));
                     }
 
-                    if (entryStandardAnswerDetails.getSubject1() == "" && entryStandardAnswerDetails.getSubject2() == "" && null == entryStandardAnswerDetails.getDebitAmount() && null == entryStandardAnswerDetails.getCreditAmount()) {
+                    if (entryStandardAnswerDetails.getSubject1() == "" && entryStandardAnswerDetails.getSubject2() == ""
+                            && null == entryStandardAnswerDetails.getDebitAmount() && null == entryStandardAnswerDetails.getCreditAmount()
+                            && null == entryStandardAnswerDetails.getDebitTotal() && null == entryStandardAnswerDetails.getCreditTotal()) {
                         continue;
                     }
                     entryStandardAnswerDetails.setEntryAnswerId(examQuestions.getId());
                     entryStandardAnswerDetails.setRow(new Integer(i).byteValue());
-                    entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1());
                     entryStandardAnswerDetails.setCreateTime(date);
                     entryStandardAnswerDetails.setModifyTime(date);
                     entryStandardAnswerDetails.setDelFlag(SystemConstant.NOUGHT);
@@ -203,9 +203,60 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
                 entryStandardAnswerDetails = new EntryStandardAnswerDetails();
                 EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
                 BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
+                if (null == entryStandardAnswerDetailsDTO.getSummaryScore()) {
+                    entryStandardAnswerDetails.setSummaryScore(new BigDecimal(0));
+                } else {
+                    entryStandardAnswerDetails.setSummaryScore(new BigDecimal(entryStandardAnswerDetailsDTO.getSummaryScore()));
+                }
+                if (null == entryStandardAnswerDetailsDTO.getSubject1Score()) {
+                    entryStandardAnswerDetails.setSubject1Score(new BigDecimal(0));
+                } else {
+                    entryStandardAnswerDetails.setSubject1Score(new BigDecimal(entryStandardAnswerDetailsDTO.getSubject1Score()));
+                }
+                if (null == entryStandardAnswerDetailsDTO.getSubject2Score()) {
+                    entryStandardAnswerDetails.setSubject2Score(new BigDecimal(0));
+                } else {
+                    entryStandardAnswerDetails.setSubject2Score(new BigDecimal(entryStandardAnswerDetailsDTO.getSubject2Score()));
+                }
+                if (null == entryStandardAnswerDetailsDTO.getDebitAmountScore()) {
+                    entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(0));
+
+                } else {
+                    entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(entryStandardAnswerDetailsDTO.getDebitAmountScore()));
+                }
+                if (null == entryStandardAnswerDetailsDTO.getCreditAmountScore()) {
+                    entryStandardAnswerDetails.setCreditAmountScore(new BigDecimal(0));
+                } else {
+                    entryStandardAnswerDetails.setCreditAmountScore(new BigDecimal(entryStandardAnswerDetailsDTO.getCreditAmountScore()));
+                }
+                if (null == entryStandardAnswerDetailsDTO.getTotalScore()) {
+                    entryStandardAnswerDetails.setTotalScore(new BigDecimal(0));
+                } else {
+                    entryStandardAnswerDetails.setTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getTotalScore()));
+                }
+                if (null == entryStandardAnswerDetailsDTO.getDebitTotalScore()) {
+                    entryStandardAnswerDetails.setDebitTotalScore(new BigDecimal(0));
+                } else {
+                    entryStandardAnswerDetails.setDebitTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getDebitTotalScore()));
+                }
+                if (null == entryStandardAnswerDetailsDTO.getCreditTotalScore()) {
+                    entryStandardAnswerDetails.setCreditTotalScore(new BigDecimal(0));
+                } else {
+                    entryStandardAnswerDetails.setCreditTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getCreditTotalScore()));
+                }
+
+                if (entryStandardAnswerDetails.getSubject1() == "" && entryStandardAnswerDetails.getSubject2() == ""
+                        && null == entryStandardAnswerDetails.getDebitAmount() && null == entryStandardAnswerDetails.getCreditAmount()
+                        && null == entryStandardAnswerDetails.getDebitTotal() && null == entryStandardAnswerDetails.getCreditTotal()) {
+                    continue;
+                }
                 entryStandardAnswerDetails.setRow(new Integer(i).byteValue());
                 entryStandardAnswerDetails.setModifyTime(date);
-                entryStandardAnswerDetailsMapper.updateByPrimaryKeySelective(entryStandardAnswerDetails);
+                try {
+                    entryStandardAnswerDetailsMapper.updateByPrimaryKeySelective(entryStandardAnswerDetails);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         return 0;

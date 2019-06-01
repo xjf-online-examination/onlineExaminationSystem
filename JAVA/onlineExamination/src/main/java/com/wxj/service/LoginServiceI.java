@@ -24,5 +24,5 @@ public interface LoginServiceI {
      */
     UserInfoVO login(HttpServletRequest request, LoginDTO loginDTO) throws BusinessException;
 
-    int modifyPassword(LoginDTO loginDTO);
+    int modifyPassword(LoginDTO loginDTO, String userCode);
 }
