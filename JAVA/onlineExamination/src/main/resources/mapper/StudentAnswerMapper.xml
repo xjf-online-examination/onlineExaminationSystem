@@ -8,7 +8,7 @@
     <result column="questions_no" jdbcType="TINYINT" property="questionsNo" />
     <result column="questions_type" jdbcType="CHAR" property="questionsType" />
     <result column="answer" jdbcType="VARCHAR" property="answer" />
-    <result column="score" jdbcType="REAL" property="score" />
+    <result column="score" jdbcType="DECIMAL" property="score" />
     <result column="finish_flag" jdbcType="CHAR" property="finishFlag" />
     <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime" />
     <result column="operator" jdbcType="INTEGER" property="operator" />
@@ -116,7 +116,7 @@
       del_flag)
     values (#{id,jdbcType=INTEGER}, #{studentSno,jdbcType=CHAR}, #{examScheduleId,jdbcType=INTEGER},
       #{questionsNo,jdbcType=TINYINT}, #{questionsType,jdbcType=CHAR}, #{answer,jdbcType=VARCHAR},
-      #{score,jdbcType=REAL}, #{finishFlag,jdbcType=CHAR}, #{finishTime,jdbcType=TIMESTAMP},
+      #{score,jdbcType=DECIMAL}, #{finishFlag,jdbcType=CHAR}, #{finishTime,jdbcType=TIMESTAMP},
       #{operator,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},
       #{delFlag,jdbcType=CHAR})
   </insert>
@@ -183,7 +183,7 @@
         #{answer,jdbcType=VARCHAR},
       </if>
       <if test="score != null">
-        #{score,jdbcType=REAL},
+        #{score,jdbcType=DECIMAL},
       </if>
       <if test="finishFlag != null">
         #{finishFlag,jdbcType=CHAR},
@@ -233,7 +233,7 @@
         answer = #{record.answer,jdbcType=VARCHAR},
       </if>
       <if test="record.score != null">
-        score = #{record.score,jdbcType=REAL},
+        score = #{record.score,jdbcType=DECIMAL},
       </if>
       <if test="record.finishFlag != null">
         finish_flag = #{record.finishFlag,jdbcType=CHAR},
@@ -266,7 +266,7 @@
     questions_no = #{record.questionsNo,jdbcType=TINYINT},
     questions_type = #{record.questionsType,jdbcType=CHAR},
     answer = #{record.answer,jdbcType=VARCHAR},
-    score = #{record.score,jdbcType=REAL},
+    score = #{record.score,jdbcType=DECIMAL},
     finish_flag = #{record.finishFlag,jdbcType=CHAR},
     finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
     operator = #{record.operator,jdbcType=INTEGER},
@@ -296,7 +296,7 @@
         answer = #{answer,jdbcType=VARCHAR},
       </if>
       <if test="score != null">
-        score = #{score,jdbcType=REAL},
+        score = #{score,jdbcType=DECIMAL},
       </if>
       <if test="finishFlag != null">
         finish_flag = #{finishFlag,jdbcType=CHAR},
@@ -326,7 +326,7 @@
       questions_no = #{questionsNo,jdbcType=TINYINT},
       questions_type = #{questionsType,jdbcType=CHAR},
       answer = #{answer,jdbcType=VARCHAR},
-      score = #{score,jdbcType=REAL},
+      score = #{score,jdbcType=DECIMAL},
       finish_flag = #{finishFlag,jdbcType=CHAR},
       finish_time = #{finishTime,jdbcType=TIMESTAMP},
       operator = #{operator,jdbcType=INTEGER},

@@ -29,6 +29,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -194,7 +195,7 @@ public class StudentServiceImpl implements StudentServiceI {
             if (null != scoreMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo())) {
                 score = scoreMap.get(studentAnswerSaveDetailsDTO.getQuestionsNo());
             }
-            studentAnswer.setScore(score);
+            studentAnswer.setScore(new BigDecimal(score));
             studentAnswer.setFinishFlag("1");
             studentAnswer.setFinishTime(date);
             studentAnswer.setCreateTime(date);

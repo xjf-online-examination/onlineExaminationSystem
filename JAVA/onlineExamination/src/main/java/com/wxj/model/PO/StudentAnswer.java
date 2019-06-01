@@ -1,6 +1,7 @@
 package com.wxj.model.PO;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Date;
  * <p>Copyright: Copyright (c) 2019</p>
  * <p>Company: www.hanshow.com</p>
  * @author wangxiaojun
- * @date 2019-05-24 01:21:05
+ * @date 2019-06-01 00:25:56
  * @version 1.0
  */
 public class StudentAnswer implements Serializable {
@@ -51,7 +52,7 @@ public class StudentAnswer implements Serializable {
     /**
      * 分数
      */
-    private Float score;
+    private BigDecimal score;
 
     /**
      * 完成标志1:完成 0:未完成
@@ -133,11 +134,11 @@ public class StudentAnswer implements Serializable {
         this.answer = answer == null ? null : answer.trim();
     }
 
-    public Float getScore() {
+    public BigDecimal getScore() {
         return score;
     }
 
-    public void setScore(Float score) {
+    public void setScore(BigDecimal score) {
         this.score = score;
     }
 

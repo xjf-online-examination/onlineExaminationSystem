@@ -6,21 +6,21 @@
     <result column="entry_answer_id" jdbcType="INTEGER" property="entryAnswerId" />
     <result column="row" jdbcType="TINYINT" property="row" />
     <result column="summary" jdbcType="CHAR" property="summary" />
-    <result column="summary_score" jdbcType="REAL" property="summaryScore" />
+    <result column="summary_score" jdbcType="DECIMAL" property="summaryScore" />
     <result column="subject1" jdbcType="CHAR" property="subject1" />
-    <result column="subject1_score" jdbcType="REAL" property="subject1Score" />
+    <result column="subject1_score" jdbcType="DECIMAL" property="subject1Score" />
     <result column="subject2" jdbcType="CHAR" property="subject2" />
-    <result column="subject2_score" jdbcType="REAL" property="subject2Score" />
+    <result column="subject2_score" jdbcType="DECIMAL" property="subject2Score" />
     <result column="debit_amount" jdbcType="INTEGER" property="debitAmount" />
-    <result column="debit_amount_score" jdbcType="REAL" property="debitAmountScore" />
+    <result column="debit_amount_score" jdbcType="DECIMAL" property="debitAmountScore" />
     <result column="credit_amount" jdbcType="INTEGER" property="creditAmount" />
-    <result column="credit_amount_score" jdbcType="REAL" property="creditAmountScore" />
+    <result column="credit_amount_score" jdbcType="DECIMAL" property="creditAmountScore" />
     <result column="total" jdbcType="CHAR" property="total" />
-    <result column="total_score" jdbcType="REAL" property="totalScore" />
+    <result column="total_score" jdbcType="DECIMAL" property="totalScore" />
     <result column="debit_total" jdbcType="INTEGER" property="debitTotal" />
-    <result column="debit_total_score" jdbcType="REAL" property="debitTotalScore" />
+    <result column="debit_total_score" jdbcType="DECIMAL" property="debitTotalScore" />
     <result column="credit_total" jdbcType="INTEGER" property="creditTotal" />
-    <result column="credit_total_score" jdbcType="REAL" property="creditTotalScore" />
+    <result column="credit_total_score" jdbcType="DECIMAL" property="creditTotalScore" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
     <result column="del_flag" jdbcType="CHAR" property="delFlag" />
@@ -129,12 +129,12 @@
       credit_total_score, create_time, modify_time,
       del_flag)
     values (#{id,jdbcType=INTEGER}, #{entryAnswerId,jdbcType=INTEGER}, #{row,jdbcType=TINYINT},
-      #{summary,jdbcType=CHAR}, #{summaryScore,jdbcType=REAL}, #{subject1,jdbcType=CHAR},
-      #{subject1Score,jdbcType=REAL}, #{subject2,jdbcType=CHAR}, #{subject2Score,jdbcType=REAL},
-      #{debitAmount,jdbcType=INTEGER}, #{debitAmountScore,jdbcType=REAL}, #{creditAmount,jdbcType=INTEGER},
-      #{creditAmountScore,jdbcType=REAL}, #{total,jdbcType=CHAR}, #{totalScore,jdbcType=REAL},
-      #{debitTotal,jdbcType=INTEGER}, #{debitTotalScore,jdbcType=REAL}, #{creditTotal,jdbcType=INTEGER},
-      #{creditTotalScore,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},
+      #{summary,jdbcType=CHAR}, #{summaryScore,jdbcType=DECIMAL}, #{subject1,jdbcType=CHAR},
+      #{subject1Score,jdbcType=DECIMAL}, #{subject2,jdbcType=CHAR}, #{subject2Score,jdbcType=DECIMAL},
+      #{debitAmount,jdbcType=INTEGER}, #{debitAmountScore,jdbcType=DECIMAL}, #{creditAmount,jdbcType=INTEGER},
+      #{creditAmountScore,jdbcType=DECIMAL}, #{total,jdbcType=CHAR}, #{totalScore,jdbcType=DECIMAL},
+      #{debitTotal,jdbcType=INTEGER}, #{debitTotalScore,jdbcType=DECIMAL}, #{creditTotal,jdbcType=INTEGER},
+      #{creditTotalScore,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},
       #{delFlag,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wxj.model.PO.EntryStandardAnswerDetails">
@@ -221,49 +221,49 @@
         #{summary,jdbcType=CHAR},
       </if>
       <if test="summaryScore != null">
-        #{summaryScore,jdbcType=REAL},
+        #{summaryScore,jdbcType=DECIMAL},
       </if>
       <if test="subject1 != null">
         #{subject1,jdbcType=CHAR},
       </if>
       <if test="subject1Score != null">
-        #{subject1Score,jdbcType=REAL},
+        #{subject1Score,jdbcType=DECIMAL},
       </if>
       <if test="subject2 != null">
         #{subject2,jdbcType=CHAR},
       </if>
       <if test="subject2Score != null">
-        #{subject2Score,jdbcType=REAL},
+        #{subject2Score,jdbcType=DECIMAL},
       </if>
       <if test="debitAmount != null">
         #{debitAmount,jdbcType=INTEGER},
       </if>
       <if test="debitAmountScore != null">
-        #{debitAmountScore,jdbcType=REAL},
+        #{debitAmountScore,jdbcType=DECIMAL},
       </if>
       <if test="creditAmount != null">
         #{creditAmount,jdbcType=INTEGER},
       </if>
       <if test="creditAmountScore != null">
-        #{creditAmountScore,jdbcType=REAL},
+        #{creditAmountScore,jdbcType=DECIMAL},
       </if>
       <if test="total != null">
         #{total,jdbcType=CHAR},
       </if>
       <if test="totalScore != null">
-        #{totalScore,jdbcType=REAL},
+        #{totalScore,jdbcType=DECIMAL},
       </if>
       <if test="debitTotal != null">
         #{debitTotal,jdbcType=INTEGER},
       </if>
       <if test="debitTotalScore != null">
-        #{debitTotalScore,jdbcType=REAL},
+        #{debitTotalScore,jdbcType=DECIMAL},
       </if>
       <if test="creditTotal != null">
         #{creditTotal,jdbcType=INTEGER},
       </if>
       <if test="creditTotalScore != null">
-        #{creditTotalScore,jdbcType=REAL},
+        #{creditTotalScore,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -298,49 +298,49 @@
         summary = #{record.summary,jdbcType=CHAR},
       </if>
       <if test="record.summaryScore != null">
-        summary_score = #{record.summaryScore,jdbcType=REAL},
+        summary_score = #{record.summaryScore,jdbcType=DECIMAL},
       </if>
       <if test="record.subject1 != null">
         subject1 = #{record.subject1,jdbcType=CHAR},
       </if>
       <if test="record.subject1Score != null">
-        subject1_score = #{record.subject1Score,jdbcType=REAL},
+        subject1_score = #{record.subject1Score,jdbcType=DECIMAL},
       </if>
       <if test="record.subject2 != null">
         subject2 = #{record.subject2,jdbcType=CHAR},
       </if>
       <if test="record.subject2Score != null">
-        subject2_score = #{record.subject2Score,jdbcType=REAL},
+        subject2_score = #{record.subject2Score,jdbcType=DECIMAL},
       </if>
       <if test="record.debitAmount != null">
         debit_amount = #{record.debitAmount,jdbcType=INTEGER},
       </if>
       <if test="record.debitAmountScore != null">
-        debit_amount_score = #{record.debitAmountScore,jdbcType=REAL},
+        debit_amount_score = #{record.debitAmountScore,jdbcType=DECIMAL},
       </if>
       <if test="record.creditAmount != null">
         credit_amount = #{record.creditAmount,jdbcType=INTEGER},
       </if>
       <if test="record.creditAmountScore != null">
-        credit_amount_score = #{record.creditAmountScore,jdbcType=REAL},
+        credit_amount_score = #{record.creditAmountScore,jdbcType=DECIMAL},
       </if>
       <if test="record.total != null">
         total = #{record.total,jdbcType=CHAR},
       </if>
       <if test="record.totalScore != null">
-        total_score = #{record.totalScore,jdbcType=REAL},
+        total_score = #{record.totalScore,jdbcType=DECIMAL},
       </if>
       <if test="record.debitTotal != null">
         debit_total = #{record.debitTotal,jdbcType=INTEGER},
       </if>
       <if test="record.debitTotalScore != null">
-        debit_total_score = #{record.debitTotalScore,jdbcType=REAL},
+        debit_total_score = #{record.debitTotalScore,jdbcType=DECIMAL},
       </if>
       <if test="record.creditTotal != null">
         credit_total = #{record.creditTotal,jdbcType=INTEGER},
       </if>
       <if test="record.creditTotalScore != null">
-        credit_total_score = #{record.creditTotalScore,jdbcType=REAL},
+        credit_total_score = #{record.creditTotalScore,jdbcType=DECIMAL},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -362,21 +362,21 @@
     entry_answer_id = #{record.entryAnswerId,jdbcType=INTEGER},
     row = #{record.row,jdbcType=TINYINT},
     summary = #{record.summary,jdbcType=CHAR},
-    summary_score = #{record.summaryScore,jdbcType=REAL},
+    summary_score = #{record.summaryScore,jdbcType=DECIMAL},
     subject1 = #{record.subject1,jdbcType=CHAR},
-    subject1_score = #{record.subject1Score,jdbcType=REAL},
+    subject1_score = #{record.subject1Score,jdbcType=DECIMAL},
     subject2 = #{record.subject2,jdbcType=CHAR},
-    subject2_score = #{record.subject2Score,jdbcType=REAL},
+    subject2_score = #{record.subject2Score,jdbcType=DECIMAL},
     debit_amount = #{record.debitAmount,jdbcType=INTEGER},
-    debit_amount_score = #{record.debitAmountScore,jdbcType=REAL},
+    debit_amount_score = #{record.debitAmountScore,jdbcType=DECIMAL},
     credit_amount = #{record.creditAmount,jdbcType=INTEGER},
-    credit_amount_score = #{record.creditAmountScore,jdbcType=REAL},
+    credit_amount_score = #{record.creditAmountScore,jdbcType=DECIMAL},
     total = #{record.total,jdbcType=CHAR},
-    total_score = #{record.totalScore,jdbcType=REAL},
+    total_score = #{record.totalScore,jdbcType=DECIMAL},
     debit_total = #{record.debitTotal,jdbcType=INTEGER},
-    debit_total_score = #{record.debitTotalScore,jdbcType=REAL},
+    debit_total_score = #{record.debitTotalScore,jdbcType=DECIMAL},
     credit_total = #{record.creditTotal,jdbcType=INTEGER},
-    credit_total_score = #{record.creditTotalScore,jdbcType=REAL},
+    credit_total_score = #{record.creditTotalScore,jdbcType=DECIMAL},
     create_time = #{record.createTime,jdbcType=TIMESTAMP},
     modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
     del_flag = #{record.delFlag,jdbcType=CHAR}
@@ -397,49 +397,49 @@
         summary = #{summary,jdbcType=CHAR},
       </if>
       <if test="summaryScore != null">
-        summary_score = #{summaryScore,jdbcType=REAL},
+        summary_score = #{summaryScore,jdbcType=DECIMAL},
       </if>
       <if test="subject1 != null">
         subject1 = #{subject1,jdbcType=CHAR},
       </if>
       <if test="subject1Score != null">
-        subject1_score = #{subject1Score,jdbcType=REAL},
+        subject1_score = #{subject1Score,jdbcType=DECIMAL},
       </if>
       <if test="subject2 != null">
         subject2 = #{subject2,jdbcType=CHAR},
       </if>
       <if test="subject2Score != null">
-        subject2_score = #{subject2Score,jdbcType=REAL},
+        subject2_score = #{subject2Score,jdbcType=DECIMAL},
       </if>
       <if test="debitAmount != null">
         debit_amount = #{debitAmount,jdbcType=INTEGER},
       </if>
       <if test="debitAmountScore != null">
-        debit_amount_score = #{debitAmountScore,jdbcType=REAL},
+        debit_amount_score = #{debitAmountScore,jdbcType=DECIMAL},
       </if>
       <if test="creditAmount != null">
         credit_amount = #{creditAmount,jdbcType=INTEGER},
       </if>
       <if test="creditAmountScore != null">
-        credit_amount_score = #{creditAmountScore,jdbcType=REAL},
+        credit_amount_score = #{creditAmountScore,jdbcType=DECIMAL},
       </if>
       <if test="total != null">
         total = #{total,jdbcType=CHAR},
       </if>
       <if test="totalScore != null">
-        total_score = #{totalScore,jdbcType=REAL},
+        total_score = #{totalScore,jdbcType=DECIMAL},
       </if>
       <if test="debitTotal != null">
         debit_total = #{debitTotal,jdbcType=INTEGER},
       </if>
       <if test="debitTotalScore != null">
-        debit_total_score = #{debitTotalScore,jdbcType=REAL},
+        debit_total_score = #{debitTotalScore,jdbcType=DECIMAL},
       </if>
       <if test="creditTotal != null">
         credit_total = #{creditTotal,jdbcType=INTEGER},
       </if>
       <if test="creditTotalScore != null">
-        credit_total_score = #{creditTotalScore,jdbcType=REAL},
+        credit_total_score = #{creditTotalScore,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -458,21 +458,21 @@
     set entry_answer_id = #{entryAnswerId,jdbcType=INTEGER},
       row = #{row,jdbcType=TINYINT},
       summary = #{summary,jdbcType=CHAR},
-      summary_score = #{summaryScore,jdbcType=REAL},
+      summary_score = #{summaryScore,jdbcType=DECIMAL},
       subject1 = #{subject1,jdbcType=CHAR},
-      subject1_score = #{subject1Score,jdbcType=REAL},
+      subject1_score = #{subject1Score,jdbcType=DECIMAL},
       subject2 = #{subject2,jdbcType=CHAR},
-      subject2_score = #{subject2Score,jdbcType=REAL},
+      subject2_score = #{subject2Score,jdbcType=DECIMAL},
       debit_amount = #{debitAmount,jdbcType=INTEGER},
-      debit_amount_score = #{debitAmountScore,jdbcType=REAL},
+      debit_amount_score = #{debitAmountScore,jdbcType=DECIMAL},
       credit_amount = #{creditAmount,jdbcType=INTEGER},
-      credit_amount_score = #{creditAmountScore,jdbcType=REAL},
+      credit_amount_score = #{creditAmountScore,jdbcType=DECIMAL},
       total = #{total,jdbcType=CHAR},
-      total_score = #{totalScore,jdbcType=REAL},
+      total_score = #{totalScore,jdbcType=DECIMAL},
       debit_total = #{debitTotal,jdbcType=INTEGER},
-      debit_total_score = #{debitTotalScore,jdbcType=REAL},
+      debit_total_score = #{debitTotalScore,jdbcType=DECIMAL},
       credit_total = #{creditTotal,jdbcType=INTEGER},
-      credit_total_score = #{creditTotalScore,jdbcType=REAL},
+      credit_total_score = #{creditTotalScore,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       del_flag = #{delFlag,jdbcType=CHAR}
@@ -491,12 +491,12 @@
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.id,jdbcType=INTEGER}, #{item.entryAnswerId,jdbcType=INTEGER}, #{item.row,jdbcType=TINYINT},
-      #{item.summary,jdbcType=CHAR}, #{item.summaryScore,jdbcType=REAL}, #{item.subject1,jdbcType=TINYINT},
-      #{item.subject1Score,jdbcType=REAL}, #{item.subject2,jdbcType=CHAR}, #{item.subject2Score,jdbcType=REAL},
-      #{item.debitAmount,jdbcType=INTEGER}, #{item.debitAmountScore,jdbcType=REAL}, #{item.creditAmount,jdbcType=INTEGER},
-      #{item.creditAmountScore,jdbcType=REAL}, #{item.total,jdbcType=CHAR}, #{item.totalScore,jdbcType=REAL},
-      #{item.debitTotal,jdbcType=INTEGER}, #{item.debitTotalScore,jdbcType=REAL}, #{item.creditTotal,jdbcType=INTEGER},
-      #{item.creditTotalScore,jdbcType=REAL}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP},
+      #{item.summary,jdbcType=CHAR}, #{item.summaryScore,jdbcType=DECIMAL}, #{item.subject1,jdbcType=TINYINT},
+      #{item.subject1Score,jdbcType=DECIMAL}, #{item.subject2,jdbcType=CHAR}, #{item.subject2Score,jdbcType=DECIMAL},
+      #{item.debitAmount,jdbcType=INTEGER}, #{item.debitAmountScore,jdbcType=DECIMAL}, #{item.creditAmount,jdbcType=INTEGER},
+      #{item.creditAmountScore,jdbcType=DECIMAL}, #{item.total,jdbcType=CHAR}, #{item.totalScore,jdbcType=DECIMAL},
+      #{item.debitTotal,jdbcType=INTEGER}, #{item.debitTotalScore,jdbcType=DECIMAL}, #{item.creditTotal,jdbcType=INTEGER},
+      #{item.creditTotalScore,jdbcType=DECIMAL}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP},
       #{item.delFlag,jdbcType=CHAR})
     </foreach>
   </insert>
@@ -506,21 +506,21 @@
     <result column="entry_answer_id" jdbcType="INTEGER" property="entryAnswerId" />
     <result column="row" jdbcType="TINYINT" property="row" />
     <result column="summary" jdbcType="CHAR" property="summary" />
-    <result column="summary_score" jdbcType="REAL" property="summaryScore" />
+    <result column="summary_score" jdbcType="DECIMAL" property="summaryScore" />
     <result column="subject1" jdbcType="CHAR" property="subject1" />
-    <result column="subject1_score" jdbcType="REAL" property="subject1Score" />
+    <result column="subject1_score" jdbcType="DECIMAL" property="subject1Score" />
     <result column="subject2" jdbcType="CHAR" property="subject2" />
-    <result column="subject2_score" jdbcType="REAL" property="subject2Score" />
+    <result column="subject2_score" jdbcType="DECIMAL" property="subject2Score" />
     <result column="debit_amount" jdbcType="INTEGER" property="debitAmount" />
-    <result column="debit_amount_score" jdbcType="REAL" property="debitAmountScore" />
+    <result column="debit_amount_score" jdbcType="DECIMAL" property="debitAmountScore" />
     <result column="credit_amount" jdbcType="INTEGER" property="creditAmount" />
-    <result column="credit_amount_score" jdbcType="REAL" property="creditAmountScore" />
+    <result column="credit_amount_score" jdbcType="DECIMAL" property="creditAmountScore" />
     <result column="total" jdbcType="CHAR" property="total" />
-    <result column="total_score" jdbcType="REAL" property="totalScore" />
+    <result column="total_score" jdbcType="DECIMAL" property="totalScore" />
     <result column="debit_total" jdbcType="INTEGER" property="debitTotal" />
-    <result column="debit_total_score" jdbcType="REAL" property="debitTotalScore" />
+    <result column="debit_total_score" jdbcType="DECIMAL" property="debitTotalScore" />
     <result column="credit_total" jdbcType="INTEGER" property="creditTotal" />
-    <result column="credit_total_score" jdbcType="REAL" property="creditTotalScore" />
+    <result column="credit_total_score" jdbcType="DECIMAL" property="creditTotalScore" />
   </resultMap>
 
   <select id="selectEntryStandardAnswerDetailsVOByEntryStandardAnswerId" parameterType="java.lang.Integer" resultMap="BaseVOResultMap">

@@ -1,5 +1,6 @@
 package com.wxj.model.PO;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -409,52 +410,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreEqualTo(Float value) {
+        public Criteria andSummaryScoreEqualTo(BigDecimal value) {
             addCriterion("summary_score =", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreNotEqualTo(Float value) {
+        public Criteria andSummaryScoreNotEqualTo(BigDecimal value) {
             addCriterion("summary_score <>", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreGreaterThan(Float value) {
+        public Criteria andSummaryScoreGreaterThan(BigDecimal value) {
             addCriterion("summary_score >", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreGreaterThanOrEqualTo(Float value) {
+        public Criteria andSummaryScoreGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("summary_score >=", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreLessThan(Float value) {
+        public Criteria andSummaryScoreLessThan(BigDecimal value) {
             addCriterion("summary_score <", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreLessThanOrEqualTo(Float value) {
+        public Criteria andSummaryScoreLessThanOrEqualTo(BigDecimal value) {
             addCriterion("summary_score <=", value, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreIn(List<Float> values) {
+        public Criteria andSummaryScoreIn(List<BigDecimal> values) {
             addCriterion("summary_score in", values, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreNotIn(List<Float> values) {
+        public Criteria andSummaryScoreNotIn(List<BigDecimal> values) {
             addCriterion("summary_score not in", values, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreBetween(Float value1, Float value2) {
+        public Criteria andSummaryScoreBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("summary_score between", value1, value2, "summaryScore");
             return (Criteria) this;
         }
 
-        public Criteria andSummaryScoreNotBetween(Float value1, Float value2) {
+        public Criteria andSummaryScoreNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("summary_score not between", value1, value2, "summaryScore");
             return (Criteria) this;
         }
@@ -539,52 +540,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreEqualTo(Float value) {
+        public Criteria andSubject1ScoreEqualTo(BigDecimal value) {
             addCriterion("subject1_score =", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreNotEqualTo(Float value) {
+        public Criteria andSubject1ScoreNotEqualTo(BigDecimal value) {
             addCriterion("subject1_score <>", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreGreaterThan(Float value) {
+        public Criteria andSubject1ScoreGreaterThan(BigDecimal value) {
             addCriterion("subject1_score >", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreGreaterThanOrEqualTo(Float value) {
+        public Criteria andSubject1ScoreGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("subject1_score >=", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreLessThan(Float value) {
+        public Criteria andSubject1ScoreLessThan(BigDecimal value) {
             addCriterion("subject1_score <", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreLessThanOrEqualTo(Float value) {
+        public Criteria andSubject1ScoreLessThanOrEqualTo(BigDecimal value) {
             addCriterion("subject1_score <=", value, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreIn(List<Float> values) {
+        public Criteria andSubject1ScoreIn(List<BigDecimal> values) {
             addCriterion("subject1_score in", values, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreNotIn(List<Float> values) {
+        public Criteria andSubject1ScoreNotIn(List<BigDecimal> values) {
             addCriterion("subject1_score not in", values, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreBetween(Float value1, Float value2) {
+        public Criteria andSubject1ScoreBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("subject1_score between", value1, value2, "subject1Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject1ScoreNotBetween(Float value1, Float value2) {
+        public Criteria andSubject1ScoreNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("subject1_score not between", value1, value2, "subject1Score");
             return (Criteria) this;
         }
@@ -669,52 +670,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreEqualTo(Float value) {
+        public Criteria andSubject2ScoreEqualTo(BigDecimal value) {
             addCriterion("subject2_score =", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreNotEqualTo(Float value) {
+        public Criteria andSubject2ScoreNotEqualTo(BigDecimal value) {
             addCriterion("subject2_score <>", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreGreaterThan(Float value) {
+        public Criteria andSubject2ScoreGreaterThan(BigDecimal value) {
             addCriterion("subject2_score >", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreGreaterThanOrEqualTo(Float value) {
+        public Criteria andSubject2ScoreGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("subject2_score >=", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreLessThan(Float value) {
+        public Criteria andSubject2ScoreLessThan(BigDecimal value) {
             addCriterion("subject2_score <", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreLessThanOrEqualTo(Float value) {
+        public Criteria andSubject2ScoreLessThanOrEqualTo(BigDecimal value) {
             addCriterion("subject2_score <=", value, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreIn(List<Float> values) {
+        public Criteria andSubject2ScoreIn(List<BigDecimal> values) {
             addCriterion("subject2_score in", values, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreNotIn(List<Float> values) {
+        public Criteria andSubject2ScoreNotIn(List<BigDecimal> values) {
             addCriterion("subject2_score not in", values, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreBetween(Float value1, Float value2) {
+        public Criteria andSubject2ScoreBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("subject2_score between", value1, value2, "subject2Score");
             return (Criteria) this;
         }
 
-        public Criteria andSubject2ScoreNotBetween(Float value1, Float value2) {
+        public Criteria andSubject2ScoreNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("subject2_score not between", value1, value2, "subject2Score");
             return (Criteria) this;
         }
@@ -789,52 +790,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreEqualTo(Float value) {
+        public Criteria andDebitAmountScoreEqualTo(BigDecimal value) {
             addCriterion("debit_amount_score =", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreNotEqualTo(Float value) {
+        public Criteria andDebitAmountScoreNotEqualTo(BigDecimal value) {
             addCriterion("debit_amount_score <>", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreGreaterThan(Float value) {
+        public Criteria andDebitAmountScoreGreaterThan(BigDecimal value) {
             addCriterion("debit_amount_score >", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreGreaterThanOrEqualTo(Float value) {
+        public Criteria andDebitAmountScoreGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("debit_amount_score >=", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreLessThan(Float value) {
+        public Criteria andDebitAmountScoreLessThan(BigDecimal value) {
             addCriterion("debit_amount_score <", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreLessThanOrEqualTo(Float value) {
+        public Criteria andDebitAmountScoreLessThanOrEqualTo(BigDecimal value) {
             addCriterion("debit_amount_score <=", value, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreIn(List<Float> values) {
+        public Criteria andDebitAmountScoreIn(List<BigDecimal> values) {
             addCriterion("debit_amount_score in", values, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreNotIn(List<Float> values) {
+        public Criteria andDebitAmountScoreNotIn(List<BigDecimal> values) {
             addCriterion("debit_amount_score not in", values, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreBetween(Float value1, Float value2) {
+        public Criteria andDebitAmountScoreBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("debit_amount_score between", value1, value2, "debitAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitAmountScoreNotBetween(Float value1, Float value2) {
+        public Criteria andDebitAmountScoreNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("debit_amount_score not between", value1, value2, "debitAmountScore");
             return (Criteria) this;
         }
@@ -909,52 +910,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreEqualTo(Float value) {
+        public Criteria andCreditAmountScoreEqualTo(BigDecimal value) {
             addCriterion("credit_amount_score =", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreNotEqualTo(Float value) {
+        public Criteria andCreditAmountScoreNotEqualTo(BigDecimal value) {
             addCriterion("credit_amount_score <>", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreGreaterThan(Float value) {
+        public Criteria andCreditAmountScoreGreaterThan(BigDecimal value) {
             addCriterion("credit_amount_score >", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreGreaterThanOrEqualTo(Float value) {
+        public Criteria andCreditAmountScoreGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("credit_amount_score >=", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreLessThan(Float value) {
+        public Criteria andCreditAmountScoreLessThan(BigDecimal value) {
             addCriterion("credit_amount_score <", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreLessThanOrEqualTo(Float value) {
+        public Criteria andCreditAmountScoreLessThanOrEqualTo(BigDecimal value) {
             addCriterion("credit_amount_score <=", value, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreIn(List<Float> values) {
+        public Criteria andCreditAmountScoreIn(List<BigDecimal> values) {
             addCriterion("credit_amount_score in", values, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreNotIn(List<Float> values) {
+        public Criteria andCreditAmountScoreNotIn(List<BigDecimal> values) {
             addCriterion("credit_amount_score not in", values, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreBetween(Float value1, Float value2) {
+        public Criteria andCreditAmountScoreBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("credit_amount_score between", value1, value2, "creditAmountScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditAmountScoreNotBetween(Float value1, Float value2) {
+        public Criteria andCreditAmountScoreNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("credit_amount_score not between", value1, value2, "creditAmountScore");
             return (Criteria) this;
         }
@@ -1039,52 +1040,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andTotalScoreEqualTo(Float value) {
+        public Criteria andTotalScoreEqualTo(BigDecimal value) {
             addCriterion("total_score =", value, "totalScore");
             return (Criteria) this;
         }
 
-        public Criteria andTotalScoreNotEqualTo(Float value) {
+        public Criteria andTotalScoreNotEqualTo(BigDecimal value) {
             addCriterion("total_score <>", value, "totalScore");
             return (Criteria) this;
         }
 
-        public Criteria andTotalScoreGreaterThan(Float value) {
+        public Criteria andTotalScoreGreaterThan(BigDecimal value) {
             addCriterion("total_score >", value, "totalScore");
             return (Criteria) this;
         }
 
-        public Criteria andTotalScoreGreaterThanOrEqualTo(Float value) {
+        public Criteria andTotalScoreGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("total_score >=", value, "totalScore");
             return (Criteria) this;
         }
 
-        public Criteria andTotalScoreLessThan(Float value) {
+        public Criteria andTotalScoreLessThan(BigDecimal value) {
             addCriterion("total_score <", value, "totalScore");
             return (Criteria) this;
         }
 
-        public Criteria andTotalScoreLessThanOrEqualTo(Float value) {
+        public Criteria andTotalScoreLessThanOrEqualTo(BigDecimal value) {
             addCriterion("total_score <=", value, "totalScore");
             return (Criteria) this;
         }
 
-        public Criteria andTotalScoreIn(List<Float> values) {
+        public Criteria andTotalScoreIn(List<BigDecimal> values) {
             addCriterion("total_score in", values, "totalScore");
             return (Criteria) this;
         }
 
-        public Criteria andTotalScoreNotIn(List<Float> values) {
+        public Criteria andTotalScoreNotIn(List<BigDecimal> values) {
             addCriterion("total_score not in", values, "totalScore");
             return (Criteria) this;
         }
 
-        public Criteria andTotalScoreBetween(Float value1, Float value2) {
+        public Criteria andTotalScoreBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("total_score between", value1, value2, "totalScore");
             return (Criteria) this;
         }
 
-        public Criteria andTotalScoreNotBetween(Float value1, Float value2) {
+        public Criteria andTotalScoreNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("total_score not between", value1, value2, "totalScore");
             return (Criteria) this;
         }
@@ -1159,52 +1160,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andDebitTotalScoreEqualTo(Float value) {
+        public Criteria andDebitTotalScoreEqualTo(BigDecimal value) {
             addCriterion("debit_total_score =", value, "debitTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitTotalScoreNotEqualTo(Float value) {
+        public Criteria andDebitTotalScoreNotEqualTo(BigDecimal value) {
             addCriterion("debit_total_score <>", value, "debitTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitTotalScoreGreaterThan(Float value) {
+        public Criteria andDebitTotalScoreGreaterThan(BigDecimal value) {
             addCriterion("debit_total_score >", value, "debitTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitTotalScoreGreaterThanOrEqualTo(Float value) {
+        public Criteria andDebitTotalScoreGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("debit_total_score >=", value, "debitTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitTotalScoreLessThan(Float value) {
+        public Criteria andDebitTotalScoreLessThan(BigDecimal value) {
             addCriterion("debit_total_score <", value, "debitTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitTotalScoreLessThanOrEqualTo(Float value) {
+        public Criteria andDebitTotalScoreLessThanOrEqualTo(BigDecimal value) {
             addCriterion("debit_total_score <=", value, "debitTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitTotalScoreIn(List<Float> values) {
+        public Criteria andDebitTotalScoreIn(List<BigDecimal> values) {
             addCriterion("debit_total_score in", values, "debitTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitTotalScoreNotIn(List<Float> values) {
+        public Criteria andDebitTotalScoreNotIn(List<BigDecimal> values) {
             addCriterion("debit_total_score not in", values, "debitTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitTotalScoreBetween(Float value1, Float value2) {
+        public Criteria andDebitTotalScoreBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("debit_total_score between", value1, value2, "debitTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andDebitTotalScoreNotBetween(Float value1, Float value2) {
+        public Criteria andDebitTotalScoreNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("debit_total_score not between", value1, value2, "debitTotalScore");
             return (Criteria) this;
         }
@@ -1279,52 +1280,52 @@ public class EntryStandardAnswerDetailsExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreditTotalScoreEqualTo(Float value) {
+        public Criteria andCreditTotalScoreEqualTo(BigDecimal value) {
             addCriterion("credit_total_score =", value, "creditTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditTotalScoreNotEqualTo(Float value) {
+        public Criteria andCreditTotalScoreNotEqualTo(BigDecimal value) {
             addCriterion("credit_total_score <>", value, "creditTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditTotalScoreGreaterThan(Float value) {
+        public Criteria andCreditTotalScoreGreaterThan(BigDecimal value) {
             addCriterion("credit_total_score >", value, "creditTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditTotalScoreGreaterThanOrEqualTo(Float value) {
+        public Criteria andCreditTotalScoreGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("credit_total_score >=", value, "creditTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditTotalScoreLessThan(Float value) {
+        public Criteria andCreditTotalScoreLessThan(BigDecimal value) {
             addCriterion("credit_total_score <", value, "creditTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditTotalScoreLessThanOrEqualTo(Float value) {
+        public Criteria andCreditTotalScoreLessThanOrEqualTo(BigDecimal value) {
             addCriterion("credit_total_score <=", value, "creditTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditTotalScoreIn(List<Float> values) {
+        public Criteria andCreditTotalScoreIn(List<BigDecimal> values) {
             addCriterion("credit_total_score in", values, "creditTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditTotalScoreNotIn(List<Float> values) {
+        public Criteria andCreditTotalScoreNotIn(List<BigDecimal> values) {
             addCriterion("credit_total_score not in", values, "creditTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditTotalScoreBetween(Float value1, Float value2) {
+        public Criteria andCreditTotalScoreBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("credit_total_score between", value1, value2, "creditTotalScore");
             return (Criteria) this;
         }
 
-        public Criteria andCreditTotalScoreNotBetween(Float value1, Float value2) {
+        public Criteria andCreditTotalScoreNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("credit_total_score not between", value1, value2, "creditTotalScore");
             return (Criteria) this;
         }

@@ -20,10 +20,12 @@ import com.wxj.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -106,19 +108,68 @@ public class ExamQuestionsServiceImpl implements ExamQuestionsServiceI {
         if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(examQuestions.getType())) {
             List<EntryStandardAnswerDetails> list = Lists.newArrayList();
             EntryStandardAnswerDetails entryStandardAnswerDetails;
-            for (int i=0,size=examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().size(); i<size; i++) {
-                entryStandardAnswerDetails = new EntryStandardAnswerDetails();
-                EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
+            try {
+                for (int i=0,size=examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().size(); i<size; i++) {
+                    entryStandardAnswerDetails = new EntryStandardAnswerDetails();
+                    EntryStandardAnswerDetailsDTO entryStandardAnswerDetailsDTO = examQuestionsSaveDTO.getEntryStandardAnswerDetailsDTOList().get(i);
 
-                BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
-                entryStandardAnswerDetails.setSummary(entryStandardAnswerDetailsDTO.getSummary());
-                entryStandardAnswerDetails.setEntryAnswerId(examQuestions.getId());
-                entryStandardAnswerDetails.setRow(new Integer(i).byteValue());
-                entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1());
-                entryStandardAnswerDetails.setCreateTime(date);
-                entryStandardAnswerDetails.setModifyTime(date);
-                entryStandardAnswerDetails.setDelFlag(SystemConstant.NOUGHT);
-                list.add(entryStandardAnswerDetails);
+                    BeanUtils.copyProperties(entryStandardAnswerDetailsDTO, entryStandardAnswerDetails);
+                    entryStandardAnswerDetails.setSummary(entryStandardAnswerDetailsDTO.getSummary());
+                    if (null == entryStandardAnswerDetailsDTO.getSummaryScore()) {
+                        entryStandardAnswerDetails.setSummaryScore(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setSummaryScore(new BigDecimal(entryStandardAnswerDetailsDTO.getSummaryScore()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getSubject1Score()) {
+                        entryStandardAnswerDetails.setSubject1Score(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setSubject1Score(new BigDecimal(entryStandardAnswerDetailsDTO.getSubject1Score()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getSubject2Score()) {
+                        entryStandardAnswerDetails.setSubject2Score(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setSubject2Score(new BigDecimal(entryStandardAnswerDetailsDTO.getSubject2Score()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getDebitAmountScore()) {
+                        entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(0));
+
+                    } else {
+                        entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(entryStandardAnswerDetailsDTO.getDebitAmountScore()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getCreditAmountScore()) {
+                        entryStandardAnswerDetails.setCreditAmountScore(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setCreditAmountScore(new BigDecimal(entryStandardAnswerDetailsDTO.getCreditAmountScore()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getTotalScore()) {
+                        entryStandardAnswerDetails.setTotalScore(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getTotalScore()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getDebitAmountScore()) {
+                        entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setDebitAmountScore(new BigDecimal(entryStandardAnswerDetailsDTO.getDebitAmountScore()));
+                    }
+                    if (null == entryStandardAnswerDetailsDTO.getCreditTotalScore()) {
+                        entryStandardAnswerDetails.setCreditTotalScore(new BigDecimal(0));
+                    } else {
+                        entryStandardAnswerDetails.setCreditTotalScore(new BigDecimal(entryStandardAnswerDetailsDTO.getCreditTotalScore()));
+                    }
+
+                    if (entryStandardAnswerDetails.getSubject1() == "" && entryStandardAnswerDetails.getSubject2() == "" && null == entryStandardAnswerDetails.getDebitAmount() && null == entryStandardAnswerDetails.getCreditAmount()) {
+                        continue;
+                    }
+                    entryStandardAnswerDetails.setEntryAnswerId(examQuestions.getId());
+                    entryStandardAnswerDetails.setRow(new Integer(i).byteValue());
+                    entryStandardAnswerDetails.setSubject1(entryStandardAnswerDetailsDTO.getSubject1());
+                    entryStandardAnswerDetails.setCreateTime(date);
+                    entryStandardAnswerDetails.setModifyTime(date);
+                    entryStandardAnswerDetails.setDelFlag(SystemConstant.NOUGHT);
+                    list.add(entryStandardAnswerDetails);
+                }
+            } catch (BeansException e) {
+                e.printStackTrace();
             }
             try {
                 entryStandardAnswerDetailsInsertSize = entryStandardAnswerDetailsMapper.batchInsert(list);
