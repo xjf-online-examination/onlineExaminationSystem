@@ -190,6 +190,7 @@ export default {
           };
         }
         rowData.rows = this.tableData.length - 1;
+        this.tableData[rowIndex].rows = this.tableData.length - 1;
         return {
           colSpan: 1,
           rowSpan: this.tableData.length - 1,
