@@ -4,10 +4,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.wxj.constant.SystemConstant;
 import com.wxj.exception.InnerDataErrorException;
 import com.wxj.exception.OperationException;
-import com.wxj.mapper.EntryAnswerDetailsMapper;
-import com.wxj.mapper.ExamPaperMapper;
-import com.wxj.mapper.ExamScheduleMapper;
-import com.wxj.mapper.StudentAnswerMapper;
+import com.wxj.mapper.*;
 import com.wxj.model.DTO.ExamScheduleParamsDTO;
 import com.wxj.model.DTO.ExamScheduleSaveDTO;
 import com.wxj.model.PO.*;
@@ -25,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +48,8 @@ public class ExamScheduleServiceImpl implements ExamScheduleServiceI {
     StudentAnswerMapper studentAnswerMapper;
     @Autowired
     EntryAnswerDetailsMapper entryAnswerDetailsMapper;
+    @Autowired
+    StudentScheduleMapper studentScheduleMapper;
 
     @Override
     public List<ExamScheduleVO> listExamScheduleByParams(ExamScheduleParamsDTO examScheduleParamsDTO) {
@@ -178,6 +178,23 @@ public class ExamScheduleServiceImpl implements ExamScheduleServiceI {
 
     @Override
     public List<StudentExamScheduleVO> getStudentExamScheduleBySno(String sno) {
-        return examScheduleMapper.selectStudentExamScheduleBySno(sno);
+        List<StudentExamScheduleVO> studentExamScheduleVOList = examScheduleMapper.selectStudentExamScheduleBySno(sno);
+
+        StudentScheduleExample studentScheduleExample = new StudentScheduleExample();
+        studentScheduleExample.createCriteria().andSnoEqualTo(sno);
+        List<StudentSchedule> studentScheduleList = studentScheduleMapper.selectByExample(studentScheduleExample);
+        if (null == studentScheduleList || studentScheduleList.size() == 0) {
+            return studentExamScheduleVOList;
+        }
+        List<Integer> examScheduleId = studentScheduleList.stream().map(StudentSchedule::getExamScheduleId).collect(Collectors.toList());
+
+        Iterator it = studentExamScheduleVOList.iterator();
+        while (it.hasNext()) {
+            StudentExamScheduleVO studentExamScheduleVO = (StudentExamScheduleVO) it.next();
+            if (examScheduleId.contains(studentExamScheduleVO.getExamScheduleId())) {
+                it.remove();
+            }
+        }
+        return studentExamScheduleVOList;
     }
 }

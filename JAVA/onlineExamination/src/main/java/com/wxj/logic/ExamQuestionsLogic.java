@@ -146,6 +146,9 @@ public class ExamQuestionsLogic {
 
     private Float entry(List<StudentEntryAnswerSaveDTO> studentAnswer, List<ExamQuestionsEntryAnswerDO> standardAnswer) {
         float score = 0f;
+        if (null == standardAnswer || standardAnswer.size() == 0) {
+            return score;
+        }
         Map<Integer, ExamQuestionsEntryAnswerDO> standardAnswerMap = standardAnswer.stream().collect(Collectors.toMap(ExamQuestionsEntryAnswerDO::getRow, obj -> obj));
         //找到合计的row
         int maxRow = studentAnswer.size()-1;

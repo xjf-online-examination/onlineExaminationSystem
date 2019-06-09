@@ -60,6 +60,8 @@ public class StudentServiceImpl implements StudentServiceI {
     StudentAnswerMapper studentAnswerMapper;
     @Autowired
     ExamQuestionsLogic examQuestionsLogic;
+    @Autowired
+    StudentScheduleMapper studentScheduleMapper;
 
 
     @Override
@@ -183,10 +185,9 @@ public class StudentServiceImpl implements StudentServiceI {
         int studentAnswerInsertSize = 0;
         Date date = new Date();
         StudentAnswer studentAnswer;
-        //判卷
-        Map<Integer, Float> scoreMap = examQuestionsLogic.getScore(studentAnswerSaveDTO);
-        //保存数据
         try {
+            //判卷
+            Map<Integer, Float> scoreMap = examQuestionsLogic.getScore(studentAnswerSaveDTO);
             for (int i=0,size=studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().size(); i<size; i++) {
                 StudentAnswerSaveDetailsDTO studentAnswerSaveDetailsDTO = studentAnswerSaveDTO.getAnswerSaveDetailsDTOList().get(i);
 
@@ -208,7 +209,7 @@ public class StudentServiceImpl implements StudentServiceI {
                 studentAnswer.setDelFlag(SystemConstant.NOUGHT);
                 studentAnswerInsertSize = studentAnswerMapper.insertSelective(studentAnswer);
                 if (SystemConstant.ZERO == studentAnswerInsertSize) {
-                    throw new OperationException("删除失败");
+                    throw new OperationException("插入失败");
                 }
 
                 if (ExamConstant.EXAM_QUESTIONS_TYPE_SIX.equals(studentAnswerSaveDetailsDTO.getQuestionsType())) {
@@ -227,12 +228,20 @@ public class StudentServiceImpl implements StudentServiceI {
                         entryAnswerDetailsInsertSize = entryAnswerDetailsMapper.insertSelective(entryAnswerDetails);
                     }
                     if (SystemConstant.ZERO == entryAnswerDetailsInsertSize) {
-                        throw new OperationException("删除失败");
+                        throw new OperationException("插入失败");
                     }
                 }
             }
+            //插入student_schedule
+            StudentSchedule studentSchedule = new StudentSchedule();
+            studentSchedule.setSno(studentAnswerSaveDTO.getSno());
+            studentSchedule.setExamScheduleId(studentAnswerSaveDTO.getExamScheduleId());
+            studentSchedule.setCreateTime(date);
+            studentSchedule.setModifyTime(date);
+            studentSchedule.setDelFlag(SystemConstant.NOUGHT);
+            studentScheduleMapper.insertSelective(studentSchedule);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("com.wxj.service.impl.StudentServiceImpl.studentAnswer 学生提交答案失败", e);
         }
         return studentAnswerInsertSize;
     }
